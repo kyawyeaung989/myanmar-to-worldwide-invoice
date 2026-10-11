@@ -5,9 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MYANMAR TO UK INVOICE GENERATOR - AD DAFFODILS</title>
   
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2pdf bundle for PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- html2canvas for JPG export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- Google Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
@@ -80,13 +84,14 @@
 </head>
 <body class="p-2 md:p-6 min-h-screen">
 
+<!-- Top Action Header Bar -->
 <div class="max-w-[1320px] mx-auto mb-4 flex flex-wrap justify-between items-center bg-slate-800 p-4 rounded-xl gap-3 no-print border border-slate-700 shadow-lg">
   <div class="flex items-center gap-3">
     <div class="bg-amber-700 text-white px-3 py-1 rounded-lg font-black text-xl tracking-wider">MM</div>
     <div>
       <div class="flex items-center gap-2">
-        <h1 class="text-amber-400 font-extrabold text-lg leading-tight">MYANMAR TO UK INVOICE V5</h1>
-        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Ultra Smooth Typing</span>
+        <h1 class="text-amber-400 font-extrabold text-lg leading-tight">MYANMAR TO UK INVOICE V6</h1>
+        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Format Fixed</span>
       </div>
       <p class="text-xs text-slate-400">AD DAFFODILS Consignment Logistics System</p>
     </div>
@@ -102,14 +107,17 @@
   </div>
 </div>
 
+<!-- Main Workspace Layout -->
 <div class="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
 
+  <!-- LEFT COLUMN: Control Panel -->
   <div class="lg:col-span-5 bg-slate-800 p-4 md:p-5 rounded-2xl border border-slate-700 space-y-4 no-print max-h-[88vh] overflow-y-auto shadow-xl">
     <h2 class="text-base font-bold text-slate-100 border-b border-slate-700 pb-2 flex items-center justify-between">
       <span>⚙️ Control Panel</span>
-      <span class="text-xs font-normal text-emerald-400 font-bold">Focus Locked Mode</span>
+      <span class="text-xs font-normal text-emerald-400 font-bold">Stable Mode</span>
     </h2>
 
+    <!-- Company Logo Upload Control -->
     <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 space-y-2">
       <div class="flex items-center justify-between">
         <label class="block text-xs font-bold text-amber-400">1. Company Logo (Optional)</label>
@@ -120,6 +128,7 @@
       <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" class="text-xs text-slate-300 w-full file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer">
     </div>
 
+    <!-- Currency & Exchange Rate Calculator Settings -->
     <div class="bg-slate-900/90 p-3 rounded-xl border border-amber-500/30 space-y-2.5">
       <div class="font-bold text-xs text-amber-400 uppercase tracking-wider flex items-center justify-between">
         <span>2. Currency & Exchange Rate</span>
@@ -140,6 +149,7 @@
       </div>
     </div>
 
+    <!-- Metadata Settings -->
     <div class="space-y-3 pt-1">
       <div class="flex justify-between items-center">
         <div class="font-bold text-xs text-amber-400 uppercase tracking-wider">3. Invoice Info</div>
@@ -160,6 +170,7 @@
       </div>
     </div>
 
+    <!-- Sender & Receiver Details -->
     <div class="space-y-3 pt-2 border-t border-slate-700">
       <div class="font-bold text-xs text-amber-400 uppercase tracking-wider">4. Sender & Receiver</div>
       <div class="space-y-2">
@@ -179,6 +190,7 @@
       </div>
     </div>
 
+    <!-- OVERALL LOCAL DELIVERY FEE CONTROL -->
     <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 space-y-2 pt-2 border-t border-slate-700">
       <div class="flex items-center justify-between">
         <span class="font-bold text-xs text-amber-400 uppercase tracking-wider">Overall Delivery Fee (£)</span>
@@ -193,6 +205,7 @@
       </div>
     </div>
 
+    <!-- Cargo Items Section -->
     <div class="pt-2 border-t border-slate-700 space-y-3">
       <div class="flex justify-between items-center">
         <span class="font-bold text-xs text-amber-400 uppercase tracking-wider">5. Consignment Items List</span>
@@ -202,18 +215,22 @@
       </div>
 
       <div id="itemInputsContainer" class="space-y-3">
-        </div>
+        <!-- Dynamic item rows injected by JS -->
+      </div>
     </div>
 
   </div>
 
+  <!-- RIGHT COLUMN: Printable Live Preview Sheet -->
   <div class="lg:col-span-7 flex justify-center items-start overflow-x-auto p-2">
     <div id="invoiceContainer">
       <div id="invoice" class="invoice-sheet text-xs">
         
         <div>
+          <!-- HEADER SECTION -->
           <div class="flex justify-between items-start pb-4 border-b border-amber-900/20">
             
+            <!-- Dual Mode Logo Block -->
             <div id="logoHeaderBlock" class="min-w-[180px] min-h-[60px] flex items-center justify-start">
               <div id="imageLogoWrapper" class="hidden w-48 h-16 flex items-center justify-start overflow-hidden">
                 <img id="viewLogoImg" src="" alt="AD DAFFODILS Logo" class="max-w-full max-h-full object-contain">
@@ -225,6 +242,7 @@
               </div>
             </div>
 
+            <!-- Right Contact Block -->
             <div class="text-right text-[11px] text-amber-950 font-medium space-y-1">
               <div class="flex items-center justify-end gap-1 font-bold">
                 <span>📞</span> <span>09966322019, 09958337846</span>
@@ -236,15 +254,18 @@
             </div>
           </div>
 
+          <!-- INVOICE TITLE BAR -->
           <div class="text-center my-4">
             <h2 class="text-2xl font-black tracking-widest text-stone-800 uppercase">INVOICE</h2>
           </div>
 
+          <!-- DATE & INV NO BANNER -->
           <div class="theme-banner rounded-sm px-4 py-2 font-bold text-sm flex justify-between items-center mb-5 tracking-wide">
             <div>DATE &nbsp;<span id="viewDate">9.10.2026</span></div>
             <div>INV No. : &nbsp;<span id="viewInvNo">ADF563</span></div>
           </div>
 
+          <!-- SENDER & RECEIVER GRID -->
           <div class="grid grid-cols-2 gap-6 my-4 text-xs font-semibold text-stone-900 px-2">
             <div class="space-y-2">
               <div class="font-black text-stone-700 tracking-wider uppercase text-[11px]">SENDER</div>
@@ -259,6 +280,7 @@
             </div>
           </div>
 
+          <!-- ITEMS TABLE -->
           <table class="w-full text-left border-collapse my-5 text-xs">
             <thead>
               <tr class="table-header text-[11px] uppercase tracking-wider">
@@ -268,8 +290,10 @@
               </tr>
             </thead>
             <tbody id="viewTableBody">
-              </tbody>
+              <!-- Dynamic Rows Injected Here -->
+            </tbody>
             <tfoot>
+              <!-- Single Overall Delivery Fee Row -->
               <tr id="deliveryFeeRow" class="hidden font-bold text-amber-950 bg-amber-900/10 border-t border-amber-900/20 text-xs">
                 <td colspan="2" class="p-2.5 uppercase tracking-wider font-extrabold">Local Deli Fees</td>
                 <td id="viewDeliveryFeeAmount" class="p-2.5 text-right font-black">£ 10</td>
@@ -277,22 +301,25 @@
             </tfoot>
           </table>
 
+          <!-- TOTAL AMOUNT BANNER -->
           <div class="theme-banner rounded-sm px-4 py-2.5 font-black text-base flex justify-between items-center my-6 tracking-wide shadow-sm">
             <span>TOTAL AMOUNT</span>
             <span><span class="currSym font-bold">£</span> <span id="viewGrandTotal">80</span></span>
           </div>
 
+          <!-- PAYMENT METHOD SECTION (Uniform Font Format Fixed) -->
           <div class="mt-4 pt-1 text-xs">
             <div class="font-black text-stone-800 uppercase tracking-wider mb-2 text-[11px]">Payment Method</div>
             <div class="space-y-1 font-semibold text-stone-800 pl-2">
-              <div class="flex"><span class="w-24 text-stone-600">Acc Type</span> <span>- Business</span></div>
-              <div class="flex"><span class="w-24 text-stone-600">Acc Name</span> <span class="font-extrabold uppercase">AD DAFFODILS CONSIGNMENT</span></div>
-              <div class="flex"><span class="w-24 text-stone-600">Sort Code</span> <span>- 82-19-74</span></div>
-              <div class="flex"><span class="w-24 text-stone-600">Acc Number</span> <span>- 40256654</span></div>
+              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Acc Type</span> <span class="font-semibold text-stone-800">- Business</span></div>
+              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Acc Name</span> <span class="font-semibold text-stone-800">- AD DAFFODILS CONSIGNMENT</span></div>
+              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Sort Code</span> <span class="font-semibold text-stone-800">- 82-19-74</span></div>
+              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Acc Number</span> <span class="font-semibold text-stone-800">- 40256654</span></div>
             </div>
           </div>
         </div>
 
+        <!-- FOOTER SLOGAN BANNER -->
         <div class="theme-banner text-center py-2 font-bold text-[10px] tracking-widest uppercase mt-auto rounded-sm">
           REMAIN TRANQUIL WE PROCEED WITH UTMOST CAUTIONS
         </div>
@@ -455,6 +482,7 @@ function renderItemInputs() {
         </div>
       </div>
 
+      <!-- Per-Item Delivery Fee Toggle -->
       <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px]">
         <label class="inline-flex items-center cursor-pointer text-slate-300">
           <input type="checkbox" ${item.hasDelFee ? 'checked' : ''} onchange="items[${index}].hasDelFee = this.checked; updateInvoice();" class="accent-amber-500">
