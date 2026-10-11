@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MYANMAR TO UK INVOICE GENERATOR - AD DAFFODILS</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Elegant Warm Cream Paper Background */
+    .invoice-sheet {
+      background-color: #ECE3D4;
+      color: #3D2B1F;
+      width: 210mm;
+      min-height: 297mm;
+      height: 297mm;
+      padding: 12mm 15mm;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Theme Accent Colors */
+    .theme-banner {
+      background-color: #9E7B5C;
+      color: #FFFFFF;
+    }
+
+    .table-header {
+      background-color: #9E7B5C;
+      color: #FFFFFF;
+    }
+
+    /* UK Style Typography Logo Styling */
+    .styled-text-logo {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      background: linear-gradient(135deg, #3d2b1f 0%, #1e130c 100%);
+      border: 2px solid #d97706;
+      border-radius: 10px;
+      padding: 8px 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    @media print {
+      body { background: white !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      .invoice-sheet {
+        box-shadow: none !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        padding: 12mm 15mm !important;
+        margin: 0 !important;
+      }
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1e293b; }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  </style>
+</head>
+<body class="p-2 md:p-6 min-h-screen">
+
+<div class="max-w-[1320px] mx-auto mb-4 flex flex-wrap justify-between items-center bg-slate-800 p-4 rounded-xl gap-3 no-print border border-slate-700 shadow-lg">
+  <div class="flex items-center gap-3">
+    <div class="bg-amber-700 text-white px-3 py-1 rounded-lg font-black text-xl tracking-wider">MM</div>
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-amber-400 font-extrabold text-lg leading-tight">MYANMAR TO UK INVOICE V5</h1>
+        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Ultra Smooth Typing</span>
+      </div>
+      <p class="text-xs text-slate-400">AD DAFFODILS Consignment Logistics System</p>
+    </div>
+  </div>
+  
+  <div class="flex flex-wrap items-center gap-2.5">
+    <button onclick="exportJPG()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition shadow flex items-center gap-1.5">
+      <span>🖼 Export JPG</span>
+    </button>
+    <button onclick="exportPDF()" class="bg-rose-600 hover:bg-rose-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition shadow flex items-center gap-1.5">
+      <span>📄 Export PDF</span>
+    </button>
+  </div>
+</div>
+
+<div class="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+  <div class="lg:col-span-5 bg-slate-800 p-4 md:p-5 rounded-2xl border border-slate-700 space-y-4 no-print max-h-[88vh] overflow-y-auto shadow-xl">
+    <h2 class="text-base font-bold text-slate-100 border-b border-slate-700 pb-2 flex items-center justify-between">
+      <span>⚙️ Control Panel</span>
+      <span class="text-xs font-normal text-emerald-400 font-bold">Focus Locked Mode</span>
+    </h2>
+
+    <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 space-y-2">
+      <div class="flex items-center justify-between">
+        <label class="block text-xs font-bold text-amber-400">1. Company Logo (Optional)</label>
+        <button id="resetLogoBtn" onclick="clearLogo()" class="text-[11px] bg-slate-800 hover:bg-rose-950 text-rose-300 hover:text-rose-200 border border-slate-700 hover:border-rose-800 px-2 py-0.5 rounded-lg transition hidden">
+          🗑️ Reset Logo
+        </button>
+      </div>
+      <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" class="text-xs text-slate-300 w-full file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer">
+    </div>
+
+    <div class="bg-slate-900/90 p-3 rounded-xl border border-amber-500/30 space-y-2.5">
+      <div class="font-bold text-xs text-amber-400 uppercase tracking-wider flex items-center justify-between">
+        <span>2. Currency & Exchange Rate</span>
+        <span class="text-[10px] text-emerald-400 font-normal">Auto Convert</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Invoice Currency</label>
+          <select id="inputCurrency" onchange="updateInvoiceOnly();" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+            <option value="£">Pound (£)</option>
+            <option value="MMK">Kyat (MMK)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Exchange Rate (1 £ = ? MMK)</label>
+          <input type="number" id="inputExchangeRate" value="5500" oninput="updateInvoiceOnly();" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-emerald-400 font-bold text-center focus:outline-none focus:border-amber-500">
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3 pt-1">
+      <div class="flex justify-between items-center">
+        <div class="font-bold text-xs text-amber-400 uppercase tracking-wider">3. Invoice Info</div>
+        <button onclick="autoNextInvoiceNo()" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 rounded transition">
+          + Auto Next Inv No.
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Date</label>
+          <input type="text" id="inputDate" value="9.10.2026" oninput="updateInvoiceOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Inv No.</label>
+          <input type="text" id="inputInvNo" value="ADF563" oninput="updateInvoiceOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-bold focus:outline-none focus:border-amber-500">
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3 pt-2 border-t border-slate-700">
+      <div class="font-bold text-xs text-amber-400 uppercase tracking-wider">4. Sender & Receiver</div>
+      <div class="space-y-2">
+        <div class="text-[11px] font-semibold text-slate-300">Sender (Myanmar)</div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="text" id="inputSenderName" value="May Zon Moe" placeholder="Name" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
+          <input type="text" id="inputSenderPhone" value="09777994663" placeholder="Tel" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
+        </div>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <div class="text-[11px] font-semibold text-slate-300">Receiver (UK / Oversea)</div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="text" id="inputRecName" value="Ahmed Jarmal" placeholder="Name" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
+          <input type="text" id="inputRecPhone" value="07894253729" placeholder="Tel" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 space-y-2 pt-2 border-t border-slate-700">
+      <div class="flex items-center justify-between">
+        <span class="font-bold text-xs text-amber-400 uppercase tracking-wider">Overall Delivery Fee (£)</span>
+        <label class="inline-flex items-center cursor-pointer text-xs font-bold text-emerald-400">
+          <input type="checkbox" id="singleDelFeeToggle" checked onchange="updateInvoiceOnly()" class="accent-amber-500 mr-1.5 w-4 h-4">
+          Include Overall Fee
+        </label>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-300 font-semibold">Amount (£):</span>
+        <input type="number" id="singleDelFeeInput" value="10" step="1" oninput="updateInvoiceOnly()" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-amber-300 font-bold w-24 text-center focus:outline-none focus:border-amber-500">
+      </div>
+    </div>
+
+    <div class="pt-2 border-t border-slate-700 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="font-bold text-xs text-amber-400 uppercase tracking-wider">5. Consignment Items List</span>
+        <button onclick="addItem()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1">
+          <span>+ Add Item</span>
+        </button>
+      </div>
+
+      <div id="itemInputsContainer" class="space-y-3">
+        </div>
+    </div>
+
+  </div>
+
+  <div class="lg:col-span-7 flex justify-center items-start overflow-x-auto p-2">
+    <div id="invoiceContainer">
+      <div id="invoice" class="invoice-sheet text-xs">
+        
+        <div>
+          <div class="flex justify-between items-start pb-4 border-b border-amber-900/20">
+            
+            <div id="logoHeaderBlock" class="min-w-[180px] min-h-[60px] flex items-center justify-start">
+              <div id="imageLogoWrapper" class="hidden w-48 h-16 flex items-center justify-start overflow-hidden">
+                <img id="viewLogoImg" src="" alt="AD DAFFODILS Logo" class="max-w-full max-h-full object-contain">
+              </div>
+
+              <div id="textLogoWrapper" class="styled-text-logo">
+                <div class="text-amber-400 font-black text-lg tracking-wider uppercase leading-none">AD DAFFODILS</div>
+                <div class="text-slate-200 font-bold text-[9px] tracking-widest uppercase mt-1">AD Daffodils Consignment</div>
+              </div>
+            </div>
+
+            <div class="text-right text-[11px] text-amber-950 font-medium space-y-1">
+              <div class="flex items-center justify-end gap-1 font-bold">
+                <span>📞</span> <span>09966322019, 09958337846</span>
+              </div>
+              <div class="flex items-start justify-end gap-1">
+                <span>📍</span> 
+                <span class="text-right max-w-[220px]">No.49, Ground Floor, 93rd Street, Mingalar Taung Nyunt, Yangon.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center my-4">
+            <h2 class="text-2xl font-black tracking-widest text-stone-800 uppercase">INVOICE</h2>
+          </div>
+
+          <div class="theme-banner rounded-sm px-4 py-2 font-bold text-sm flex justify-between items-center mb-5 tracking-wide">
+            <div>DATE &nbsp;<span id="viewDate">9.10.2026</span></div>
+            <div>INV No. : &nbsp;<span id="viewInvNo">ADF563</span></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 my-4 text-xs font-semibold text-stone-900 px-2">
+            <div class="space-y-2">
+              <div class="font-black text-stone-700 tracking-wider uppercase text-[11px]">SENDER</div>
+              <div class="flex"><span class="w-16 text-stone-600">Name :</span> <span id="viewSenderName" class="font-bold">May Zon Moe</span></div>
+              <div class="flex"><span class="w-16 text-stone-600">Tel :</span> <span id="viewSenderPhone" class="font-bold">09777994663</span></div>
+            </div>
+            
+            <div class="space-y-2 border-l-2 border-amber-900/20 pl-6">
+              <div class="font-black text-stone-700 tracking-wider uppercase text-[11px]">RECEIVER</div>
+              <div class="flex"><span class="w-16 text-stone-600">Name :</span> <span id="viewRecName" class="font-bold">Ahmed Jarmal</span></div>
+              <div class="flex"><span class="w-16 text-stone-600">Tel :</span> <span id="viewRecPhone" class="font-bold">07894253729</span></div>
+            </div>
+          </div>
+
+          <table class="w-full text-left border-collapse my-5 text-xs">
+            <thead>
+              <tr class="table-header text-[11px] uppercase tracking-wider">
+                <th class="p-2.5 font-bold rounded-l-sm" style="width: 55%;">DESCRIPTION</th>
+                <th class="p-2.5 font-bold text-center" style="width: 20%;">UNIT</th>
+                <th class="p-2.5 font-bold text-right rounded-r-sm" style="width: 25%;">TOTAL</th>
+              </tr>
+            </thead>
+            <tbody id="viewTableBody">
+              </tbody>
+            <tfoot>
+              <tr id="deliveryFeeRow" class="hidden font-bold text-amber-950 bg-amber-900/10 border-t border-amber-900/20 text-xs">
+                <td colspan="2" class="p-2.5 uppercase tracking-wider font-extrabold">Local Deli Fees</td>
+                <td id="viewDeliveryFeeAmount" class="p-2.5 text-right font-black">£ 10</td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div class="theme-banner rounded-sm px-4 py-2.5 font-black text-base flex justify-between items-center my-6 tracking-wide shadow-sm">
+            <span>TOTAL AMOUNT</span>
+            <span><span class="currSym font-bold">£</span> <span id="viewGrandTotal">80</span></span>
+          </div>
+
+          <div class="mt-4 pt-1 text-xs">
+            <div class="font-black text-stone-800 uppercase tracking-wider mb-2 text-[11px]">Payment Method</div>
+            <div class="space-y-1 font-semibold text-stone-800 pl-2">
+              <div class="flex"><span class="w-24 text-stone-600">Acc Type</span> <span>- Business</span></div>
+              <div class="flex"><span class="w-24 text-stone-600">Acc Name</span> <span class="font-extrabold uppercase">AD DAFFODILS CONSIGNMENT</span></div>
+              <div class="flex"><span class="w-24 text-stone-600">Sort Code</span> <span>- 82-19-74</span></div>
+              <div class="flex"><span class="w-24 text-stone-600">Acc Number</span> <span>- 40256654</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="theme-banner text-center py-2 font-bold text-[10px] tracking-widest uppercase mt-auto rounded-sm">
+          REMAIN TRANQUIL WE PROCEED WITH UTMOST CAUTIONS
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let items = [
+  { route: "Myanmar To UK", weight: 5, riskNote: "(Risk)", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 }
+];
+
+// IndexedDB Logo Helper
+const DB_NAME = 'ADDaffodilsMMInvoiceDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'assets';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function saveLogoToDB(dataUrl) {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).put(dataUrl, 'companyLogo');
+  } catch (err) { console.error(err); }
+}
+
+async function getLogoFromDB() {
+  try {
+    const db = await openDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const req = tx.objectStore(STORE_NAME).get('companyLogo');
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+  } catch (err) { return null; }
+}
+
+async function deleteLogoFromDB() {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    tx.objectStore(STORE_NAME).delete('companyLogo');
+  } catch (err) { console.error(err); }
+}
+
+async function init() {
+  await loadSavedLogo();
+  loadSavedInvoiceNumber();
+  renderItemInputs();
+  updateInvoice();
+}
+
+function loadSavedInvoiceNumber() {
+  const savedInv = localStorage.getItem('addaffodils_mm_last_inv_no');
+  if (savedInv) document.getElementById('inputInvNo').value = savedInv;
+}
+
+function autoNextInvoiceNo() {
+  const invInput = document.getElementById('inputInvNo');
+  let val = invInput.value.trim();
+  const match = val.match(/^(.*?)(?:\b|_|-)*(\d+)$/);
+  
+  if (match) {
+    const prefix = match[1];
+    const numStr = match[2];
+    const nextNum = parseInt(numStr, 10) + 1;
+    const paddedNum = String(nextNum).padStart(numStr.length, '0');
+    invInput.value = prefix + paddedNum;
+  } else {
+    invInput.value = val + '001';
+  }
+  updateInvoice();
+}
+
+async function loadSavedLogo() {
+  const savedLogo = await getLogoFromDB();
+  if (savedLogo) displayImageLogo(savedLogo);
+  else displayTextLogo();
+}
+
+function displayImageLogo(dataUrl) {
+  document.getElementById('viewLogoImg').src = dataUrl;
+  document.getElementById('imageLogoWrapper').classList.remove('hidden');
+  document.getElementById('textLogoWrapper').classList.add('hidden');
+  document.getElementById('resetLogoBtn').classList.remove('hidden');
+}
+
+function displayTextLogo() {
+  document.getElementById('imageLogoWrapper').classList.add('hidden');
+  document.getElementById('textLogoWrapper').classList.remove('hidden');
+  document.getElementById('resetLogoBtn').classList.add('hidden');
+  const fileInput = document.getElementById('logoFileInput');
+  if (fileInput) fileInput.value = '';
+}
+
+async function handleLogoUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const base64Image = e.target.result;
+      displayImageLogo(base64Image);
+      await saveLogoToDB(base64Image);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+async function clearLogo() {
+  await deleteLogoFromDB();
+  displayTextLogo();
+}
+
+function renderItemInputs() {
+  const container = document.getElementById('itemInputsContainer');
+  container.innerHTML = '';
+  const curr = document.getElementById('inputCurrency')?.value || '£';
+  const exRate = parseFloat(document.getElementById('inputExchangeRate')?.value) || 5500;
+
+  items.forEach((item, index) => {
+    const itemSubtotalGbp = item.weight * item.unitRateGbp;
+    const itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
+
+    const div = document.createElement('div');
+    div.className = 'bg-slate-900 p-2.5 rounded-xl border border-slate-700/80 space-y-2 text-xs';
+    div.innerHTML = `
+      <div class="flex items-center justify-between gap-2">
+        <input type="text" id="route_${index}" value="${item.route}" oninput="items[${index}].route = this.value; updateInvoice();" placeholder="Route" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-slate-100 font-semibold flex-1 text-xs">
+        <input type="text" id="riskNote_${index}" value="${item.riskNote || ''}" oninput="items[${index}].riskNote = this.value; updateInvoice();" placeholder="(Risk)" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-amber-300 font-semibold w-24 text-xs text-center">
+        <button onclick="removeItem(${index})" class="text-rose-400 hover:text-rose-300 font-bold px-1 py-0.5 rounded transition">✕</button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 text-[11px]">
+        <div>
+          <span class="text-slate-400">Weight (kg):</span>
+          <input type="number" step="0.5" id="weight_${index}" value="${item.weight}" oninput="items[${index}].weight = parseFloat(this.value)||0; updateItemTotalDisp(${index}); updateInvoice();" class="bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-slate-100 font-bold text-center w-full">
+        </div>
+        <div>
+          <span class="text-slate-400">Rate/kg (£):</span>
+          <input type="number" step="1" id="rate_${index}" value="${item.unitRateGbp}" oninput="items[${index}].unitRateGbp = parseFloat(this.value)||0; updateItemTotalDisp(${index}); updateInvoice();" class="bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-slate-100 font-bold text-center w-full">
+        </div>
+        <div>
+          <span class="text-slate-400">Total (${curr}):</span>
+          <div id="itemTotalDisp_${index}" class="bg-slate-800/80 border border-slate-700 rounded px-2 py-0.5 text-emerald-400 font-extrabold text-center truncate">${curr} ${itemSubtotalDisp}</div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px]">
+        <label class="inline-flex items-center cursor-pointer text-slate-300">
+          <input type="checkbox" ${item.hasDelFee ? 'checked' : ''} onchange="items[${index}].hasDelFee = this.checked; updateInvoice();" class="accent-amber-500">
+          <span class="ml-1 text-[10px]">Add Item Delivery Fee (£)</span>
+        </label>
+        <input type="number" value="${item.delFeeGbp || 10}" ${item.hasDelFee ? '' : 'disabled'} oninput="items[${index}].delFeeGbp = parseFloat(this.value)||0; updateInvoice();" class="bg-slate-800 border border-slate-700 rounded w-16 text-center text-amber-300 font-bold py-0.5 disabled:opacity-40">
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function updateItemTotalDisp(index) {
+  const curr = document.getElementById('inputCurrency')?.value || '£';
+  const exRate = parseFloat(document.getElementById('inputExchangeRate')?.value) || 5500;
+  const item = items[index];
+  const itemSubtotalGbp = item.weight * item.unitRateGbp;
+  const itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
+  
+  const dispEl = document.getElementById(`itemTotalDisp_${index}`);
+  if (dispEl) dispEl.innerText = `${curr} ${itemSubtotalDisp}`;
+}
+
+function addItem() {
+  items.push({ route: "Myanmar To UK", weight: 1, riskNote: "", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 });
+  renderItemInputs();
+  updateInvoice();
+}
+
+function removeItem(index) {
+  if (items.length > 1) {
+    items.splice(index, 1);
+    renderItemInputs();
+    updateInvoice();
+  }
+}
+
+function updateInvoiceOnly() {
+  updateInvoice();
+}
+
+function updateInvoice() {
+  const currentInv = document.getElementById('inputInvNo').value;
+  localStorage.setItem('addaffodils_mm_last_inv_no', currentInv);
+
+  const curr = document.getElementById('inputCurrency').value;
+  const exRate = parseFloat(document.getElementById('inputExchangeRate').value) || 5500;
+
+  document.querySelectorAll('.currSym').forEach(el => el.innerText = curr);
+
+  document.getElementById('viewDate').innerText = document.getElementById('inputDate').value;
+  document.getElementById('viewInvNo').innerText = currentInv;
+
+  document.getElementById('viewSenderName').innerText = document.getElementById('inputSenderName').value;
+  document.getElementById('viewSenderPhone').innerText = document.getElementById('inputSenderPhone').value;
+  document.getElementById('viewRecName').innerText = document.getElementById('inputRecName').value;
+  document.getElementById('viewRecPhone').innerText = document.getElementById('inputRecPhone').value;
+
+  const tbody = document.getElementById('viewTableBody');
+  tbody.innerHTML = '';
+
+  let grandTotalGbp = 0;
+
+  items.forEach(item => {
+    const itemPriceGbp = item.weight * item.unitRateGbp;
+    const itemDelFeeGbp = item.hasDelFee ? (item.delFeeGbp || 0) : 0;
+    const lineTotalGbp = itemPriceGbp + itemDelFeeGbp;
+    grandTotalGbp += lineTotalGbp;
+
+    const descText = `${item.route} ${item.weight} kg ${item.riskNote || ''}`.trim();
+    const unitRateDisplay = curr === 'MMK' ? `${curr} ${Math.round(item.unitRateGbp * exRate).toLocaleString()}` : `£ ${item.unitRateGbp}`;
+    const lineTotalDisplay = curr === 'MMK' ? `${curr} ${Math.round(lineTotalGbp * exRate).toLocaleString()}` : `£ ${lineTotalGbp}`;
+
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-amber-900/10 font-semibold text-stone-900';
+
+    let descHtml = `<div>${descText}</div>`;
+    if (item.hasDelFee && itemDelFeeGbp > 0) {
+      const delFeeDisp = curr === 'MMK' ? `${curr} ${Math.round(itemDelFeeGbp * exRate).toLocaleString()}` : `£ ${itemDelFeeGbp}`;
+      descHtml += `<div class="text-[10px] text-amber-800 font-bold">+ Item Deli Fee (${delFeeDisp})</div>`;
+    }
+
+    tr.innerHTML = `
+      <td class="p-2.5">${descHtml}</td>
+      <td class="p-2.5 text-center font-semibold">${unitRateDisplay}</td>
+      <td class="p-2.5 text-right font-extrabold">${lineTotalDisplay}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const isSingleDelFeeEnabled = document.getElementById('singleDelFeeToggle').checked;
+  const singleDelFeeGbp = isSingleDelFeeEnabled ? (parseFloat(document.getElementById('singleDelFeeInput').value) || 0) : 0;
+  const delFeeRow = document.getElementById('deliveryFeeRow');
+
+  if (isSingleDelFeeEnabled) {
+    grandTotalGbp += singleDelFeeGbp;
+    delFeeRow.classList.remove('hidden');
+    const singleDelFeeDisp = curr === 'MMK' ? `${curr} ${Math.round(singleDelFeeGbp * exRate).toLocaleString()}` : `£ ${singleDelFeeGbp}`;
+    document.getElementById('viewDeliveryFeeAmount').innerText = singleDelFeeDisp;
+  } else {
+    delFeeRow.classList.add('hidden');
+  }
+
+  const finalGrandTotalDisp = curr === 'MMK' ? Math.round(grandTotalGbp * exRate).toLocaleString() : grandTotalGbp.toLocaleString();
+  document.getElementById('viewGrandTotal').innerText = finalGrandTotalDisp;
+}
+
+function exportJPG() {
+  const invNo = document.getElementById('inputInvNo').value;
+  const invoice = document.getElementById('invoice');
+  
+  html2canvas(invoice, { scale: 3, useCORS: true, allowTaint: true }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `${invNo}_AD_Daffodils_MM_Outbound.jpg`;
+    link.href = canvas.toDataURL('image/jpeg', 1.0);
+    link.click();
+  });
+}
+
+function exportPDF() {
+  const invNo = document.getElementById('inputInvNo').value;
+  const element = document.getElementById('invoice');
+  const opt = {
+    margin: 0,
+    filename: `${invNo}_AD_Daffodils_MM_Outbound.pdf`,
+    image: { type: 'jpeg', quality: 1.0 },
+    html2canvas: { scale: 3, useCORS: true, allowTaint: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
