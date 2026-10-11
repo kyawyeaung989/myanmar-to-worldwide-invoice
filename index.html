@@ -90,8 +90,8 @@
     <div class="bg-amber-700 text-white px-3 py-1 rounded-lg font-black text-xl tracking-wider">MM</div>
     <div>
       <div class="flex items-center gap-2">
-        <h1 class="text-amber-400 font-extrabold text-lg leading-tight">MYANMAR TO UK INVOICE V6</h1>
-        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Format Fixed</span>
+        <h1 class="text-amber-400 font-extrabold text-lg leading-tight">MYANMAR TO UK INVOICE V10</h1>
+        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Auto Date Button Fixed</span>
       </div>
       <p class="text-xs text-slate-400">AD DAFFODILS Consignment Logistics System</p>
     </div>
@@ -153,15 +153,20 @@
     <div class="space-y-3 pt-1">
       <div class="flex justify-between items-center">
         <div class="font-bold text-xs text-amber-400 uppercase tracking-wider">3. Invoice Info</div>
-        <button onclick="autoNextInvoiceNo()" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 rounded transition">
-          + Auto Next Inv No.
-        </button>
+        <div class="flex items-center gap-1.5">
+          <button onclick="setTodayDate()" class="text-[10px] bg-amber-600 hover:bg-amber-500 text-white font-bold px-2 py-0.5 rounded transition shadow">
+            + Today Date
+          </button>
+          <button onclick="autoNextInvoiceNo()" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 rounded transition shadow">
+            + Auto Next Inv No.
+          </button>
+        </div>
       </div>
 
       <div class="grid grid-cols-2 gap-2.5">
         <div>
           <label class="block text-[11px] font-semibold text-slate-300 mb-1">Date</label>
-          <input type="text" id="inputDate" value="9.10.2026" oninput="updateInvoiceOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
+          <input type="text" id="inputDate" value="" oninput="updateInvoiceOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-300 mb-1">Inv No.</label>
@@ -261,7 +266,7 @@
 
           <!-- DATE & INV NO BANNER -->
           <div class="theme-banner rounded-sm px-4 py-2 font-bold text-sm flex justify-between items-center mb-5 tracking-wide">
-            <div>DATE &nbsp;<span id="viewDate">9.10.2026</span></div>
+            <div>DATE &nbsp;<span id="viewDate">11.10.2026</span></div>
             <div>INV No. : &nbsp;<span id="viewInvNo">ADF563</span></div>
           </div>
 
@@ -307,7 +312,7 @@
             <span><span class="currSym font-bold">£</span> <span id="viewGrandTotal">80</span></span>
           </div>
 
-          <!-- PAYMENT METHOD SECTION (Uniform Font Format Fixed) -->
+          <!-- PAYMENT METHOD SECTION -->
           <div class="mt-4 pt-1 text-xs">
             <div class="font-black text-stone-800 uppercase tracking-wider mb-2 text-[11px]">Payment Method</div>
             <div class="space-y-1 font-semibold text-stone-800 pl-2">
@@ -383,6 +388,7 @@ async function deleteLogoFromDB() {
 async function init() {
   await loadSavedLogo();
   loadSavedInvoiceNumber();
+  setTodayDate();
   renderItemInputs();
   updateInvoice();
 }
@@ -406,6 +412,16 @@ function autoNextInvoiceNo() {
   } else {
     invInput.value = val + '001';
   }
+  updateInvoice();
+}
+
+function setTodayDate() {
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+  
+  document.getElementById('inputDate').value = `${day}.${month}.${year}`;
   updateInvoice();
 }
 
