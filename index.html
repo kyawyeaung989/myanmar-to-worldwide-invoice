@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MYANMAR TO UK INVOICE GENERATOR - AD DAFFODILS</title>
   
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
   <!-- html2pdf bundle for PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <!-- html2canvas for JPG export -->
@@ -15,16 +13,117 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
       background-color: #0f172a;
       color: #f8fafc;
-      margin: 0;
-      padding: 0;
+      padding: 16px;
+      min-height: 100vh;
     }
 
-    /* Elegant Warm Cream Paper Background */
+    .app-header {
+      max-width: 1320px;
+      margin: 0 auto 16px auto;
+      background-color: #1e293b;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .main-grid {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 5fr 7fr;
+      }
+    }
+
+    .control-panel {
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-box {
+      background-color: rgba(15, 23, 42, 0.9);
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fbbf24;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    label { font-size: 11px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
+    
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #f8fafc;
+      outline: none;
+      font-family: inherit;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus {
+      border-color: #f59e0b;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    .btn {
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: white;
+    }
+    .btn-green { background-color: #059669; } .btn-green:hover { background-color: #10b981; }
+    .btn-amber { background-color: #d97706; } .btn-amber:hover { background-color: #f59e0b; }
+    .btn-rose { background-color: #e11d48; }  .btn-rose:hover { background-color: #f43f5e; }
+    .btn-action { padding: 8px 16px; font-size: 12px; border-radius: 8px; }
+
     .invoice-sheet {
       background-color: #ECE3D4;
       color: #3D2B1F;
@@ -41,18 +140,9 @@
       justify-content: space-between;
     }
 
-    /* Theme Accent Colors */
-    .theme-banner {
-      background-color: #9E7B5C;
-      color: #FFFFFF;
-    }
+    .theme-banner { background-color: #9E7B5C; color: #FFFFFF; }
+    .table-header { background-color: #9E7B5C; color: #FFFFFF; }
 
-    .table-header {
-      background-color: #9E7B5C;
-      color: #FFFFFF;
-    }
-
-    /* UK Style Typography Logo Styling */
     .styled-text-logo {
       display: inline-flex;
       flex-direction: column;
@@ -80,259 +170,208 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #1e293b; }
     ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+    .hidden { display: none !important; }
   </style>
 </head>
-<body class="p-2 md:p-6 min-h-screen">
+<body>
 
-<!-- Top Action Header Bar -->
-<div class="max-w-[1320px] mx-auto mb-4 flex flex-wrap justify-between items-center bg-slate-800 p-4 rounded-xl gap-3 no-print border border-slate-700 shadow-lg">
-  <div class="flex items-center gap-3">
-    <div class="bg-amber-700 text-white px-3 py-1 rounded-lg font-black text-xl tracking-wider">MM</div>
+<div class="app-header no-print">
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="background-color: #b45309; color: white; padding: 4px 12px; border-radius: 8px; font-weight: 900; font-size: 20px;">MM</div>
     <div>
-      <div class="flex items-center gap-2">
-        <h1 class="text-amber-400 font-extrabold text-lg leading-tight">MYANMAR TO UK INVOICE V10</h1>
-        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">Auto Date Button Fixed</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <h1 style="color: #fbbf24; font-weight: 800; font-size: 18px; line-height: 1.2;">MYANMAR TO UK INVOICE V12</h1>
+        <span style="font-size: 10px; background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; font-weight: 700; padding: 2px 8px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.3);">Offline Fix</span>
       </div>
-      <p class="text-xs text-slate-400">AD DAFFODILS Consignment Logistics System</p>
+      <p style="font-size: 12px; color: #94a3b8; margin-top: 2px;">AD DAFFODILS Consignment Logistics System</p>
     </div>
   </div>
   
-  <div class="flex flex-wrap items-center gap-2.5">
-    <button onclick="exportJPG()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition shadow flex items-center gap-1.5">
-      <span>🖼 Export JPG</span>
-    </button>
-    <button onclick="exportPDF()" class="bg-rose-600 hover:bg-rose-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition shadow flex items-center gap-1.5">
-      <span>📄 Export PDF</span>
-    </button>
+  <div style="display: flex; gap: 10px;">
+    <button onclick="exportJPG()" class="btn btn-green btn-action">🖼 Export JPG</button>
+    <button onclick="exportPDF()" class="btn btn-rose btn-action">📄 Export PDF</button>
   </div>
 </div>
 
-<!-- Main Workspace Layout -->
-<div class="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-  <!-- LEFT COLUMN: Control Panel -->
-  <div class="lg:col-span-5 bg-slate-800 p-4 md:p-5 rounded-2xl border border-slate-700 space-y-4 no-print max-h-[88vh] overflow-y-auto shadow-xl">
-    <h2 class="text-base font-bold text-slate-100 border-b border-slate-700 pb-2 flex items-center justify-between">
+<div class="main-grid">
+  <div class="control-panel no-print">
+    <div style="font-size: 16px; font-weight: 700; color: #f8fafc; border-bottom: 1px solid #334155; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
       <span>⚙️ Control Panel</span>
-      <span class="text-xs font-normal text-emerald-400 font-bold">Stable Mode</span>
-    </h2>
-
-    <!-- Company Logo Upload Control -->
-    <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 space-y-2">
-      <div class="flex items-center justify-between">
-        <label class="block text-xs font-bold text-amber-400">1. Company Logo (Optional)</label>
-        <button id="resetLogoBtn" onclick="clearLogo()" class="text-[11px] bg-slate-800 hover:bg-rose-950 text-rose-300 hover:text-rose-200 border border-slate-700 hover:border-rose-800 px-2 py-0.5 rounded-lg transition hidden">
-          🗑️ Reset Logo
-        </button>
-      </div>
-      <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" class="text-xs text-slate-300 w-full file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer">
+      <span style="font-size: 12px; color: #34d399;">Stable Mode</span>
     </div>
 
-    <!-- Currency & Exchange Rate Calculator Settings -->
-    <div class="bg-slate-900/90 p-3 rounded-xl border border-amber-500/30 space-y-2.5">
-      <div class="font-bold text-xs text-amber-400 uppercase tracking-wider flex items-center justify-between">
-        <span>2. Currency & Exchange Rate</span>
-        <span class="text-[10px] text-emerald-400 font-normal">Auto Convert</span>
+    <div class="card-box">
+      <div class="section-title">
+        <span>1. Company Logo (Optional)</span>
+        <button id="resetLogoBtn" onclick="clearLogo()" class="btn btn-rose hidden">🗑️ Reset Logo</button>
       </div>
-      <div class="grid grid-cols-2 gap-2.5">
+      <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" style="font-size: 11px;">
+    </div>
+
+    <div class="card-box" style="border-color: rgba(245, 158, 11, 0.3);">
+      <div class="section-title">
+        <span>2. Currency & Exchange Rate</span>
+        <span style="font-size: 10px; color: #34d399; font-weight: 400;">Auto Convert</span>
+      </div>
+      <div class="grid-2">
         <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Invoice Currency</label>
-          <select id="inputCurrency" onchange="updateInvoiceOnly();" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+          <label>Invoice Currency</label>
+          <select id="inputCurrency" onchange="updateInvoiceOnly();" style="color: #fbbf24; font-weight: 700;">
             <option value="£">Pound (£)</option>
             <option value="MMK">Kyat (MMK)</option>
           </select>
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Exchange Rate (1 £ = ? MMK)</label>
-          <input type="number" id="inputExchangeRate" value="5500" oninput="updateInvoiceOnly();" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-emerald-400 font-bold text-center focus:outline-none focus:border-amber-500">
+          <label>Exchange Rate (1 £ = ? MMK)</label>
+          <input type="number" id="inputExchangeRate" value="5500" oninput="updateInvoiceOnly();" style="color: #34d399; font-weight: 700; text-align: center;">
         </div>
       </div>
     </div>
 
-    <!-- Metadata Settings -->
-    <div class="space-y-3 pt-1">
-      <div class="flex justify-between items-center">
-        <div class="font-bold text-xs text-amber-400 uppercase tracking-wider">3. Invoice Info</div>
-        <div class="flex items-center gap-1.5">
-          <button onclick="setTodayDate()" class="text-[10px] bg-amber-600 hover:bg-amber-500 text-white font-bold px-2 py-0.5 rounded transition shadow">
-            + Today Date
-          </button>
-          <button onclick="autoNextInvoiceNo()" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 rounded transition shadow">
-            + Auto Next Inv No.
-          </button>
+    <div class="card-box">
+      <div class="section-title">
+        <span>3. Invoice Info</span>
+        <div style="display: flex; gap: 6px;">
+          <button onclick="setTodayDate()" class="btn btn-amber">📅 Today Date</button>
+          <button onclick="autoNextInvoiceNo()" class="btn btn-green">+ Auto Inv No.</button>
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-2.5">
+      <div class="grid-2">
         <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Date</label>
-          <input type="text" id="inputDate" value="" oninput="updateInvoiceOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
+          <label>Date</label>
+          <input type="text" id="inputDate" value="" oninput="updateInvoiceOnly()">
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Inv No.</label>
-          <input type="text" id="inputInvNo" value="ADF563" oninput="updateInvoiceOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-bold focus:outline-none focus:border-amber-500">
+          <label>Inv No.</label>
+          <input type="text" id="inputInvNo" value="ADF563" oninput="updateInvoiceOnly()" style="font-weight: 700;">
         </div>
       </div>
     </div>
 
-    <!-- Sender & Receiver Details -->
-    <div class="space-y-3 pt-2 border-t border-slate-700">
-      <div class="font-bold text-xs text-amber-400 uppercase tracking-wider">4. Sender & Receiver</div>
-      <div class="space-y-2">
-        <div class="text-[11px] font-semibold text-slate-300">Sender (Myanmar)</div>
-        <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="inputSenderName" value="May Zon Moe" placeholder="Name" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
-          <input type="text" id="inputSenderPhone" value="09777994663" placeholder="Tel" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
+    <div class="card-box">
+      <div class="section-title">4. Sender & Receiver</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: 11px; font-weight: 600; color: #94a3b8;">Sender (Myanmar)</span>
+        <div class="grid-2">
+          <input type="text" id="inputSenderName" value="May Zon Moe" placeholder="Name" oninput="updateInvoiceOnly()">
+          <input type="text" id="inputSenderPhone" value="09777994663" placeholder="Tel" oninput="updateInvoiceOnly()">
         </div>
       </div>
 
-      <div class="space-y-2 pt-1">
-        <div class="text-[11px] font-semibold text-slate-300">Receiver (UK / Oversea)</div>
-        <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="inputRecName" value="Ahmed Jarmal" placeholder="Name" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
-          <input type="text" id="inputRecPhone" value="07894253729" placeholder="Tel" oninput="updateInvoiceOnly()" class="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100">
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+        <span style="font-size: 11px; font-weight: 600; color: #94a3b8;">Receiver (UK / Oversea)</span>
+        <div class="grid-2">
+          <input type="text" id="inputRecName" value="Ahmed Jarmal" placeholder="Name" oninput="updateInvoiceOnly()">
+          <input type="text" id="inputRecPhone" value="07894253729" placeholder="Tel" oninput="updateInvoiceOnly()">
         </div>
       </div>
     </div>
 
-    <!-- OVERALL LOCAL DELIVERY FEE CONTROL -->
-    <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 space-y-2 pt-2 border-t border-slate-700">
-      <div class="flex items-center justify-between">
-        <span class="font-bold text-xs text-amber-400 uppercase tracking-wider">Overall Delivery Fee (£)</span>
-        <label class="inline-flex items-center cursor-pointer text-xs font-bold text-emerald-400">
-          <input type="checkbox" id="singleDelFeeToggle" checked onchange="updateInvoiceOnly()" class="accent-amber-500 mr-1.5 w-4 h-4">
+    <div class="card-box">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="section-title">Overall Delivery Fee (£)</span>
+        <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #34d399; margin: 0;">
+          <input type="checkbox" id="singleDelFeeToggle" checked onchange="updateInvoiceOnly()" style="accent-color: #f59e0b; width: 16px; height: 16px;">
           Include Overall Fee
         </label>
       </div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-slate-300 font-semibold">Amount (£):</span>
-        <input type="number" id="singleDelFeeInput" value="10" step="1" oninput="updateInvoiceOnly()" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-amber-300 font-bold w-24 text-center focus:outline-none focus:border-amber-500">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 12px; color: #cbd5e1;">Amount (£):</span>
+        <input type="number" id="singleDelFeeInput" value="10" step="1" oninput="updateInvoiceOnly()" style="width: 100px; text-align: center; color: #fde047; font-weight: 700;">
       </div>
     </div>
 
-    <!-- Cargo Items Section -->
-    <div class="pt-2 border-t border-slate-700 space-y-3">
-      <div class="flex justify-between items-center">
-        <span class="font-bold text-xs text-amber-400 uppercase tracking-wider">5. Consignment Items List</span>
-        <button onclick="addItem()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1">
-          <span>+ Add Item</span>
-        </button>
+    <div class="card-box">
+      <div class="section-title">
+        <span>5. Consignment Items List</span>
+        <button onclick="addItem()" class="btn btn-green">+ Add Item</button>
       </div>
-
-      <div id="itemInputsContainer" class="space-y-3">
-        <!-- Dynamic item rows injected by JS -->
-      </div>
+      <div id="itemInputsContainer" style="display: flex; flex-direction: column; gap: 10px;"></div>
     </div>
-
   </div>
 
-  <!-- RIGHT COLUMN: Printable Live Preview Sheet -->
-  <div class="lg:col-span-7 flex justify-center items-start overflow-x-auto p-2">
+  <div style="display: flex; justify-content: center; overflow-x: auto; padding: 8px;">
     <div id="invoiceContainer">
-      <div id="invoice" class="invoice-sheet text-xs">
-        
+      <div id="invoice" class="invoice-sheet">
         <div>
-          <!-- HEADER SECTION -->
-          <div class="flex justify-between items-start pb-4 border-b border-amber-900/20">
-            
-            <!-- Dual Mode Logo Block -->
-            <div id="logoHeaderBlock" class="min-w-[180px] min-h-[60px] flex items-center justify-start">
-              <div id="imageLogoWrapper" class="hidden w-48 h-16 flex items-center justify-start overflow-hidden">
-                <img id="viewLogoImg" src="" alt="AD DAFFODILS Logo" class="max-w-full max-h-full object-contain">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid rgba(120, 53, 15, 0.2);">
+            <div id="logoHeaderBlock" style="min-width: 180px; min-height: 60px; display: flex; align-items: center;">
+              <div id="imageLogoWrapper" class="hidden" style="width: 192px; height: 64px; overflow: hidden;">
+                <img id="viewLogoImg" src="" alt="AD DAFFODILS Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </div>
-
               <div id="textLogoWrapper" class="styled-text-logo">
-                <div class="text-amber-400 font-black text-lg tracking-wider uppercase leading-none">AD DAFFODILS</div>
-                <div class="text-slate-200 font-bold text-[9px] tracking-widest uppercase mt-1">AD Daffodils Consignment</div>
+                <div style="color: #fbbf24; font-weight: 900; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1;">AD DAFFODILS</div>
+                <div style="color: #e2e8f0; font-weight: 700; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px;">AD Daffodils Consignment</div>
               </div>
             </div>
-
-            <!-- Right Contact Block -->
-            <div class="text-right text-[11px] text-amber-950 font-medium space-y-1">
-              <div class="flex items-center justify-end gap-1 font-bold">
-                <span>📞</span> <span>09966322019, 09958337846</span>
-              </div>
-              <div class="flex items-start justify-end gap-1">
-                <span>📍</span> 
-                <span class="text-right max-w-[220px]">No.49, Ground Floor, 93rd Street, Mingalar Taung Nyunt, Yangon.</span>
-              </div>
+            <div style="text-align: right; font-size: 11px; color: #451a03; font-weight: 500; display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-weight: 700;">📞 09966322019, 09958337846</div>
+              <div style="max-w: 220px;">📍 No.49, Ground Floor, 93rd Street, Mingalar Taung Nyunt, Yangon.</div>
             </div>
           </div>
 
-          <!-- INVOICE TITLE BAR -->
-          <div class="text-center my-4">
-            <h2 class="text-2xl font-black tracking-widest text-stone-800 uppercase">INVOICE</h2>
+          <div style="text-align: center; margin: 16px 0;">
+            <h2 style="font-size: 24px; font-weight: 900; letter-spacing: 0.1em; color: #292524; text-transform: uppercase;">INVOICE</h2>
           </div>
 
-          <!-- DATE & INV NO BANNER -->
-          <div class="theme-banner rounded-sm px-4 py-2 font-bold text-sm flex justify-between items-center mb-5 tracking-wide">
-            <div>DATE &nbsp;<span id="viewDate">11.10.2026</span></div>
+          <div class="theme-banner" style="border-radius: 2px; padding: 8px 16px; font-weight: 700; font-size: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div>DATE &nbsp;<span id="viewDate">17.10.2026</span></div>
             <div>INV No. : &nbsp;<span id="viewInvNo">ADF563</span></div>
           </div>
 
-          <!-- SENDER & RECEIVER GRID -->
-          <div class="grid grid-cols-2 gap-6 my-4 text-xs font-semibold text-stone-900 px-2">
-            <div class="space-y-2">
-              <div class="font-black text-stone-700 tracking-wider uppercase text-[11px]">SENDER</div>
-              <div class="flex"><span class="w-16 text-stone-600">Name :</span> <span id="viewSenderName" class="font-bold">May Zon Moe</span></div>
-              <div class="flex"><span class="w-16 text-stone-600">Tel :</span> <span id="viewSenderPhone" class="font-bold">09777994663</span></div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 16px 0; font-size: 12px; font-weight: 600; color: #1c1917; padding: 0 8px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="font-weight: 900; color: #44403c; text-transform: uppercase; font-size: 11px;">SENDER</div>
+              <div><span style="width: 60px; display: inline-block; color: #57534e;">Name :</span> <span id="viewSenderName" style="font-weight: 700;">May Zon Moe</span></div>
+              <div><span style="width: 60px; display: inline-block; color: #57534e;">Tel :</span> <span id="viewSenderPhone" style="font-weight: 700;">09777994663</span></div>
             </div>
-            
-            <div class="space-y-2 border-l-2 border-amber-900/20 pl-6">
-              <div class="font-black text-stone-700 tracking-wider uppercase text-[11px]">RECEIVER</div>
-              <div class="flex"><span class="w-16 text-stone-600">Name :</span> <span id="viewRecName" class="font-bold">Ahmed Jarmal</span></div>
-              <div class="flex"><span class="w-16 text-stone-600">Tel :</span> <span id="viewRecPhone" class="font-bold">07894253729</span></div>
+            <div style="display: flex; flex-direction: column; gap: 8px; border-left: 2px solid rgba(120, 53, 15, 0.2); padding-left: 24px;">
+              <div style="font-weight: 900; color: #44403c; text-transform: uppercase; font-size: 11px;">RECEIVER</div>
+              <div><span style="width: 60px; display: inline-block; color: #57534e;">Name :</span> <span id="viewRecName" style="font-weight: 700;">Ahmed Jarmal</span></div>
+              <div><span style="width: 60px; display: inline-block; color: #57534e;">Tel :</span> <span id="viewRecPhone" style="font-weight: 700;">07894253729</span></div>
             </div>
           </div>
 
-          <!-- ITEMS TABLE -->
-          <table class="w-full text-left border-collapse my-5 text-xs">
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px; text-align: left;">
             <thead>
-              <tr class="table-header text-[11px] uppercase tracking-wider">
-                <th class="p-2.5 font-bold rounded-l-sm" style="width: 55%;">DESCRIPTION</th>
-                <th class="p-2.5 font-bold text-center" style="width: 20%;">UNIT</th>
-                <th class="p-2.5 font-bold text-right rounded-r-sm" style="width: 25%;">TOTAL</th>
+              <tr class="table-header" style="font-size: 11px; text-transform: uppercase;">
+                <th style="padding: 10px; font-weight: 700; border-radius: 2px 0 0 2px; width: 55%;">DESCRIPTION</th>
+                <th style="padding: 10px; font-weight: 700; text-align: center; width: 20%;">UNIT</th>
+                <th style="padding: 10px; font-weight: 700; text-align: right; border-radius: 0 2px 2px 0; width: 25%;">TOTAL</th>
               </tr>
             </thead>
-            <tbody id="viewTableBody">
-              <!-- Dynamic Rows Injected Here -->
-            </tbody>
+            <tbody id="viewTableBody"></tbody>
             <tfoot>
-              <!-- Single Overall Delivery Fee Row -->
-              <tr id="deliveryFeeRow" class="hidden font-bold text-amber-950 bg-amber-900/10 border-t border-amber-900/20 text-xs">
-                <td colspan="2" class="p-2.5 uppercase tracking-wider font-extrabold">Local Deli Fees</td>
-                <td id="viewDeliveryFeeAmount" class="p-2.5 text-right font-black">£ 10</td>
+              <tr id="deliveryFeeRow" class="hidden" style="font-weight: 700; color: #451a03; background-color: rgba(158, 123, 92, 0.15); border-top: 1px solid rgba(120, 53, 15, 0.2); font-size: 12px;">
+                <td colspan="2" style="padding: 10px; text-transform: uppercase; font-weight: 900;">Local Deli Fees</td>
+                <td id="viewDeliveryFeeAmount" style="padding: 10px; text-align: right; font-weight: 900;">£ 10</td>
               </tr>
             </tfoot>
           </table>
 
-          <!-- TOTAL AMOUNT BANNER -->
-          <div class="theme-banner rounded-sm px-4 py-2.5 font-black text-base flex justify-between items-center my-6 tracking-wide shadow-sm">
+          <div class="theme-banner" style="border-radius: 2px; padding: 10px 16px; font-weight: 900; font-size: 16px; display: flex; justify-content: space-between; align-items: center; margin: 24px 0;">
             <span>TOTAL AMOUNT</span>
-            <span><span class="currSym font-bold">£</span> <span id="viewGrandTotal">80</span></span>
+            <span><span class="currSym">£</span> <span id="viewGrandTotal">80</span></span>
           </div>
 
-          <!-- PAYMENT METHOD SECTION -->
-          <div class="mt-4 pt-1 text-xs">
-            <div class="font-black text-stone-800 uppercase tracking-wider mb-2 text-[11px]">Payment Method</div>
-            <div class="space-y-1 font-semibold text-stone-800 pl-2">
-              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Acc Type</span> <span class="font-semibold text-stone-800">- Business</span></div>
-              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Acc Name</span> <span class="font-semibold text-stone-800">- AD DAFFODILS CONSIGNMENT</span></div>
-              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Sort Code</span> <span class="font-semibold text-stone-800">- 82-19-74</span></div>
-              <div class="flex"><span class="w-24 text-stone-600 font-semibold">Acc Number</span> <span class="font-semibold text-stone-800">- 40256654</span></div>
+          <div style="margin-top: 16px; font-size: 12px;">
+            <div style="font-weight: 900; color: #292524; text-transform: uppercase; margin-bottom: 8px; font-size: 11px;">Payment Method</div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 600; color: #292524; padding-left: 8px;">
+              <div><span style="width: 100px; display: inline-block; color: #57534e;">Acc Type</span> <span>- Business</span></div>
+              <div><span style="width: 100px; display: inline-block; color: #57534e;">Acc Name</span> <span>- AD DAFFODILS CONSIGNMENT</span></div>
+              <div><span style="width: 100px; display: inline-block; color: #57534e;">Sort Code</span> <span>- 82-19-74</span></div>
+              <div><span style="width: 100px; display: inline-block; color: #57534e;">Acc Number</span> <span>- 40256654</span></div>
             </div>
           </div>
         </div>
 
-        <!-- FOOTER SLOGAN BANNER -->
-        <div class="theme-banner text-center py-2 font-bold text-[10px] tracking-widest uppercase mt-auto rounded-sm">
+        <div class="theme-banner" style="text-align: center; padding: 8px; font-weight: 700; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: auto; border-radius: 2px;">
           REMAIN TRANQUIL WE PROCEED WITH UTMOST CAUTIONS
         </div>
-
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
@@ -340,7 +379,6 @@ let items = [
   { route: "Myanmar To UK", weight: 5, riskNote: "(Risk)", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 }
 ];
 
-// IndexedDB Logo Helper
 const DB_NAME = 'ADDaffodilsMMInvoiceDB';
 const DB_VERSION = 1;
 const STORE_NAME = 'assets';
@@ -475,36 +513,36 @@ function renderItemInputs() {
     const itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
 
     const div = document.createElement('div');
-    div.className = 'bg-slate-900 p-2.5 rounded-xl border border-slate-700/80 space-y-2 text-xs';
+    div.className = 'card-box';
+    div.style.gap = '8px';
     div.innerHTML = `
-      <div class="flex items-center justify-between gap-2">
-        <input type="text" id="route_${index}" value="${item.route}" oninput="items[${index}].route = this.value; updateInvoice();" placeholder="Route" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-slate-100 font-semibold flex-1 text-xs">
-        <input type="text" id="riskNote_${index}" value="${item.riskNote || ''}" oninput="items[${index}].riskNote = this.value; updateInvoice();" placeholder="(Risk)" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-amber-300 font-semibold w-24 text-xs text-center">
-        <button onclick="removeItem(${index})" class="text-rose-400 hover:text-rose-300 font-bold px-1 py-0.5 rounded transition">✕</button>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <input type="text" id="route_${index}" value="${item.route}" oninput="items[${index}].route = this.value; updateInvoice();" placeholder="Route" style="flex: 1;">
+        <input type="text" id="riskNote_${index}" value="${item.riskNote || ''}" oninput="items[${index}].riskNote = this.value; updateInvoice();" placeholder="(Risk)" style="width: 80px; color: #fde047; text-align: center;">
+        <button onclick="removeItem(${index})" class="btn btn-rose" style="padding: 2px 8px;">✕</button>
       </div>
 
-      <div class="grid grid-cols-3 gap-2 text-[11px]">
+      <div class="grid-3">
         <div>
-          <span class="text-slate-400">Weight (kg):</span>
-          <input type="number" step="0.5" id="weight_${index}" value="${item.weight}" oninput="items[${index}].weight = parseFloat(this.value)||0; updateItemTotalDisp(${index}); updateInvoice();" class="bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-slate-100 font-bold text-center w-full">
+          <label>Weight (kg):</label>
+          <input type="number" step="0.5" id="weight_${index}" value="${item.weight}" oninput="items[${index}].weight = parseFloat(this.value)||0; updateItemTotalDisp(${index}); updateInvoice();" style="text-align: center; font-weight: 700;">
         </div>
         <div>
-          <span class="text-slate-400">Rate/kg (£):</span>
-          <input type="number" step="1" id="rate_${index}" value="${item.unitRateGbp}" oninput="items[${index}].unitRateGbp = parseFloat(this.value)||0; updateItemTotalDisp(${index}); updateInvoice();" class="bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-slate-100 font-bold text-center w-full">
+          <label>Rate/kg (£):</label>
+          <input type="number" step="1" id="rate_${index}" value="${item.unitRateGbp}" oninput="items[${index}].unitRateGbp = parseFloat(this.value)||0; updateItemTotalDisp(${index}); updateInvoice();" style="text-align: center; font-weight: 700;">
         </div>
         <div>
-          <span class="text-slate-400">Total (${curr}):</span>
-          <div id="itemTotalDisp_${index}" class="bg-slate-800/80 border border-slate-700 rounded px-2 py-0.5 text-emerald-400 font-extrabold text-center truncate">${curr} ${itemSubtotalDisp}</div>
+          <label>Total (${curr}):</label>
+          <div id="itemTotalDisp_${index}" style="background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 6px; color: #34d399; font-weight: 800; text-align: center; font-size: 11px;">${curr} ${itemSubtotalDisp}</div>
         </div>
       </div>
 
-      <!-- Per-Item Delivery Fee Toggle -->
-      <div class="flex items-center justify-between pt-1 border-t border-slate-800/80 text-[11px]">
-        <label class="inline-flex items-center cursor-pointer text-slate-300">
-          <input type="checkbox" ${item.hasDelFee ? 'checked' : ''} onchange="items[${index}].hasDelFee = this.checked; updateInvoice();" class="accent-amber-500">
-          <span class="ml-1 text-[10px]">Add Item Delivery Fee (£)</span>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px solid #334155;">
+        <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; color: #cbd5e1; margin: 0;">
+          <input type="checkbox" ${item.hasDelFee ? 'checked' : ''} onchange="items[${index}].hasDelFee = this.checked; updateInvoice();" style="accent-color: #f59e0b;">
+          <span>Add Item Delivery Fee (£)</span>
         </label>
-        <input type="number" value="${item.delFeeGbp || 10}" ${item.hasDelFee ? '' : 'disabled'} oninput="items[${index}].delFeeGbp = parseFloat(this.value)||0; updateInvoice();" class="bg-slate-800 border border-slate-700 rounded w-16 text-center text-amber-300 font-bold py-0.5 disabled:opacity-40">
+        <input type="number" value="${item.delFeeGbp || 10}" ${item.hasDelFee ? '' : 'disabled'} oninput="items[${index}].delFeeGbp = parseFloat(this.value)||0; updateInvoice();" style="width: 70px; text-align: center; color: #fde047; font-weight: 700;">
       </div>
     `;
     container.appendChild(div);
@@ -573,18 +611,20 @@ function updateInvoice() {
     const lineTotalDisplay = curr === 'MMK' ? `${curr} ${Math.round(lineTotalGbp * exRate).toLocaleString()}` : `£ ${lineTotalGbp}`;
 
     const tr = document.createElement('tr');
-    tr.className = 'border-b border-amber-900/10 font-semibold text-stone-900';
+    tr.style.borderBottom = '1px solid rgba(120, 53, 15, 0.1)';
+    tr.style.fontWeight = '600';
+    tr.style.color = '#1c1917';
 
     let descHtml = `<div>${descText}</div>`;
     if (item.hasDelFee && itemDelFeeGbp > 0) {
       const delFeeDisp = curr === 'MMK' ? `${curr} ${Math.round(itemDelFeeGbp * exRate).toLocaleString()}` : `£ ${itemDelFeeGbp}`;
-      descHtml += `<div class="text-[10px] text-amber-800 font-bold">+ Item Deli Fee (${delFeeDisp})</div>`;
+      descHtml += `<div style="font-size: 10px; color: #92400e; font-weight: 700;">+ Item Deli Fee (${delFeeDisp})</div>`;
     }
 
     tr.innerHTML = `
-      <td class="p-2.5">${descHtml}</td>
-      <td class="p-2.5 text-center font-semibold">${unitRateDisplay}</td>
-      <td class="p-2.5 text-right font-extrabold">${lineTotalDisplay}</td>
+      <td style="padding: 10px;">${descHtml}</td>
+      <td style="padding: 10px; text-align: center;">${unitRateDisplay}</td>
+      <td style="padding: 10px; text-align: right; font-weight: 800;">${lineTotalDisplay}</td>
     `;
     tbody.appendChild(tr);
   });
