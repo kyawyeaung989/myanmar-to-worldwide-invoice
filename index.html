@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MYANMAR TO UK INVOICE GENERATOR - AD DAFFODILS</title>
+  <title>MYANMAR TO WORLDWIDE INVOICE V37 - AD DAFFODILS</title>
   
   <!-- html2pdf bundle for PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -124,13 +124,14 @@
     .btn-rose { background-color: #e11d48; }  .btn-rose:hover { background-color: #f43f5e; }
     .btn-action { padding: 8px 16px; font-size: 12px; border-radius: 8px; }
 
+    /* Strict Single A4 Printable Sheet */
     .invoice-sheet {
       background-color: #ECE3D4;
       color: #3D2B1F;
       width: 210mm;
       min-height: 297mm;
       height: 297mm;
-      padding: 12mm 15mm;
+      padding: 10mm 14mm;
       margin: 0 auto;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       position: relative;
@@ -150,10 +151,26 @@
       justify-content: center;
       background: linear-gradient(135deg, #3d2b1f 0%, #1e130c 100%);
       border: 2px solid #d97706;
-      border-radius: 10px;
-      padding: 8px 14px;
+      border-radius: 8px;
+      padding: 6px 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
+
+    /* Dedicated Clean Status Stamp Design */
+    .status-stamp {
+      display: inline-block;
+      border: 3px solid;
+      border-radius: 8px;
+      padding: 6px 18px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transform: rotate(-5deg);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    .stamp-paid { color: #059669; border-color: #059669; background-color: rgba(5, 150, 105, 0.12); }
+    .stamp-unpaid { color: #e11d48; border-color: #e11d48; background-color: rgba(225, 29, 72, 0.12); }
 
     @media print {
       body { background: white !important; padding: 0 !important; }
@@ -162,7 +179,7 @@
         box-shadow: none !important;
         width: 210mm !important;
         height: 297mm !important;
-        padding: 12mm 15mm !important;
+        padding: 10mm 14mm !important;
         margin: 0 !important;
       }
     }
@@ -180,24 +197,42 @@
     <div style="background-color: #b45309; color: white; padding: 4px 12px; border-radius: 8px; font-weight: 900; font-size: 20px;">MM</div>
     <div>
       <div style="display: flex; align-items: center; gap: 8px;">
-        <h1 style="color: #fbbf24; font-weight: 800; font-size: 18px; line-height: 1.2;">MYANMAR TO UK INVOICE V12</h1>
-        <span style="font-size: 10px; background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; font-weight: 700; padding: 2px 8px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.3);">Offline Fix</span>
+        <h1 style="color: #fbbf24; font-weight: 800; font-size: 18px; line-height: 1.2;">MYANMAR TO WORLDWIDE INVOICE V37</h1>
+        <span style="font-size: 10px; background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; font-weight: 700; padding: 2px 8px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.3);">3-Column Card Footer V37</span>
       </div>
       <p style="font-size: 12px; color: #94a3b8; margin-top: 2px;">AD DAFFODILS Consignment Logistics System</p>
     </div>
   </div>
   
   <div style="display: flex; gap: 10px;">
-    <button onclick="exportJPG()" class="btn btn-green btn-action">🖼 Export JPG</button>
-    <button onclick="exportPDF()" class="btn btn-rose btn-action">📄 Export PDF</button>
+    <button onclick="exportJPG()" class="btn btn-green btn-action">🖼 Export Single Page JPG</button>
+    <button onclick="exportPDF()" class="btn btn-rose btn-action">📄 Export Single Page PDF</button>
   </div>
 </div>
 
 <div class="main-grid">
+  <!-- CONTROL PANEL -->
   <div class="control-panel no-print">
     <div style="font-size: 16px; font-weight: 700; color: #f8fafc; border-bottom: 1px solid #334155; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
       <span>⚙️ Control Panel</span>
-      <span style="font-size: 12px; color: #34d399;">Stable Mode</span>
+      <span style="font-size: 12px; color: #34d399;">Single Page V37</span>
+    </div>
+
+    <!-- Payment Status Control -->
+    <div class="card-box" style="border-color: rgba(5, 150, 105, 0.4); background-color: rgba(5, 150, 105, 0.05);">
+      <div class="section-title" style="color: #34d399;">
+        <span>Invoice Payment Status</span>
+      </div>
+      <div class="grid-2">
+        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
+          <input type="radio" name="paymentStatus" value="PAID" checked onchange="updateInvoice()" style="accent-color: #059669;">
+          <span style="font-weight: 800; color: #34d399;">PAID (ရှင်းပြီး)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
+          <input type="radio" name="paymentStatus" value="UNPAID" onchange="updateInvoice()" style="accent-color: #e11d48;">
+          <span style="font-weight: 800; color: #f43f5e;">UNPAID (မရှင်းရသေး)</span>
+        </label>
+      </div>
     </div>
 
     <div class="card-box">
@@ -216,14 +251,14 @@
       <div class="grid-2">
         <div>
           <label>Invoice Currency</label>
-          <select id="inputCurrency" onchange="updateInvoiceOnly();" style="color: #fbbf24; font-weight: 700;">
+          <select id="inputCurrency" onchange="updateInvoice();" style="color: #fbbf24; font-weight: 700;">
             <option value="£">Pound (£)</option>
             <option value="MMK">Kyat (MMK)</option>
           </select>
         </div>
         <div>
           <label>Exchange Rate (1 £ = ? MMK)</label>
-          <input type="number" id="inputExchangeRate" value="5500" oninput="updateInvoiceOnly();" style="color: #34d399; font-weight: 700; text-align: center;">
+          <input type="number" id="inputExchangeRate" value="5500" oninput="updateInvoice();" style="color: #34d399; font-weight: 700; text-align: center;">
         </div>
       </div>
     </div>
@@ -240,11 +275,11 @@
       <div class="grid-2">
         <div>
           <label>Date</label>
-          <input type="text" id="inputDate" value="" oninput="updateInvoiceOnly()">
+          <input type="text" id="inputDate" value="" oninput="updateInvoice()">
         </div>
         <div>
           <label>Inv No.</label>
-          <input type="text" id="inputInvNo" value="ADF563" oninput="updateInvoiceOnly()" style="font-weight: 700;">
+          <input type="text" id="inputInvNo" value="ADF563" oninput="updateInvoice()" style="font-weight: 700;">
         </div>
       </div>
     </div>
@@ -254,16 +289,16 @@
       <div style="display: flex; flex-direction: column; gap: 8px;">
         <span style="font-size: 11px; font-weight: 600; color: #94a3b8;">Sender (Myanmar)</span>
         <div class="grid-2">
-          <input type="text" id="inputSenderName" value="May Zon Moe" placeholder="Name" oninput="updateInvoiceOnly()">
-          <input type="text" id="inputSenderPhone" value="09777994663" placeholder="Tel" oninput="updateInvoiceOnly()">
+          <input type="text" id="inputSenderName" value="May Zon Moe" placeholder="Name" oninput="updateInvoice()">
+          <input type="text" id="inputSenderPhone" value="09777994663" placeholder="Tel" oninput="updateInvoice()">
         </div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
-        <span style="font-size: 11px; font-weight: 600; color: #94a3b8;">Receiver (UK / Oversea)</span>
+        <span style="font-size: 11px; font-weight: 600; color: #94a3b8;">Receiver (Worldwide)</span>
         <div class="grid-2">
-          <input type="text" id="inputRecName" value="Ahmed Jarmal" placeholder="Name" oninput="updateInvoiceOnly()">
-          <input type="text" id="inputRecPhone" value="07894253729" placeholder="Tel" oninput="updateInvoiceOnly()">
+          <input type="text" id="inputRecName" value="Ahmed Jarmal" placeholder="Name" oninput="updateInvoice()">
+          <input type="text" id="inputRecPhone" value="07894253729" placeholder="Tel" oninput="updateInvoice()">
         </div>
       </div>
     </div>
@@ -272,13 +307,13 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="section-title">Overall Delivery Fee (£)</span>
         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #34d399; margin: 0;">
-          <input type="checkbox" id="singleDelFeeToggle" checked onchange="updateInvoiceOnly()" style="accent-color: #f59e0b; width: 16px; height: 16px;">
+          <input type="checkbox" id="singleDelFeeToggle" checked onchange="updateInvoice()" style="accent-color: #f59e0b; width: 16px; height: 16px;">
           Include Overall Fee
         </label>
       </div>
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="font-size: 12px; color: #cbd5e1;">Amount (£):</span>
-        <input type="number" id="singleDelFeeInput" value="10" step="1" oninput="updateInvoiceOnly()" style="width: 100px; text-align: center; color: #fde047; font-weight: 700;">
+        <input type="number" id="singleDelFeeInput" value="10" step="1" oninput="updateInvoice()" style="width: 100px; text-align: center; color: #fde047; font-weight: 700;">
       </div>
     </div>
 
@@ -291,84 +326,163 @@
     </div>
   </div>
 
-  <div style="display: flex; justify-content: center; overflow-x: auto; padding: 8px;">
+  <!-- RIGHT COLUMN: SINGLE A4 PRINTABLE LIVE PREVIEW -->
+  <div style="display: flex; justify-content: center; overflow-x: auto; padding: 4px;">
     <div id="invoiceContainer">
       <div id="invoice" class="invoice-sheet">
+        
         <div>
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid rgba(120, 53, 15, 0.2);">
-            <div id="logoHeaderBlock" style="min-width: 180px; min-height: 60px; display: flex; align-items: center;">
-              <div id="imageLogoWrapper" class="hidden" style="width: 192px; height: 64px; overflow: hidden;">
+          <!-- HEADER SECTION -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 6px; border-bottom: 1px solid rgba(120, 53, 15, 0.2);">
+            <div id="logoHeaderBlock" style="min-width: 170px; min-height: 44px; display: flex; align-items: center;">
+              <div id="imageLogoWrapper" class="hidden" style="width: 170px; height: 44px; overflow: hidden;">
                 <img id="viewLogoImg" src="" alt="AD DAFFODILS Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </div>
               <div id="textLogoWrapper" class="styled-text-logo">
-                <div style="color: #fbbf24; font-weight: 900; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1;">AD DAFFODILS</div>
-                <div style="color: #e2e8f0; font-weight: 700; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px;">AD Daffodils Consignment</div>
+                <div style="color: #fbbf24; font-weight: 900; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1;">AD DAFFODILS</div>
+                <div style="color: #e2e8f0; font-weight: 700; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px;">AD Daffodils Consignment</div>
               </div>
             </div>
-            <div style="text-align: right; font-size: 11px; color: #451a03; font-weight: 500; display: flex; flex-direction: column; gap: 4px;">
-              <div style="font-weight: 700;">📞 09966322019, 09958337846</div>
-              <div style="max-w: 220px;">📍 No.49, Ground Floor, 93rd Street, Mingalar Taung Nyunt, Yangon.</div>
+            <div style="text-align: right; font-size: 9.5px; color: #451a03; font-weight: 500; display: flex; flex-direction: column; gap: 1px;">
+              <div style="font-weight: 700; font-size: 10.5px;">📞 MM: 09966322019, 09958337846</div>
+              <div style="max-width: 230px;">📍 No.49, Ground Floor, 93rd Street, Mingalar Taung Nyunt, Yangon.</div>
             </div>
           </div>
 
-          <div style="text-align: center; margin: 16px 0;">
-            <h2 style="font-size: 24px; font-weight: 900; letter-spacing: 0.1em; color: #292524; text-transform: uppercase;">INVOICE</h2>
+          <!-- INVOICE TITLE BANNER -->
+          <div style="text-align: center; margin: 6px 0 3px 0;">
+            <h2 style="font-size: 16px; font-weight: 900; letter-spacing: 0.1em; color: #292524; text-transform: uppercase;">INVOICE</h2>
           </div>
 
-          <div class="theme-banner" style="border-radius: 2px; padding: 8px 16px; font-weight: 700; font-size: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div class="theme-banner" style="border-radius: 2px; padding: 3px 10px; font-weight: 700; font-size: 11px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <div>DATE &nbsp;<span id="viewDate">17.10.2026</span></div>
             <div>INV No. : &nbsp;<span id="viewInvNo">ADF563</span></div>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 16px 0; font-size: 12px; font-weight: 600; color: #1c1917; padding: 0 8px;">
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div style="font-weight: 900; color: #44403c; text-transform: uppercase; font-size: 11px;">SENDER</div>
-              <div><span style="width: 60px; display: inline-block; color: #57534e;">Name :</span> <span id="viewSenderName" style="font-weight: 700;">May Zon Moe</span></div>
-              <div><span style="width: 60px; display: inline-block; color: #57534e;">Tel :</span> <span id="viewSenderPhone" style="font-weight: 700;">09777994663</span></div>
+          <!-- SENDER & RECEIVER -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 6px 0; font-size: 10px; font-weight: 600; color: #1c1917; padding: 0 4px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-weight: 900; color: #44403c; text-transform: uppercase; font-size: 9px;">SENDER (MYANMAR)</div>
+              <div><span style="width: 44px; display: inline-block; color: #57534e;">Name :</span> <span id="viewSenderName" style="font-weight: 700;">May Zon Moe</span></div>
+              <div><span style="width: 44px; display: inline-block; color: #57534e;">Tel :</span> <span id="viewSenderPhone" style="font-weight: 700;">09777994663</span></div>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 8px; border-left: 2px solid rgba(120, 53, 15, 0.2); padding-left: 24px;">
-              <div style="font-weight: 900; color: #44403c; text-transform: uppercase; font-size: 11px;">RECEIVER</div>
-              <div><span style="width: 60px; display: inline-block; color: #57534e;">Name :</span> <span id="viewRecName" style="font-weight: 700;">Ahmed Jarmal</span></div>
-              <div><span style="width: 60px; display: inline-block; color: #57534e;">Tel :</span> <span id="viewRecPhone" style="font-weight: 700;">07894253729</span></div>
+            <div style="display: flex; flex-direction: column; gap: 2px; border-left: 2px solid rgba(120, 53, 15, 0.2); padding-left: 12px;">
+              <div style="font-weight: 900; color: #44403c; text-transform: uppercase; font-size: 9px;">RECEIVER (WORLDWIDE)</div>
+              <div><span style="width: 44px; display: inline-block; color: #57534e;">Name :</span> <span id="viewRecName" style="font-weight: 700;">Ahmed Jarmal</span></div>
+              <div><span style="width: 44px; display: inline-block; color: #57534e;">Tel :</span> <span id="viewRecPhone" style="font-weight: 700;">07894253729</span></div>
             </div>
           </div>
 
-          <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px; text-align: left;">
+          <!-- ITEMS TABLE -->
+          <table style="width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 10px; text-align: left;">
             <thead>
-              <tr class="table-header" style="font-size: 11px; text-transform: uppercase;">
-                <th style="padding: 10px; font-weight: 700; border-radius: 2px 0 0 2px; width: 55%;">DESCRIPTION</th>
-                <th style="padding: 10px; font-weight: 700; text-align: center; width: 20%;">UNIT</th>
-                <th style="padding: 10px; font-weight: 700; text-align: right; border-radius: 0 2px 2px 0; width: 25%;">TOTAL</th>
+              <tr class="table-header" style="font-size: 9px; text-transform: uppercase;">
+                <th style="padding: 5px 6px; font-weight: 700; border-radius: 2px 0 0 2px; width: 55%;">DESCRIPTION</th>
+                <th style="padding: 5px 6px; font-weight: 700; text-align: center; width: 20%;">UNIT</th>
+                <th style="padding: 5px 6px; font-weight: 700; text-align: right; border-radius: 0 2px 2px 0; width: 25%;">TOTAL</th>
               </tr>
             </thead>
             <tbody id="viewTableBody"></tbody>
             <tfoot>
-              <tr id="deliveryFeeRow" class="hidden" style="font-weight: 700; color: #451a03; background-color: rgba(158, 123, 92, 0.15); border-top: 1px solid rgba(120, 53, 15, 0.2); font-size: 12px;">
-                <td colspan="2" style="padding: 10px; text-transform: uppercase; font-weight: 900;">Local Deli Fees</td>
-                <td id="viewDeliveryFeeAmount" style="padding: 10px; text-align: right; font-weight: 900;">£ 10</td>
+              <!-- Local Delivery Fee Row -->
+              <tr id="deliveryFeeRow" class="hidden" style="font-weight: 600; color: #1c1917; border-bottom: 1px solid rgba(120, 53, 15, 0.1); font-size: 10px;">
+                <td style="padding: 5px 6px; font-weight: 600;">Local Deli Fees</td>
+                <td style="padding: 5px 6px; text-align: center;">-</td>
+                <td id="viewDeliveryFeeAmount" style="padding: 5px 6px; text-align: right; font-weight: 800;">£ 10</td>
               </tr>
             </tfoot>
           </table>
 
-          <div class="theme-banner" style="border-radius: 2px; padding: 10px 16px; font-weight: 900; font-size: 16px; display: flex; justify-content: space-between; align-items: center; margin: 24px 0;">
+          <!-- TOTAL AMOUNT BANNER -->
+          <div class="theme-banner" style="border-radius: 2px; padding: 5px 10px; font-weight: 900; font-size: 12.5px; display: flex; justify-content: space-between; align-items: center; margin: 6px 0;">
             <span>TOTAL AMOUNT</span>
             <span><span class="currSym">£</span> <span id="viewGrandTotal">80</span></span>
           </div>
 
-          <div style="margin-top: 16px; font-size: 12px;">
-            <div style="font-weight: 900; color: #292524; text-transform: uppercase; margin-bottom: 8px; font-size: 11px;">Payment Method</div>
-            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 600; color: #292524; padding-left: 8px;">
-              <div><span style="width: 100px; display: inline-block; color: #57534e;">Acc Type</span> <span>- Business</span></div>
-              <div><span style="width: 100px; display: inline-block; color: #57534e;">Acc Name</span> <span>- AD DAFFODILS CONSIGNMENT</span></div>
-              <div><span style="width: 100px; display: inline-block; color: #57534e;">Sort Code</span> <span>- 82-19-74</span></div>
-              <div><span style="width: 100px; display: inline-block; color: #57534e;">Acc Number</span> <span>- 40256654</span></div>
+          <!-- MIDDLE ROW: PAYMENT METHOD & STAMP -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; align-items: center;">
+            
+            <!-- Payment Method -->
+            <div style="background-color: rgba(158, 123, 92, 0.12); padding: 6px 8px; border-radius: 6px; border: 1px solid rgba(120, 53, 15, 0.2); font-size: 9.5px;">
+              <div style="font-weight: 900; color: #292524; text-transform: uppercase; margin-bottom: 3px; font-size: 8.5px; border-bottom: 1px solid rgba(120, 53, 15, 0.2); padding-bottom: 2px;">PAYMENT METHOD</div>
+              <div style="display: flex; flex-direction: column; gap: 2px; font-weight: 600; color: #292524;">
+                <div><span style="color: #57534e;">Acc Type:</span> <span style="font-weight: 700;">Business</span></div>
+                <div><span style="color: #57534e;">Acc Name:</span> <span style="font-weight: 700;">AD DAFFODILS CONSIGNMENT</span></div>
+                <div><span style="color: #57534e;">Sort Code:</span> <span style="font-weight: 700;">82-19-74</span></div>
+                <div><span style="color: #57534e;">Acc Number:</span> <span style="font-weight: 700;">40256654</span></div>
+              </div>
+            </div>
+
+            <!-- Clean & Dedicated Status Stamp Display -->
+            <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+              <div id="statusStamp" class="status-stamp stamp-paid">PAID</div>
+            </div>
+
+          </div>
+
+          <!-- TERMS & CONDITIONS (V37) -->
+          <div style="margin-top: 8px;">
+            <div style="background-color: rgba(255, 255, 255, 0.82); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(120, 53, 15, 0.35); font-size: 10px; line-height: 1.4; color: #1c1917;">
+              <div style="font-weight: 900; color: #78350f; text-transform: uppercase; margin-bottom: 4px; font-size: 10.5px; border-bottom: 1.5px solid rgba(120, 53, 15, 0.3); padding-bottom: 2px; display: flex; justify-content: space-between; align-items: center;">
+                <span>Myanmar To Worldwide Terms & Conditions</span>
+                <span style="font-size: 9.5px; font-weight: 800; color: #9e7b5c;">AD Daffodils</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 3px; font-weight: 700;">
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> Company မှ သတ်မှတ်ထားသော fees သည် ကုန်ပစ္စည်းပို့ဆောင်ရေးအတွက် သီးသန့်ဖြစ်ပါသည်။ Insurance မပါသော အဖိုးတန်ပစ္စည်းများ၊ Risk Items များ၊ ပို့ဆောင်မည့်နိုင်ငံ၏ Custom အစစ်ဆေးကြောင့် အထုတ်ခံရ၊ မြန်မာပြည်ဘက် Return ပြန်ပို့သည့် စရိတ်များအတွက် မပါဝင်ပါ။</div>
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> လူကြီးမင်းတို့ ပေးပို့မည့်နိုင်ငံ Custom မှ အခွန်သတ်မှတ်လျှင် လက်ခံမည့်သူဘက်မှ ပေးဆောင်ရမည်။ အခါအားလျော်စွာ Custom ၏ စစ်ဆေးမှုကြောင့် ပစ္စည်းများ ရောက်ရှိရန် သတ်မှတ်ရက်ထက် ပိုကြာနိုင်ပါသည်။</div>
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> လူကြီးမင်းတို့ ပို့ဆောင်သည့်ပစ္စည်းများတွင် ဖန်ထည်၊ ထိခိုက်လွယ်သောပစ္စည်းများ (Fragile Items)၊ အဆီနှင့် အရည်ထွက်ပစ္စည်းများ ပါရှိပါက ပစ္စည်းမပျက်စီးစေရန် ပေးပို့သူ (Customer) ဘက်မှသာ သေချာခိုင်ခံ့စွာ ထုပ်ပိုးပံ့ပိုးလာရမည်ဖြစ်ပါသည်။</div>
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> နိုင်ငံတကာ ပို့ဆောင်ရေးဥပဒေအရ တားမြစ်ထားသော မူးယစ်ဆေးဝါး၊ လက်နက်ခဲယမ်း၊ ပေါက်ကွဲစေတတ်သော ပစ္စည်းများနှင့် တရားမဝင်ပစ္စည်းများ ထည့်သွင်းပေးပို့ခြင်း လုံးဝ(လုံးဝ) မပြုလုပ်ရပါ။</div>
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> ရွှေ၊ ငွေ၊ အဖိုးတန်ပစ္စည်းများ၊ အရေးကြီး စာရွက်စာတမ်းများ ပါရှိပါက ကြိုတင်အသိပေးရမည်။ ရန်သူမျိုးငါးပါး နှင့် သဘာဝဘေးအန္တရာယ်များကဲ့သို့သော ရှောင်လွှဲ၍မရသည့် အကြောင်းအရာများကြောင့် ပစ္စည်းဆုံးရှုံးပျက်စီးမှုများအတွက် ကုမ္ပဏီဘက်မှ တာဝန်ယူမည်မဟုတ်ပါ။</div>
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> လူကြီးမင်းတို့ ပို့ဆောင်သော ပစ္စည်းသည် ရန်ကုန်ရုံးမှ U.K. ရုံးသို့ ပို့ဆောင်မှာဖြစ်ပြီး ထိုအတွင်း ဖြစ်ပေါ်မည့် ကိစ္စအဝဝကိုသာ တာဝန်ယူမည်ဖြစ်ပါသည်။ U.K. မြို့တွင်း ပြန်လည် ပို့ဆောင်ရမည့် local delivery အတွက် မသက်ဆိုင်ပါ။</div>
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> Cargo Fees များကို Invoice လက်ခံရရှိပြီး (၂) ရက်အတွင်း ပေးချေပေးရမည် ဖြစ်ပါသည်။ ငွေကြိုတင်ပေးချေစနစ်ဖြစ်လို့ cargo ဖိုး မရှင်းပေးသော ပစ္စည်းများကို HOLD လုပ်ထားမည်ဖြစ်ပါသည်။</div>
+                <div><strong style="color: #9e7b5c; font-weight: 900;">■</strong> Insurance ဆောင်ထားသော ပစ္စည်းများအတွက် 100% အာမခံဖြင့် ပို့ဆောင်ပေးပါသည်။ ပစ္စည်းများလက်ခံသူဆီသို့ရောက်ပါက ပစ္စည်းမဖောက်ခင်အချိန်မှစ၍ ပစ္စည်းဖောက်စစ်ပြီး အချိန်ထိ Video Record လုပ်ပေးဖို့ လိုပါသည် (Video Record ပြနိုင်မှသာ အလျော်အစားမှာ အကျိုးဝင်မှာ ဖြစ်ပါတယ်)။</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="theme-banner" style="text-align: center; padding: 8px; font-weight: 700; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: auto; border-radius: 2px;">
-          REMAIN TRANQUIL WE PROCEED WITH UTMOST CAUTIONS
+        <!-- FOOTER: 3-COLUMN CONTACT & INFO CARDS -->
+        <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+            
+            <!-- Card 1: Call Us -->
+            <div style="background-color: rgba(158, 123, 92, 0.12); padding: 5px 6px; border-radius: 5px; border: 1px solid rgba(120, 53, 15, 0.25); text-align: center;">
+              <div style="font-weight: 900; font-size: 9.5px; color: #78350f; text-transform: uppercase; margin-bottom: 2px;">Call us on</div>
+              <div style="font-size: 8.5px; font-weight: 700; color: #292524; line-height: 1.3;">
+                <div>UK: +44 7861 489456</div>
+                <div>MM: 09 9958337846</div>
+              </div>
+            </div>
+
+            <!-- Card 2: Online & Social -->
+            <div style="background-color: rgba(158, 123, 92, 0.12); padding: 5px 6px; border-radius: 5px; border: 1px solid rgba(120, 53, 15, 0.25); text-align: center;">
+              <div style="font-weight: 900; font-size: 9.5px; color: #78350f; text-transform: uppercase; margin-bottom: 2px;">Online & Social</div>
+              <div style="font-size: 8.5px; font-weight: 700; color: #292524; line-height: 1.3;">
+                <div>🌐 <a href="https://daffodilsconsignment.co.uk/" target="_blank" style="color: #b45309; text-decoration: underline;">daffodilsconsignment.co.uk</a></div>
+                <div>📘 AD Daffodils Consignment</div>
+              </div>
+            </div>
+
+            <!-- Card 3: Offices -->
+            <div style="background-color: rgba(158, 123, 92, 0.12); padding: 5px 6px; border-radius: 5px; border: 1px solid rgba(120, 53, 15, 0.25); text-align: center;">
+              <div style="font-weight: 900; font-size: 9.5px; color: #78350f; text-transform: uppercase; margin-bottom: 2px;">Offices</div>
+              <div style="font-size: 8px; font-weight: 700; color: #292524; line-height: 1.2;">
+                <div>UK: 79, Oval Road North Dagenham RM10 9ET</div>
+                <div>MM: No.49, 93rd St, Mingalar Taung Nyunt, Yangon</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Thank You & Motto Banner -->
+          <div style="text-align: center; font-size: 9px; font-weight: 700; color: #451a03; font-style: italic; margin-top: 2px;">
+            Thank you for trusting and choosing AD Daffodils Consignment for your logistics needs!
+          </div>
+          <div class="theme-banner" style="text-align: center; padding: 3px; font-weight: 700; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px;">
+            REMAIN TRANQUIL WE PROCEED WITH UTMOST CAUTIONS
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -376,10 +490,10 @@
 
 <script>
 let items = [
-  { route: "Myanmar To UK", weight: 5, riskNote: "(Risk)", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 }
+  { route: "Myanmar To Worldwide", weight: 5, riskNote: "<span style='color: #dc2626; font-weight: 800;'>(Risk)</span>", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 }
 ];
 
-const DB_NAME = 'ADDaffodilsMMInvoiceDB';
+const DB_NAME = 'ADDaffodilsMMInvoiceDBV37';
 const DB_VERSION = 1;
 const STORE_NAME = 'assets';
 
@@ -518,7 +632,7 @@ function renderItemInputs() {
     div.innerHTML = `
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
         <input type="text" id="route_${index}" value="${item.route}" oninput="items[${index}].route = this.value; updateInvoice();" placeholder="Route" style="flex: 1;">
-        <input type="text" id="riskNote_${index}" value="${item.riskNote || ''}" oninput="items[${index}].riskNote = this.value; updateInvoice();" placeholder="(Risk)" style="width: 80px; color: #fde047; text-align: center;">
+        <input type="text" id="riskNote_${index}" value="${item.riskNote.includes('Risk') ? '(Risk)' : item.riskNote}" oninput="let val = this.value; items[${index}].riskNote = val ? (val.toLowerCase().includes('risk') ? '<span style=\\'color: #dc2626; font-weight: 800;\\'>(' + val.replace(/[()]/g, '').trim() + ')</span>' : val) : ''; updateInvoice();" placeholder="(Risk)" style="width: 80px; color: #fde047; text-align: center;">
         <button onclick="removeItem(${index})" class="btn btn-rose" style="padding: 2px 8px;">✕</button>
       </div>
 
@@ -561,7 +675,7 @@ function updateItemTotalDisp(index) {
 }
 
 function addItem() {
-  items.push({ route: "Myanmar To UK", weight: 1, riskNote: "", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 });
+  items.push({ route: "Myanmar To Worldwide", weight: 1, riskNote: "", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 });
   renderItemInputs();
   updateInvoice();
 }
@@ -574,16 +688,22 @@ function removeItem(index) {
   }
 }
 
-function updateInvoiceOnly() {
-  updateInvoice();
-}
-
 function updateInvoice() {
   const currentInv = document.getElementById('inputInvNo').value;
   localStorage.setItem('addaffodils_mm_last_inv_no', currentInv);
 
   const curr = document.getElementById('inputCurrency').value;
   const exRate = parseFloat(document.getElementById('inputExchangeRate').value) || 5500;
+
+  // Handle PAID / UNPAID Status Stamp
+  const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked').value;
+  const stampEl = document.getElementById('statusStamp');
+  stampEl.innerText = paymentStatus;
+  if (paymentStatus === 'PAID') {
+    stampEl.className = 'status-stamp stamp-paid';
+  } else {
+    stampEl.className = 'status-stamp stamp-unpaid';
+  }
 
   document.querySelectorAll('.currSym').forEach(el => el.innerText = curr);
 
@@ -600,13 +720,19 @@ function updateInvoice() {
 
   let grandTotalGbp = 0;
 
-  items.forEach(item => {
+  items.forEach((item, index) => {
     const itemPriceGbp = item.weight * item.unitRateGbp;
     const itemDelFeeGbp = item.hasDelFee ? (item.delFeeGbp || 0) : 0;
     const lineTotalGbp = itemPriceGbp + itemDelFeeGbp;
     grandTotalGbp += lineTotalGbp;
 
-    const descText = `${item.route} ${item.weight} kg ${item.riskNote || ''}`.trim();
+    let rawRisk = item.riskNote;
+    if (rawRisk && !rawRisk.includes('style=')) {
+      rawRisk = `<span style="color: #dc2626; font-weight: 800;">${rawRisk}</span>`;
+    }
+
+    const descText = `${item.route} ${item.weight} kg ${rawRisk || ''}`.trim();
+
     const unitRateDisplay = curr === 'MMK' ? `${curr} ${Math.round(item.unitRateGbp * exRate).toLocaleString()}` : `£ ${item.unitRateGbp}`;
     const lineTotalDisplay = curr === 'MMK' ? `${curr} ${Math.round(lineTotalGbp * exRate).toLocaleString()}` : `£ ${lineTotalGbp}`;
 
@@ -618,13 +744,13 @@ function updateInvoice() {
     let descHtml = `<div>${descText}</div>`;
     if (item.hasDelFee && itemDelFeeGbp > 0) {
       const delFeeDisp = curr === 'MMK' ? `${curr} ${Math.round(itemDelFeeGbp * exRate).toLocaleString()}` : `£ ${itemDelFeeGbp}`;
-      descHtml += `<div style="font-size: 10px; color: #92400e; font-weight: 700;">+ Item Deli Fee (${delFeeDisp})</div>`;
+      descHtml += `<div style="font-size: 9.5px; color: #92400e; font-weight: 700;">+ Item Deli Fee (${delFeeDisp})</div>`;
     }
 
     tr.innerHTML = `
-      <td style="padding: 10px;">${descHtml}</td>
-      <td style="padding: 10px; text-align: center;">${unitRateDisplay}</td>
-      <td style="padding: 10px; text-align: right; font-weight: 800;">${lineTotalDisplay}</td>
+      <td style="padding: 6px 8px;">${descHtml}</td>
+      <td style="padding: 6px 8px; text-align: center;">${unitRateDisplay}</td>
+      <td style="padding: 6px 8px; text-align: right; font-weight: 800;">${lineTotalDisplay}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -652,7 +778,7 @@ function exportJPG() {
   
   html2canvas(invoice, { scale: 3, useCORS: true, allowTaint: true }).then(canvas => {
     const link = document.createElement('a');
-    link.download = `${invNo}_AD_Daffodils_MM_Outbound.jpg`;
+    link.download = `${invNo}_AD_Daffodils_Invoice.jpg`;
     link.href = canvas.toDataURL('image/jpeg', 1.0);
     link.click();
   });
@@ -663,7 +789,7 @@ function exportPDF() {
   const element = document.getElementById('invoice');
   const opt = {
     margin: 0,
-    filename: `${invNo}_AD_Daffodils_MM_Outbound.pdf`,
+    filename: `${invNo}_AD_Daffodils_Invoice.pdf`,
     image: { type: 'jpeg', quality: 1.0 },
     html2canvas: { scale: 3, useCORS: true, allowTaint: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
