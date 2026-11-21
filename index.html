@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MYANMAR TO WORLDWIDE INVOICE V42 - AD DAFFODILS</title>
+  <title>MYANMAR TO WORLDWIDE INVOICE V43 - AD DAFFODILS</title>
   
   <!-- jsPDF & html2canvas for reliable single-page A4 PDF & JPG export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -213,8 +213,8 @@
     <div style="background-color: #b45309; color: white; padding: 4px 12px; border-radius: 8px; font-weight: 900; font-size: 20px;">MM</div>
     <div>
       <div style="display: flex; align-items: center; gap: 8px;">
-        <h1 style="color: #fbbf24; font-weight: 800; font-size: 18px; line-height: 1.2;">MYANMAR TO WORLDWIDE INVOICE V42</h1>
-        <span style="font-size: 10px; background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; font-weight: 700; padding: 2px 8px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.3);">Insurance & Fresh Discount V42</span>
+        <h1 style="color: #fbbf24; font-weight: 800; font-size: 18px; line-height: 1.2;">MYANMAR TO WORLDWIDE INVOICE V43</h1>
+        <span style="font-size: 10px; background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; font-weight: 700; padding: 2px 8px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.3);">Multi-Currency Fee & Discount V43</span>
       </div>
       <p style="font-size: 12px; color: #94a3b8; margin-top: 2px;">AD DAFFODILS Consignment Logistics System</p>
     </div>
@@ -231,7 +231,7 @@
   <div class="control-panel no-print">
     <div style="font-size: 16px; font-weight: 700; color: #f8fafc; border-bottom: 1px solid #334155; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
       <span>⚙️ Control Panel</span>
-      <span style="font-size: 12px; color: #34d399;">Single Page V42</span>
+      <span style="font-size: 12px; color: #34d399;">Single Page V43</span>
     </div>
 
     <!-- Payment Status Control -->
@@ -334,7 +334,7 @@
       </div>
     </div>
 
-    <!-- NEW: Insurance Fee Feature -->
+    <!-- Insurance Fee Feature (£ or MMK) -->
     <div class="card-box" style="border-color: rgba(56, 189, 248, 0.35); background-color: rgba(56, 189, 248, 0.05);">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="section-title" style="color: #38bdf8;">Insurance Fee (အာမခံကြေး)</span>
@@ -343,45 +343,52 @@
           Include Insurance
         </label>
       </div>
-      <div class="grid-2">
+      <div class="grid-3">
         <div>
-          <label>Amount (£):</label>
-          <input type="number" id="insuranceFeeInput" value="25" min="0" step="1" oninput="updateInvoice()" style="text-align: center; color: #7dd3fc; font-weight: 700;">
+          <label>Fee Currency</label>
+          <select id="insuranceCurrency" onchange="updateInvoice()" style="color: #7dd3fc; font-weight: 700;">
+            <option value="MMK">MMK (Kyat)</option>
+            <option value="£">£ (Pound)</option>
+          </select>
+        </div>
+        <div>
+          <label id="insuranceValueLabel">Amount (MMK):</label>
+          <input type="number" id="insuranceFeeInput" value="0" min="0" step="100" oninput="updateInvoice()" style="text-align: center; color: #7dd3fc; font-weight: 700;">
         </div>
         <div>
           <label>Note / Label</label>
-          <input type="text" id="insuranceLabelInput" value="Insurance Fee (Valuables)" placeholder="e.g. Gold / Valuables Insurance" oninput="updateInvoice()">
+          <input type="text" id="insuranceLabelInput" value="Insurance Fee" placeholder="e.g. Gold Insurance" oninput="updateInvoice()">
         </div>
       </div>
     </div>
 
-    <!-- Customer Discount Feature -->
+    <!-- Customer Discount Feature (£, MMK, or %) -->
     <div class="card-box" style="border-color: rgba(52, 211, 153, 0.4); background-color: rgba(16, 185, 129, 0.06);">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="section-title" style="color: #34d399;">Customer Discount (လျှော့ဈေး)</span>
+        <span class="section-title" style="color: #34d399;">Promotion Discount (လျှော့ဈေး)</span>
         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #34d399; margin: 0;">
           <input type="checkbox" id="discountToggle" onchange="updateInvoice()" style="accent-color: #059669; width: 16px; height: 16px;">
           Apply Discount
         </label>
       </div>
 
-      <div class="grid-2">
+      <div class="grid-3">
         <div>
-          <label>Discount Type</label>
+          <label>Discount Mode</label>
           <select id="discountType" onchange="updateInvoice()" style="color: #6ee7b7; font-weight: 700;">
-            <option value="amount">Amount (£ / MMK)</option>
-            <option value="percent">Percentage (%)</option>
+            <option value="£">£ (Pound)</option>
+            <option value="MMK">MMK (Kyat)</option>
+            <option value="percent">% (Percent)</option>
           </select>
         </div>
         <div>
-          <label id="discountValueLabel">Discount Value (£):</label>
+          <label id="discountValueLabel">Discount (£):</label>
           <input type="number" id="discountValueInput" value="0" min="0" step="0.5" oninput="updateInvoice()" style="text-align: center; color: #34d399; font-weight: 700;">
         </div>
-      </div>
-
-      <div>
-        <label>Discount Note / Label (Optional)</label>
-        <input type="text" id="discountLabelInput" value="Special Discount" placeholder="e.g. Special Discount / VIP" oninput="updateInvoice()">
+        <div>
+          <label>Label / Note</label>
+          <input type="text" id="discountLabelInput" value="Promotion Discount" placeholder="e.g. Promo Discount" oninput="updateInvoice()">
+        </div>
       </div>
     </div>
 
@@ -462,13 +469,13 @@
               <!-- Insurance Fee Row -->
               <tr id="insuranceRow" class="hidden" style="font-weight: 600; color: #0f4c5c; background-color: rgba(14, 116, 144, 0.06); border-bottom: 1px solid rgba(120, 53, 15, 0.12); font-size: 10px;">
                 <td id="viewInsuranceLabel" style="padding: 4px 6px; font-weight: 700;">Insurance Fee</td>
-                <td style="padding: 4px 6px; text-align: center;">Insured</td>
-                <td id="viewInsuranceAmount" style="padding: 4px 6px; text-align: right; font-weight: 800;">+ £ 25</td>
+                <td id="viewInsuranceBadge" style="padding: 4px 6px; text-align: center;">Insured</td>
+                <td id="viewInsuranceAmount" style="padding: 4px 6px; text-align: right; font-weight: 800;">+ £ 0</td>
               </tr>
 
               <!-- Discount Deduction Row (Fresh Emerald Green) -->
               <tr id="discountRow" class="hidden" style="font-weight: 700; color: #047857; background-color: rgba(16, 185, 129, 0.1); border-bottom: 1px solid rgba(4, 120, 87, 0.2); font-size: 10px;">
-                <td id="viewDiscountLabel" style="padding: 4px 6px; font-weight: 700;">Special Discount</td>
+                <td id="viewDiscountLabel" style="padding: 4px 6px; font-weight: 700;">Promotion Discount</td>
                 <td id="viewDiscountBadge" style="padding: 4px 6px; text-align: center;">-</td>
                 <td id="viewDiscountAmount" style="padding: 4px 6px; text-align: right; font-weight: 800;">- £ 0</td>
               </tr>
@@ -502,7 +509,7 @@
 
           </div>
 
-          <!-- TERMS & CONDITIONS (V42) -->
+          <!-- TERMS & CONDITIONS (V43) -->
           <div style="margin-top: 5px;">
             <div class="mm-terms-box">
               <div style="font-weight: 800; color: #78350f; text-transform: uppercase; margin-bottom: 3px; font-size: 10.5px; border-bottom: 1.5px solid rgba(120, 53, 15, 0.3); padding-bottom: 2px; display: flex; justify-content: space-between; align-items: center; line-height: 1.4;">
@@ -575,7 +582,7 @@ let items = [
   { route: "Myanmar To Worldwide", weight: 5, riskNote: "<span style='color: #dc2626; font-weight: 800;'>(Risk)</span>", unitRateGbp: 14, hasDelFee: false, delFeeGbp: 10 }
 ];
 
-const DB_NAME = 'ADDaffodilsMMInvoiceDBV42';
+const DB_NAME = 'ADDaffodilsMMInvoiceDBV43';
 const DB_VERSION = 1;
 const STORE_NAME = 'assets';
 
@@ -777,10 +784,11 @@ function updateInvoice() {
   const curr = document.getElementById('inputCurrency').value;
   const exRate = parseFloat(document.getElementById('inputExchangeRate').value) || 5500;
 
-  // Update discount value label based on selected type
+  const insCurr = document.getElementById('insuranceCurrency').value;
+  document.getElementById('insuranceValueLabel').innerText = `Amount (${insCurr}):`;
+
   const discountType = document.getElementById('discountType').value;
-  const discountValLabel = document.getElementById('discountValueLabel');
-  discountValLabel.innerText = discountType === 'percent' ? 'Discount Value (%):' : `Discount Value (${curr}):`;
+  document.getElementById('discountValueLabel').innerText = discountType === 'percent' ? 'Discount (%):' : `Discount (${discountType}):`;
 
   const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked').value;
   const stampEl = document.getElementById('statusStamp');
@@ -854,28 +862,36 @@ function updateInvoice() {
     delFeeRow.classList.add('hidden');
   }
 
-  // Insurance Fee Calculation
+  // Insurance Fee Calculation (£ or MMK)
   const isInsuranceEnabled = document.getElementById('insuranceToggle').checked;
-  const insuranceFeeGbp = isInsuranceEnabled ? (parseFloat(document.getElementById('insuranceFeeInput').value) || 0) : 0;
+  const insuranceRawVal = parseFloat(document.getElementById('insuranceFeeInput').value) || 0;
   const insuranceLabelText = document.getElementById('insuranceLabelInput').value.trim() || 'Insurance Fee';
   const insuranceRow = document.getElementById('insuranceRow');
 
-  if (isInsuranceEnabled && insuranceFeeGbp > 0) {
+  if (isInsuranceEnabled && insuranceRawVal > 0) {
+    const insuranceFeeGbp = insCurr === 'MMK' ? (insuranceRawVal / exRate) : insuranceRawVal;
     subTotalGbp += insuranceFeeGbp;
+
     const insuranceDisp = curr === 'MMK'
       ? `+ ${curr} ${Math.round(insuranceFeeGbp * exRate).toLocaleString()}`
       : `+ £ ${Number.isInteger(insuranceFeeGbp) ? insuranceFeeGbp : insuranceFeeGbp.toFixed(2)}`;
+
+    const badgeText = insCurr === 'MMK'
+      ? `MMK ${Math.round(insuranceRawVal).toLocaleString()}`
+      : `£ ${insuranceRawVal}`;
+
     document.getElementById('viewInsuranceLabel').innerText = insuranceLabelText;
+    document.getElementById('viewInsuranceBadge').innerText = badgeText;
     document.getElementById('viewInsuranceAmount').innerText = insuranceDisp;
     insuranceRow.classList.remove('hidden');
   } else {
     insuranceRow.classList.add('hidden');
   }
 
-  // Discount Calculation
+  // Discount Calculation (£, MMK, or %)
   const isDiscountEnabled = document.getElementById('discountToggle').checked;
   const discountValInput = parseFloat(document.getElementById('discountValueInput').value) || 0;
-  const discountLabelText = document.getElementById('discountLabelInput').value.trim() || 'Discount';
+  const discountLabelText = document.getElementById('discountLabelInput').value.trim() || 'Promotion Discount';
   const discountRow = document.getElementById('discountRow');
 
   let discountGbp = 0;
@@ -884,9 +900,12 @@ function updateInvoice() {
       const clampedPct = Math.min(100, Math.max(0, discountValInput));
       discountGbp = (subTotalGbp * clampedPct) / 100;
       document.getElementById('viewDiscountBadge').innerText = `${clampedPct}%`;
+    } else if (discountType === 'MMK') {
+      discountGbp = discountValInput / exRate;
+      document.getElementById('viewDiscountBadge').innerText = `MMK ${Math.round(discountValInput).toLocaleString()}`;
     } else {
-      discountGbp = curr === 'MMK' ? (discountValInput / exRate) : discountValInput;
-      document.getElementById('viewDiscountBadge').innerText = 'Fixed';
+      discountGbp = discountValInput;
+      document.getElementById('viewDiscountBadge').innerText = `£ ${discountValInput}`;
     }
     discountGbp = Math.min(subTotalGbp, Math.max(0, discountGbp));
 
