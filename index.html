@@ -23,9 +23,9 @@
 
     .app-header {
       max-width: 1320px;
-      margin: 0 auto 16px auto;
+      margin: 0 auto 12px auto;
       background-color: #1e293b;
-      padding: 16px;
+      padding: 14px 16px;
       border-radius: 12px;
       border: 1px solid #334155;
       display: flex;
@@ -34,6 +34,20 @@
       align-items: center;
       gap: 12px;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .draft-bar {
+      max-width: 1320px;
+      margin: 0 auto 16px auto;
+      background-color: rgba(30, 41, 59, 0.92);
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
     }
 
     .main-grid {
@@ -105,6 +119,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 6px;
     }
 
     label { font-size: 11px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block; }
@@ -124,8 +139,28 @@
       border-color: #f59e0b;
     }
 
+    input.auto-locked-input {
+      background-color: #090e1a;
+      border-style: dashed;
+      border-color: #475569;
+      cursor: not-allowed;
+      user-select: none;
+      opacity: 0.95;
+    }
+
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    .calc-mode-tag {
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.16);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
 
     .btn {
       border: none;
@@ -140,11 +175,15 @@
       justify-content: center;
       gap: 4px;
       color: white;
+      text-decoration: none;
+      white-space: nowrap;
     }
     .btn-green { background-color: #059669; } .btn-green:hover { background-color: #10b981; }
     .btn-amber { background-color: #d97706; } .btn-amber:hover { background-color: #f59e0b; }
     .btn-rose { background-color: #e11d48; }  .btn-rose:hover { background-color: #f43f5e; }
     .btn-indigo { background-color: #4f46e5; } .btn-indigo:hover { background-color: #6366f1; }
+    .btn-sky { background-color: #0284c7; } .btn-sky:hover { background-color: #0ea5e9; }
+    .btn-teal { background-color: #0d9488; } .btn-teal:hover { background-color: #14b8a6; }
     .btn-slate { background-color: #334155; } .btn-slate:hover { background-color: #475569; }
     .btn-action { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
 
@@ -225,7 +264,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.75);
+      background: rgba(2, 6, 23, 0.78);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -238,12 +277,26 @@
       border-radius: 16px;
       padding: 20px;
       width: 100%;
-      max-width: 480px;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
     }
+
+    .stage-pill {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      border: 1px solid;
+    }
+    .stage-draft { background: rgba(251, 191, 36, 0.16); color: #fde047; border-color: rgba(251, 191, 36, 0.4); }
+    .stage-photo-warn { background: rgba(244, 63, 94, 0.18); color: #fda4af; border-color: rgba(244, 63, 94, 0.45); }
+    .stage-final { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4); }
+    .stage-revised { background: rgba(56, 189, 248, 0.18); color: #7dd3fc; border-color: rgba(56, 189, 248, 0.45); }
 
     @media print {
       body { background: white !important; padding: 0 !important; }
@@ -271,17 +324,32 @@
     <div>
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
         <h1 style="color: #fbbf24; font-weight: 800; font-size: 18px; line-height: 1.2;">MYANMAR TO WORLDWIDE INVOICE V44</h1>
-        <span style="font-size: 10px; background-color: rgba(16, 185, 129, 0.2); color: #6ee7b7; font-weight: 700; padding: 2px 8px; border-radius: 9999px; border: 1px solid rgba(16, 185, 129, 0.3);">Invoice First → Dashboard Sync</span>
+        <span id="currentDocStageBadge" class="stage-pill stage-draft">📝 Draft / New</span>
       </div>
       <p id="dashSyncStatus" style="font-size: 11.5px; color: #94a3b8; margin-top: 2px;">AD DAFFODILS Consignment Logistics System • Dashboard Sync Ready</p>
     </div>
   </div>
 
   <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+    <button onclick="openDashboardPage()" class="btn btn-teal btn-action">🔗 Open Dashboard</button>
     <button onclick="openDashSyncModal()" class="btn btn-slate btn-action">⚙️ Dashboard Sync</button>
-    <button id="sendToDashBtn" onclick="sendInvoiceToDashboard(false)" class="btn btn-indigo btn-action">📤 Dashboard ပို့ / Sync</button>
-    <button onclick="exportJPG()" class="btn btn-green btn-action">🖼 JPG</button>
-    <button onclick="exportPDF()" class="btn btn-rose btn-action">📄 PDF</button>
+    <button onclick="saveCurrentAsDraft()" class="btn btn-amber btn-action">💾 Save Draft</button>
+    <button onclick="openDraftsModal()" class="btn btn-sky btn-action">📂 Drafts / Saved (<span id="draftCountBadge">0</span>)</button>
+    <button id="sendToDashBtn" onclick="requestFinalSyncToDashboard()" class="btn btn-indigo btn-action">📤 Final &amp; Dashboard Sync</button>
+    <button onclick="requestExport('JPG')" class="btn btn-green btn-action">🖼 Final JPG</button>
+    <button onclick="requestExport('PDF')" class="btn btn-rose btn-action">📄 Final PDF</button>
+  </div>
+</div>
+
+<!-- Quick Draft / Recall & Photo Policy Strip -->
+<div class="draft-bar no-print">
+  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 11.5px; color: #cbd5e1;">
+    <span style="font-weight: 700; color: #fbbf24;">📸 Photo &amp; Auto-Draft Policy:</span>
+    <span>ပုံမပါလည်း Invoice ထုတ်လို့ရပြီး <b>Draft မှာ Auto ကျန်နေမည်</b> • <b>Dashboard Sync</b> မှာတော့ ပုံပါမှ ရမည်။</span>
+  </div>
+  <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+    <button onclick="startFreshInvoice()" class="btn btn-slate" style="padding: 5px 10px; font-size: 11px;">+ New Blank Invoice</button>
+    <button onclick="openDraftsModal()" class="btn btn-amber" style="padding: 5px 10px; font-size: 11px;">🔍 ပြန်ခေါ်ရန် (Recall Draft / Invoice)</button>
   </div>
 </div>
 
@@ -311,11 +379,63 @@
     </div>
     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 11px; color: #6ee7b7; margin: 0;">
       <input type="checkbox" id="autoSendOnExport" checked style="accent-color: #10b981;">
-      <span>JPG / PDF Export နှိပ်တိုင်း Dashboard သို့ Auto ပို့မည်</span>
+      <span>Final JPG / PDF Export ပြီးတိုင်း Dashboard သို့ Auto ပို့မည် (ပုံပါရှိမှသာ Sync လုပ်မည်)</span>
     </label>
     <div style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 6px;">
       <button onclick="closeDashSyncModal()" class="btn btn-slate" style="padding: 8px 12px; font-size: 11px;">ပိတ်မည်</button>
       <button onclick="saveDashSyncConfig()" class="btn btn-green" style="padding: 8px 14px; font-size: 11px;">✅ Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Drafts & Saved Invoices Recall Modal -->
+<div id="draftsModal" class="modal-backdrop hidden no-print">
+  <div class="modal-box" style="max-width: 600px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+      <h2 style="font-size: 15px; font-weight: 800; color: #7dd3fc;">📂 Saved Drafts &amp; Invoices (ပြန်ခေါ်ပြင်ရန်)</h2>
+      <button onclick="closeDraftsModal()" class="btn btn-slate" style="padding: 4px 8px;">✕</button>
+    </div>
+    <p style="font-size: 11px; color: #94a3b8; line-height: 1.45;">
+      ပုံမပါဘဲ ထုတ်ထားသော Invoice များသည် <b>📸 ပုံလိုနေသည် (Auto-Draft)</b> အနေနဲ့ ဤနေရာတွင် ကျန်နေပါမည်။ ပြန်ခေါ်ပြီး ဓာတ်ပုံထည့်၍ Dashboard သို့ Sync လုပ်နိုင်ပါသည်။
+    </p>
+    <input type="text" id="draftSearchInput" oninput="renderDraftsList()" placeholder="🔍 Inv No. / Sender / Receiver ဖြင့် ရှာရန်...">
+    <div id="draftsListContainer" style="display: flex; flex-direction: column; gap: 8px; max-height: 55vh; overflow-y: auto;"></div>
+    <div style="display: flex; justify-content: flex-end; padding-top: 6px; border-top: 1px solid #334155;">
+      <button onclick="closeDraftsModal()" class="btn btn-slate" style="padding: 8px 14px; font-size: 11px;">ပိတ်မည်</button>
+    </div>
+  </div>
+</div>
+
+<!-- Missing Fields / Missing Photo Alert Pop-up Modal -->
+<div id="missingFieldsModal" class="modal-backdrop hidden no-print">
+  <div class="modal-box" style="border-color: #f43f5e;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+      <h2 id="missingModalTitle" style="font-size: 15px; font-weight: 800; color: #fda4af;">⚠️ လိုအပ်နေသော အချက်အလက်များ</h2>
+      <button onclick="closeMissingFieldsModal()" class="btn btn-slate" style="padding: 4px 8px;">✕</button>
+    </div>
+    <p id="missingModalDesc" style="font-size: 11.5px; color: #cbd5e1; line-height: 1.5;"></p>
+    <ul id="missingFieldsList" style="list-style: none; display: flex; flex-direction: column; gap: 6px; background: rgba(15, 23, 42, 0.9); padding: 12px; border-radius: 10px; border: 1px solid rgba(244, 63, 94, 0.4); font-size: 12px; color: #fecdd3;"></ul>
+    <div id="missingModalActions" style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 6px; flex-wrap: wrap;">
+      <button id="missingSaveDraftBtn" onclick="closeMissingFieldsModal(); saveCurrentAsDraft();" class="btn btn-amber" style="padding: 8px 12px; font-size: 11px;">💾 Draft အနေနဲ့ သိမ်းမည်</button>
+      <button id="missingCloseBtn" onclick="closeMissingFieldsModal()" class="btn btn-rose" style="padding: 8px 14px; font-size: 11px;">ပြန်ဖြည့်မည်</button>
+    </div>
+  </div>
+</div>
+
+<!-- Final Check Confirmation Pop-up Modal -->
+<div id="finalCheckModal" class="modal-backdrop hidden no-print">
+  <div class="modal-box" style="border-color: #10b981; max-width: 600px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+      <h2 style="font-size: 15px; font-weight: 800; color: #6ee7b7;">🔍 Final Check — အချက်အလက် ပြန်လည်စစ်ဆေးရန်</h2>
+      <button onclick="closeFinalCheckModal()" class="btn btn-slate" style="padding: 4px 8px;">✕</button>
+    </div>
+    <p id="finalCheckIntroText" style="font-size: 11.5px; color: #cbd5e1; line-height: 1.5;">
+      အောက်ပါ အချက်အလက်များ အားလုံး မှန်ကန်ကြောင်း သေချာစစ်ဆေးပြီးမှ <b>Confirm &amp; Proceed</b> ကို နှိပ်ပါ —
+    </p>
+    <div id="finalCheckSummaryBody" style="background: rgba(15, 23, 42, 0.92); padding: 12px; border-radius: 10px; border: 1px solid #334155; font-size: 12px; line-height: 1.65; color: #f8fafc;"></div>
+    <div style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 6px;">
+      <button onclick="closeFinalCheckModal()" class="btn btn-slate" style="padding: 8px 12px; font-size: 11px;">↩️ ပြန်စစ်မည်</button>
+      <button id="confirmFinalActionBtn" onclick="executeConfirmedFinalAction()" class="btn btn-green" style="padding: 8px 16px; font-size: 11.5px;">✅ မှန်ကန်ပါသည် — ဆက်လုပ်မည်</button>
     </div>
   </div>
 </div>
@@ -328,9 +448,7 @@
       <span style="font-size: 12px; color: #34d399;">Single Page V44</span>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- PART A: CUSTOMER INVOICE SECTION (ALL TOGETHER AT THE TOP)   -->
-    <!-- ============================================================ -->
+    <!-- PART A: CUSTOMER INVOICE SECTION -->
     <div class="phase-divider phase-invoice">
       <span>🧾 Part 1: Customer Invoice (အပေါ်ပိုင်းတင် အကုန်ဖြည့်ပြီး Invoice ထုတ်ရန်)</span>
     </div>
@@ -338,7 +456,7 @@
     <!-- Payment Status Control -->
     <div class="card-box" style="border-color: rgba(5, 150, 105, 0.4); background-color: rgba(5, 150, 105, 0.05);">
       <div class="section-title" style="color: #34d399;">
-        <span>Invoice Payment Status</span>
+        <span>Invoice Payment Status *</span>
       </div>
       <div class="grid-2">
         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
@@ -352,7 +470,7 @@
       </div>
     </div>
 
-    <!-- 1. Invoice Currency & Rate + Info -->
+    <!-- 1. Invoice Currency & Single Master Default Rate -->
     <div class="card-box" style="border-color: rgba(245, 158, 11, 0.3);">
       <div class="section-title">
         <span>1. Invoice Info &amp; Currency</span>
@@ -364,26 +482,26 @@
 
       <div class="grid-2">
         <div>
-          <label>Date</label>
+          <label>Date *</label>
           <input type="text" id="inputDate" value="" oninput="updateInvoice()">
         </div>
         <div>
-          <label>Inv No.</label>
+          <label>Inv No. *</label>
           <input type="text" id="inputInvNo" value="ADF563" oninput="updateInvoice()" style="font-weight: 700;">
         </div>
       </div>
 
       <div class="grid-2">
         <div>
-          <label>Invoice Currency</label>
+          <label>Invoice Currency *</label>
           <select id="inputCurrency" onchange="updateInvoice();" style="color: #fbbf24; font-weight: 700;">
             <option value="£">Pound (£)</option>
             <option value="MMK">Kyat (MMK)</option>
           </select>
         </div>
         <div>
-          <label>Default Rate (1 £ = ? MMK)</label>
-          <input type="number" id="inputExchangeRate" value="5500" oninput="syncDefaultRatesIfEmpty(); updateInvoice();" style="color: #34d399; font-weight: 700; text-align: center;">
+          <label>Default Rate (1 £ = ? MMK) *</label>
+          <input type="number" id="inputExchangeRate" value="5500" oninput="handleMasterRateChange();" style="color: #34d399; font-weight: 700; text-align: center;">
         </div>
       </div>
     </div>
@@ -391,7 +509,7 @@
     <!-- 2. Route (Origin -> Destination) -->
     <div class="card-box" style="border-color: rgba(56, 189, 248, 0.35); background-color: rgba(56, 189, 248, 0.05);">
       <div class="section-title" style="color: #7dd3fc;">
-        <span>2. Route (Origin → Destination)</span>
+        <span>2. Route (Origin → Destination) *</span>
         <span id="routePreviewBadge" style="font-size: 10px; color: #fbbf24; font-weight: 800;">Myanmar To UK</span>
       </div>
       <div class="grid-2">
@@ -414,10 +532,10 @@
       </div>
     </div>
 
-    <!-- 3. Consignment Items List (Directly under Route!) -->
+    <!-- 3. Consignment Items List -->
     <div class="card-box">
       <div class="section-title">
-        <span>3. Consignment Items List</span>
+        <span>3. Consignment Items List *</span>
         <button onclick="addItem()" class="btn btn-green">+ Add Item</button>
       </div>
       <div id="itemInputsContainer" style="display: flex; flex-direction: column; gap: 10px;"></div>
@@ -425,25 +543,25 @@
 
     <!-- 4. Sender & Receiver -->
     <div class="card-box">
-      <div class="section-title">4. Sender &amp; Receiver</div>
+      <div class="section-title">4. Sender &amp; Receiver *</div>
       <div style="display: flex; flex-direction: column; gap: 8px;">
         <span style="font-size: 11px; font-weight: 600; color: #94a3b8;">Sender (Myanmar)</span>
         <div class="grid-2">
-          <input type="text" id="inputSenderName" value="May Zon Moe" placeholder="Name" oninput="updateInvoice()">
-          <input type="text" id="inputSenderPhone" value="09777994663" placeholder="Tel" oninput="updateInvoice()">
+          <input type="text" id="inputSenderName" value="May Zon Moe" placeholder="Sender Name *" oninput="updateInvoice()">
+          <input type="text" id="inputSenderPhone" value="09777994663" placeholder="Sender Tel *" oninput="updateInvoice()">
         </div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
         <span style="font-size: 11px; font-weight: 600; color: #94a3b8;">Receiver (Worldwide)</span>
         <div class="grid-2">
-          <input type="text" id="inputRecName" value="Ahmed Jarmal" placeholder="Name" oninput="updateInvoice()">
-          <input type="text" id="inputRecPhone" value="07894253729" placeholder="Tel" oninput="updateInvoice()">
+          <input type="text" id="inputRecName" value="Ahmed Jarmal" placeholder="Receiver Name *" oninput="updateInvoice()">
+          <input type="text" id="inputRecPhone" value="07894253729" placeholder="Receiver Tel *" oninput="updateInvoice()">
         </div>
       </div>
     </div>
 
-    <!-- 5. Invoice Fees (Local Delivery, Insurance, Discount) -->
+    <!-- 5. Local Delivery Fee -->
     <div class="card-box">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="section-title">5. Local Delivery Fee (£)</span>
@@ -461,7 +579,7 @@
     <!-- Insurance Fee Feature -->
     <div class="card-box" style="border-color: rgba(56, 189, 248, 0.35); background-color: rgba(56, 189, 248, 0.05);">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="section-title" style="color: #38bdf8;">Insurance Fee (အာမခံကြေး)</span>
+        <span class="section-title" style="color: #38bdf8;">Insurance Fee (Optional)</span>
         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #38bdf8; margin: 0;">
           <input type="checkbox" id="insuranceToggle" onchange="updateInvoice()" style="accent-color: #0284c7; width: 16px; height: 16px;">
           Include Insurance
@@ -480,22 +598,16 @@
           <input type="number" id="insuranceFeeInput" value="0" min="0" step="100" oninput="updateInvoice()" style="text-align: center; color: #7dd3fc; font-weight: 700;">
         </div>
       </div>
-      <div class="grid-2">
-        <div>
-          <label>Ins Rate (1£ = ? Ks):</label>
-          <input type="number" id="dashInsRate" value="5500" min="0" step="1" oninput="this.dataset.touched='1'" style="text-align: center; color: #7dd3fc; font-weight: 700;">
-        </div>
-        <div>
-          <label>Note / Label</label>
-          <input type="text" id="insuranceLabelInput" value="Insurance Fee (Yangon Paid)" placeholder="e.g. Gold Insurance" oninput="updateInvoice()">
-        </div>
+      <div>
+        <label>Note / Label</label>
+        <input type="text" id="insuranceLabelInput" value="Insurance Fee (Yangon Paid)" placeholder="e.g. Gold Insurance" oninput="updateInvoice()">
       </div>
     </div>
 
     <!-- Promotion Discount Feature -->
     <div class="card-box" style="border-color: rgba(52, 211, 153, 0.4); background-color: rgba(16, 185, 129, 0.06);">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="section-title" style="color: #34d399;">Promotion Discount (လျှော့ဈေး)</span>
+        <span class="section-title" style="color: #34d399;">Promotion Discount (Optional)</span>
         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #34d399; margin: 0;">
           <input type="checkbox" id="discountToggle" onchange="syncDashAmountsFromInvoice(); updateInvoice();" style="accent-color: #059669; width: 16px; height: 16px;">
           Apply Discount
@@ -516,15 +628,9 @@
           <input type="number" id="discountValueInput" value="0" min="0" step="0.5" oninput="syncDashAmountsFromInvoice(); updateInvoice();" style="text-align: center; color: #34d399; font-weight: 700;">
         </div>
       </div>
-      <div class="grid-2">
-        <div>
-          <label>Disc Rate (1£ = ? Ks):</label>
-          <input type="number" id="dashDiscRate" value="5500" min="0" step="1" oninput="this.dataset.touched='1'" style="text-align: center; color: #6ee7b7; font-weight: 700;">
-        </div>
-        <div>
-          <label>Label / Note</label>
-          <input type="text" id="discountLabelInput" value="Promotion Discount" placeholder="e.g. Promo Discount" oninput="updateInvoice()">
-        </div>
+      <div>
+        <label>Label / Note</label>
+        <input type="text" id="discountLabelInput" value="Promotion Discount" placeholder="e.g. Promo Discount" oninput="updateInvoice()">
       </div>
     </div>
 
@@ -537,18 +643,16 @@
       <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" style="font-size: 11px;">
     </div>
 
-    <!-- ============================================================ -->
-    <!-- PART B: DASHBOARD RECORD & PHOTOS (FILL AFTER INVOICE)       -->
-    <!-- ============================================================ -->
+    <!-- PART B: DASHBOARD RECORD & PHOTOS (STRICT AUTO + READ-ONLY LOCKED) -->
     <div class="phase-divider phase-dashboard">
-      <span>📊 Part 2: Dashboard Record &amp; Photos (Invoice ထုတ်ပြီးမှ အေးဆေးဖြည့်ရန်)</span>
+      <span>📊 Part 2: Dashboard Record &amp; Photos (Auto &amp; Locked)</span>
     </div>
 
-    <!-- D1. KG Fee Currency & Actual Received Amount -->
+    <!-- D1. KG Fee Currency & Amount (Locked Auto) -->
     <div class="card-box" style="border-color: rgba(16, 185, 129, 0.4); background-color: rgba(16, 185, 129, 0.06);">
       <div class="section-title" style="color: #6ee7b7;">
-        <span>D1. KG Fee (Dashboard ငွေကြေး &amp; ပမာဏ)</span>
-        <span id="dashKgUnitBadge" style="font-size: 10px; background: rgba(16,185,129,0.2); padding: 2px 7px; border-radius: 6px; color: #6ee7b7;">Unit: £</span>
+        <span>D1. KG Fee (Auto Locked) *</span>
+        <span class="calc-mode-tag">🔒 Auto Locked</span>
       </div>
       <div class="grid-2">
         <div>
@@ -559,44 +663,37 @@
           </select>
         </div>
         <div>
-          <label>KG Rate (1£ = ? Ks)</label>
-          <input type="number" id="dashKgRate" value="5500" min="0" step="1" oninput="this.dataset.touched='1'" style="text-align: center; color: #6ee7b7; font-weight: 700;">
-        </div>
-      </div>
-
-      <!-- Dynamic Amount Box: GBP or MMK -->
-      <div id="dashKgGbpBox">
-        <label style="color: #6ee7b7;">Dashboard KG Amount (£) — ပေါင် ပမာဏ:</label>
-        <input type="number" id="dashKgGbpInput" value="70" min="0" step="0.5" oninput="this.dataset.touched='1'" style="text-align: center; color: #6ee7b7; font-weight: 800; font-size: 13px;">
-      </div>
-      <div id="dashKgMmkBox" class="hidden">
-        <label style="color: #fbbf24;">Dashboard KG Amount (MMK / ကျပ်) — မြန်မာကျပ် ပမာဏ:</label>
-        <input type="number" id="dashKgMmkInput" value="385000" min="0" step="100" oninput="this.dataset.touched='1'" style="text-align: center; color: #fbbf24; font-weight: 800; font-size: 13px;">
-      </div>
-
-      <div class="grid-2">
-        <div>
-          <label>KG Pay Status</label>
-          <select id="dashKgPayStatus">
-            <option value="auto">Auto (From PAID/UNPAID)</option>
-            <option value="paid_mm">Paid in MM</option>
-            <option value="paid_uk">Paid in UK</option>
-            <option value="pay_arrival_uk">Pay on Arrival</option>
-            <option value="unpaid">Unpaid</option>
-          </select>
-        </div>
-        <div>
           <label>KG Pay Date</label>
           <input type="text" id="dashKgPayDate" placeholder="e.g. 23.11.2026">
         </div>
       </div>
+
+      <div id="dashKgGbpBox">
+        <label style="color: #6ee7b7;">Dashboard KG Amount (£) — Auto Locked: *</label>
+        <input type="number" id="dashKgGbpInput" value="70" readonly tabindex="-1" class="auto-locked-input" style="text-align: center; color: #6ee7b7; font-weight: 800; font-size: 13px;">
+      </div>
+      <div id="dashKgMmkBox" class="hidden">
+        <label style="color: #fbbf24;">Dashboard KG Amount (MMK) — Auto from Default Rate (Locked): *</label>
+        <input type="number" id="dashKgMmkInput" value="385000" readonly tabindex="-1" class="auto-locked-input" style="text-align: center; color: #fbbf24; font-weight: 800; font-size: 13px;">
+      </div>
+
+      <div>
+        <label>KG Pay Status</label>
+        <select id="dashKgPayStatus">
+          <option value="auto">Auto (From PAID/UNPAID)</option>
+          <option value="paid_mm">Paid in MM</option>
+          <option value="paid_uk">Paid in UK</option>
+          <option value="pay_arrival_uk">Pay on Arrival</option>
+          <option value="unpaid">Unpaid</option>
+        </select>
+      </div>
     </div>
 
-    <!-- D2. Local Delivery Fee Currency & Actual Amount -->
+    <!-- D2. Local Delivery Fee Currency & Amount (Locked Auto) -->
     <div class="card-box" style="border-color: rgba(250, 204, 21, 0.35); background-color: rgba(250, 204, 21, 0.04);">
       <div class="section-title" style="color: #fde047;">
-        <span>D2. Local Delivery Fee (Dashboard ငွေကြေး &amp; ပမာဏ)</span>
-        <span id="dashDeliUnitBadge" style="font-size: 10px; background: rgba(250,204,21,0.18); padding: 2px 7px; border-radius: 6px; color: #fde047;">Unit: £</span>
+        <span>D2. Local Delivery Fee (Auto Locked)</span>
+        <span class="calc-mode-tag">🔒 Auto Locked</span>
       </div>
       <div class="grid-2">
         <div>
@@ -607,29 +704,23 @@
           </select>
         </div>
         <div>
-          <label>Deli Rate (1£ = ? Ks)</label>
-          <input type="number" id="dashDeliRate" value="5500" min="0" step="1" oninput="this.dataset.touched='1'" style="text-align: center; color: #fde047; font-weight: 700;">
+          <label>Deli Status (Dashboard):</label>
+          <select id="dashDeliStatus">
+            <option value="pay_uk">Pay in UK</option>
+            <option value="paid_mm">Paid in MM</option>
+            <option value="paid_uk">Paid in UK</option>
+            <option value="office_pickup">Office Pickup</option>
+          </select>
         </div>
       </div>
 
-      <!-- Dynamic Deli Amount Box: GBP or MMK -->
       <div id="dashDeliGbpBox">
-        <label style="color: #fde047;">Dashboard Local Deli Amount (£) — ပေါင် ပမာဏ:</label>
-        <input type="number" id="dashDeliGbpInput" value="10" min="0" step="0.5" oninput="this.dataset.touched='1'" style="text-align: center; color: #fde047; font-weight: 800; font-size: 13px;">
+        <label style="color: #fde047;">Dashboard Local Deli Amount (£) — Auto Locked:</label>
+        <input type="number" id="dashDeliGbpInput" value="10" readonly tabindex="-1" class="auto-locked-input" style="text-align: center; color: #fde047; font-weight: 800; font-size: 13px;">
       </div>
       <div id="dashDeliMmkBox" class="hidden">
-        <label style="color: #fbbf24;">Dashboard Local Deli Amount (MMK / ကျပ်) — မြန်မာကျပ် ပမာဏ:</label>
-        <input type="number" id="dashDeliMmkInput" value="55000" min="0" step="100" oninput="this.dataset.touched='1'" style="text-align: center; color: #fbbf24; font-weight: 800; font-size: 13px;">
-      </div>
-
-      <div>
-        <label>Deli Status (Dashboard):</label>
-        <select id="dashDeliStatus">
-          <option value="pay_uk">Pay in UK</option>
-          <option value="paid_mm">Paid in MM</option>
-          <option value="paid_uk">Paid in UK</option>
-          <option value="office_pickup">Office Pickup</option>
-        </select>
+        <label style="color: #fbbf24;">Dashboard Local Deli Amount (MMK) — Auto from Default Rate (Locked):</label>
+        <input type="number" id="dashDeliMmkInput" value="55000" readonly tabindex="-1" class="auto-locked-input" style="text-align: center; color: #fbbf24; font-weight: 800; font-size: 13px;">
       </div>
     </div>
 
@@ -640,34 +731,34 @@
       </div>
       <div class="grid-2">
         <div>
-          <label>Boxes (ပုံးအရေအတွက်)</label>
+          <label>Boxes (ပုံးအရေအတွက်) *</label>
           <input type="number" id="dashBoxes" min="1" value="1" style="text-align: center; font-weight: 700;">
         </div>
         <div>
-          <label>Dashboard Note (မှတ်ချက်)</label>
+          <label>Dashboard Note (Optional)</label>
           <input type="text" id="dashNote" placeholder="e.g. အိတ်အမဲ ၂ လုံး">
         </div>
       </div>
     </div>
 
-    <!-- D4. Parcel Photos for Dashboard (Unlimited Count, Auto-Compressed) -->
+    <!-- D4. Parcel Photos for Dashboard -->
     <div class="card-box" style="border-color: rgba(129, 140, 248, 0.45); background-color: rgba(99, 102, 241, 0.07);">
       <div class="section-title" style="color: #a5b4fc;">
-        <span>D4. ပစ္စည်းဓာတ်ပုံများ (Dashboard သို့ တွဲပို့ရန်)</span>
+        <span>D4. ပစ္စည်းဓာတ်ပုံများ (Dashboard Sync အတွက် မဖြစ်မနေ)</span>
         <label class="btn btn-indigo" style="cursor: pointer; padding: 4px 10px; font-size: 10px;">
           + ဓာတ်ပုံ ထည့်ရန်
           <input type="file" id="dashPhotoInput" accept="image/*" multiple onchange="handleDashPhotoFiles(event)" style="display: none;">
         </label>
       </div>
       <p style="font-size: 10px; color: #cbd5e1; line-height: 1.4;">
-        ၁ ပုံ၊ ၂ ပုံ၊ ၃ ပုံ၊ ၄ ပုံ စသဖြင့် လိုသလောက် ထည့်နိုင်ပါသည်။ Size ကို အလိုအလျောက် ချုံ့ပေးပြီး "Dashboard ပို့ / Sync" နှိပ်လျှင် Dashboard ဘက်သို့ ရောက်သွားပါမည်။
+        ပုံမပါဘဲ Invoice ထုတ်လို့ရပြီး Draft မှာ Auto ကျန်နေပါမည်။ <b>Dashboard Sync</b> လုပ်တဲ့အချိန်မှာတော့ ပုံပါမှ Sync ရပါမည်။
       </p>
       <div id="dashPhotoPreviewGrid" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px;"></div>
       <div id="dashPhotoStatus" style="font-size: 10.5px; color: #a5b4fc; font-weight: 700;"></div>
     </div>
   </div>
 
-  <!-- RIGHT COLUMN: SINGLE A4 PRINTABLE LIVE PREVIEW (UNCHANGED CUSTOMER INVOICE) -->
+  <!-- RIGHT COLUMN: SINGLE A4 PRINTABLE LIVE PREVIEW -->
   <div style="display: flex; justify-content: center; overflow-x: auto; padding: 4px;">
     <div id="invoiceContainer">
       <div id="invoice" class="invoice-sheet">
@@ -855,6 +946,26 @@ const CATEGORY_OPTIONS = [
   'Other'
 ];
 
+const DRAFTS_STORAGE_KEY = 'mm_uk_ww_invoice_v44_drafts_v1';
+const DB_NAME = 'ADDaffodilsMMInvoiceDBV44';
+const DB_VERSION = 1;
+const STORE_NAME = 'assets';
+const DASH_CFG_KEY = 'mm_uk_ww_inv_to_dash_cfg_v1';
+
+let workingDocState = {
+  docId: 'doc_' + Date.now(),
+  hasSyncedFinal: false,
+  wasDraft: false,
+  needsPhotoDraft: false
+};
+
+let pendingFinalAction = null;
+
+function getMasterRate() {
+  const val = parseFloat(document.getElementById('inputExchangeRate')?.value);
+  return Number.isFinite(val) && val > 0 ? val : 5500;
+}
+
 function getSelectedRouteString() {
   const oSel = document.getElementById('dashOriginSelect')?.value || 'Myanmar';
   const origin = oSel === 'Other'
@@ -896,10 +1007,653 @@ let items = [
 
 let dashPhotos = [];
 
-const DB_NAME = 'ADDaffodilsMMInvoiceDBV44';
-const DB_VERSION = 1;
-const STORE_NAME = 'assets';
-const DASH_CFG_KEY = 'mm_uk_ww_inv_to_dash_cfg_v1';
+function hasParcelPhotos() {
+  return Array.isArray(dashPhotos) && dashPhotos.length > 0;
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function openDashboardPage() {
+  const cfg = getDashCfg();
+  if (!cfg.user || !cfg.repo) {
+    alert('Dashboard Link ဖွင့်ရန် "Dashboard Sync" Setup ထဲတွင် GitHub Username နှင့် Repo Name အရင်ဖြည့်ပေးပါ။');
+    openDashSyncModal();
+    return;
+  }
+  const cleanUser = cfg.user.trim();
+  const cleanRepo = cfg.repo.trim().replace(/^\/+|\/+$/g, '');
+  const url = `https://${encodeURIComponent(cleanUser)}.github.io/${encodeURIComponent(cleanRepo)}/`;
+  window.open(url, '_blank', 'noopener');
+}
+
+function updateDocStageBadge() {
+  const badge = document.getElementById('currentDocStageBadge');
+  if (!badge) return;
+  if (!hasParcelPhotos() && (workingDocState.needsPhotoDraft || workingDocState.wasDraft)) {
+    badge.className = 'stage-pill stage-photo-warn';
+    badge.textContent = '📸 ပုံလိုနေသည် (Auto-Draft)';
+  } else if (workingDocState.hasSyncedFinal) {
+    badge.className = 'stage-pill stage-revised';
+    badge.textContent = '🔄 Recalled / Revised Mode';
+  } else if (workingDocState.wasDraft) {
+    badge.className = 'stage-pill stage-draft';
+    badge.textContent = '📝 Draft (Pending Final)';
+  } else {
+    badge.className = 'stage-pill stage-draft';
+    badge.textContent = '🧾 New Invoice';
+  }
+}
+
+function getSavedDrafts() {
+  try {
+    const arr = JSON.parse(localStorage.getItem(DRAFTS_STORAGE_KEY));
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function writeSavedDrafts(list) {
+  try {
+    localStorage.setItem(DRAFTS_STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {
+    alert('⚠️ Draft သိမ်းရန် Browser Memory ပြည့်နေပါသည် — Draft အဟောင်းတချို့ကို ဖျက်ပေးပါ။');
+  }
+  updateDraftCountBadge();
+}
+
+function updateDraftCountBadge() {
+  const el = document.getElementById('draftCountBadge');
+  if (el) el.textContent = getSavedDrafts().length;
+}
+
+function snapshotCurrentFormState(docStage = 'Draft') {
+  const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked')?.value || 'PAID';
+  const missingPhoto = !hasParcelPhotos();
+  return {
+    docId: workingDocState.docId,
+    docStage: missingPhoto && docStage !== 'Revised' ? 'PhotoMissingDraft' : docStage,
+    missingPhoto,
+    hasSyncedFinal: !!workingDocState.hasSyncedFinal,
+    savedAt: new Date().toLocaleString(),
+    paymentStatus,
+    date: document.getElementById('inputDate').value || '',
+    invNo: document.getElementById('inputInvNo').value || '',
+    currency: document.getElementById('inputCurrency').value || '£',
+    exchangeRate: document.getElementById('inputExchangeRate').value || '5500',
+    originSelect: document.getElementById('dashOriginSelect').value || 'Myanmar',
+    originCustom: document.getElementById('dashOriginCustom').value || '',
+    destSelect: document.getElementById('dashDestSelect').value || 'UK',
+    destCustom: document.getElementById('dashDestCustom').value || '',
+    senderName: document.getElementById('inputSenderName').value || '',
+    senderPhone: document.getElementById('inputSenderPhone').value || '',
+    recName: document.getElementById('inputRecName').value || '',
+    recPhone: document.getElementById('inputRecPhone').value || '',
+    items: JSON.parse(JSON.stringify(items)),
+    singleDelFeeToggle: !!document.getElementById('singleDelFeeToggle').checked,
+    singleDelFeeInput: document.getElementById('singleDelFeeInput').value || '0',
+    insuranceToggle: !!document.getElementById('insuranceToggle').checked,
+    insuranceCurrency: document.getElementById('insuranceCurrency').value || 'MMK',
+    insuranceFeeInput: document.getElementById('insuranceFeeInput').value || '0',
+    insuranceLabelInput: document.getElementById('insuranceLabelInput').value || '',
+    discountToggle: !!document.getElementById('discountToggle').checked,
+    discountType: document.getElementById('discountType').value || '£',
+    discountValueInput: document.getElementById('discountValueInput').value || '0',
+    discountLabelInput: document.getElementById('discountLabelInput').value || '',
+    dashKgCurrency: document.getElementById('dashKgCurrency').value || 'GBP',
+    dashKgGbpInput: document.getElementById('dashKgGbpInput').value || '0',
+    dashKgMmkInput: document.getElementById('dashKgMmkInput').value || '0',
+    dashKgPayStatus: document.getElementById('dashKgPayStatus').value || 'auto',
+    dashKgPayDate: document.getElementById('dashKgPayDate').value || '',
+    dashDeliCurrency: document.getElementById('dashDeliCurrency').value || 'GBP',
+    dashDeliGbpInput: document.getElementById('dashDeliGbpInput').value || '0',
+    dashDeliMmkInput: document.getElementById('dashDeliMmkInput').value || '0',
+    dashDeliStatus: document.getElementById('dashDeliStatus').value || 'pay_uk',
+    dashBoxes: document.getElementById('dashBoxes').value || '1',
+    dashNote: document.getElementById('dashNote').value || ''
+  };
+}
+
+function upsertDraftRecord(snap) {
+  const list = getSavedDrafts();
+  const idx = list.findIndex(d => d.docId === snap.docId);
+  if (idx >= 0) {
+    list[idx] = snap;
+  } else {
+    list.unshift(snap);
+  }
+  writeSavedDrafts(list);
+}
+
+function saveCurrentAsDraft() {
+  workingDocState.wasDraft = true;
+  if (!hasParcelPhotos()) {
+    workingDocState.needsPhotoDraft = true;
+  }
+  const snap = snapshotCurrentFormState(workingDocState.hasSyncedFinal ? 'Revised' : 'Draft');
+  upsertDraftRecord(snap);
+  updateDocStageBadge();
+  alert(`💾 Draft သိမ်းပြီးပါပြီ (${snap.invNo || 'Untitled'} • ${snap.recName || snap.senderName || 'Customer'}) — Customer အများအပြားကို Draft အနေနဲ့ သိမ်းထားနိုင်ပြီး နောက်မှ ပြန်ခေါ် ဆက်ဖြည့်နိုင်ပါသည်။`);
+}
+
+function autoSaveMissingPhotoDraft() {
+  workingDocState.wasDraft = true;
+  workingDocState.needsPhotoDraft = true;
+  const snap = snapshotCurrentFormState('PhotoMissingDraft');
+  upsertDraftRecord(snap);
+  updateDocStageBadge();
+  return snap;
+}
+
+function applySnapshotToForm(snap) {
+  workingDocState.docId = snap.docId || ('doc_' + Date.now());
+  workingDocState.hasSyncedFinal = !!snap.hasSyncedFinal;
+  workingDocState.wasDraft = snap.docStage === 'Draft' || snap.docStage === 'PhotoMissingDraft' || !!snap.missingPhoto;
+  workingDocState.needsPhotoDraft = !!snap.missingPhoto || snap.docStage === 'PhotoMissingDraft';
+
+  const payRadio = document.querySelector(`input[name="paymentStatus"][value="${snap.paymentStatus === 'UNPAID' ? 'UNPAID' : 'PAID'}"]`);
+  if (payRadio) payRadio.checked = true;
+
+  document.getElementById('inputDate').value = snap.date || '';
+  document.getElementById('inputInvNo').value = snap.invNo || '';
+  document.getElementById('inputCurrency').value = snap.currency || '£';
+  document.getElementById('inputExchangeRate').value = snap.exchangeRate || '5500';
+
+  document.getElementById('dashOriginSelect').value = snap.originSelect || 'Myanmar';
+  document.getElementById('dashOriginCustom').value = snap.originCustom || '';
+  document.getElementById('dashDestSelect').value = snap.destSelect || 'UK';
+  document.getElementById('dashDestCustom').value = snap.destCustom || '';
+
+  document.getElementById('inputSenderName').value = snap.senderName || '';
+  document.getElementById('inputSenderPhone').value = snap.senderPhone || '';
+  document.getElementById('inputRecName').value = snap.recName || '';
+  document.getElementById('inputRecPhone').value = snap.recPhone || '';
+
+  items = Array.isArray(snap.items) && snap.items.length > 0
+    ? JSON.parse(JSON.stringify(snap.items))
+    : [{
+        route: getSelectedRouteString(),
+        categoryType: "Standard",
+        customCategory: "",
+        weight: 0,
+        riskNote: "(Standard)",
+        unitRateGbp: 14,
+        hasDelFee: false,
+        delFeeGbp: 10
+      }];
+
+  document.getElementById('singleDelFeeToggle').checked = !!snap.singleDelFeeToggle;
+  document.getElementById('singleDelFeeInput').value = snap.singleDelFeeInput ?? '10';
+
+  document.getElementById('insuranceToggle').checked = !!snap.insuranceToggle;
+  document.getElementById('insuranceCurrency').value = snap.insuranceCurrency || 'MMK';
+  document.getElementById('insuranceFeeInput').value = snap.insuranceFeeInput ?? '0';
+  document.getElementById('insuranceLabelInput').value = snap.insuranceLabelInput || 'Insurance Fee (Yangon Paid)';
+
+  document.getElementById('discountToggle').checked = !!snap.discountToggle;
+  document.getElementById('discountType').value = snap.discountType || '£';
+  document.getElementById('discountValueInput').value = snap.discountValueInput ?? '0';
+  document.getElementById('discountLabelInput').value = snap.discountLabelInput || 'Promotion Discount';
+
+  document.getElementById('dashKgCurrency').value = snap.dashKgCurrency || 'GBP';
+  document.getElementById('dashKgPayStatus').value = snap.dashKgPayStatus || 'auto';
+  document.getElementById('dashKgPayDate').value = snap.dashKgPayDate || '';
+
+  document.getElementById('dashDeliCurrency').value = snap.dashDeliCurrency || 'GBP';
+  document.getElementById('dashDeliStatus').value = snap.dashDeliStatus || 'pay_uk';
+
+  document.getElementById('dashBoxes').value = snap.dashBoxes || '1';
+  document.getElementById('dashNote').value = snap.dashNote || '';
+
+  handleRouteSelectionChange();
+  handleDashKgCurrencyChange();
+  handleDashDeliCurrencyChange();
+  renderItemInputs();
+  syncDashAmountsFromInvoice();
+  updateInvoice();
+  updateDocStageBadge();
+}
+
+function recallDraftById(docId) {
+  const list = getSavedDrafts();
+  const found = list.find(d => d.docId === docId);
+  if (!found) return;
+  applySnapshotToForm(found);
+  closeDraftsModal();
+}
+
+function deleteDraftById(docId) {
+  if (!confirm('ဒီ Draft / Saved စာရင်းကို ဖျက်မှာ သေချာလား?')) return;
+  const list = getSavedDrafts().filter(d => d.docId !== docId);
+  writeSavedDrafts(list);
+  renderDraftsList();
+}
+
+function startFreshInvoice() {
+  workingDocState = {
+    docId: 'doc_' + Date.now(),
+    hasSyncedFinal: false,
+    wasDraft: false,
+    needsPhotoDraft: false
+  };
+  document.getElementById('inputSenderName').value = '';
+  document.getElementById('inputSenderPhone').value = '';
+  document.getElementById('inputRecName').value = '';
+  document.getElementById('inputRecPhone').value = '';
+  document.getElementById('dashNote').value = '';
+  document.getElementById('dashKgPayDate').value = '';
+  document.getElementById('dashBoxes').value = '1';
+
+  items = [{
+    route: getSelectedRouteString(),
+    categoryType: "Standard",
+    customCategory: "",
+    weight: 0,
+    riskNote: "(Standard)",
+    unitRateGbp: 14,
+    hasDelFee: false,
+    delFeeGbp: 10
+  }];
+
+  autoNextInvoiceNo();
+  setTodayDate();
+  renderItemInputs();
+  syncDashAmountsFromInvoice();
+  updateInvoice();
+  updateDocStageBadge();
+}
+
+function openDraftsModal() {
+  document.getElementById('draftSearchInput').value = '';
+  renderDraftsList();
+  document.getElementById('draftsModal').classList.remove('hidden');
+}
+
+function closeDraftsModal() {
+  document.getElementById('draftsModal').classList.add('hidden');
+}
+
+function renderDraftsList() {
+  const q = (document.getElementById('draftSearchInput').value || '').trim().toLowerCase();
+  const list = getSavedDrafts().filter(d => {
+    if (!q) return true;
+    return [d.invNo, d.senderName, d.senderPhone, d.recName, d.recPhone, d.docStage].join(' ').toLowerCase().includes(q);
+  });
+
+  const container = document.getElementById('draftsListContainer');
+  if (!list.length) {
+    container.innerHTML = `<div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 12px;">Draft / Saved Invoice မရှိသေးပါ။</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(d => {
+    const totalKg = (d.items || []).reduce((s, it) => s + (parseFloat(it.weight) || 0), 0);
+    let stageCls = 'stage-draft';
+    let stageLabel = '📝 Draft';
+    if (d.docStage === 'PhotoMissingDraft' || d.missingPhoto) {
+      stageCls = 'stage-photo-warn';
+      stageLabel = '📸 ပုံလိုနေသည် (Auto-Draft)';
+    } else if (d.docStage === 'Revised' || d.hasSyncedFinal) {
+      stageCls = 'stage-revised';
+      stageLabel = '🔄 Revised / Synced';
+    } else if (d.docStage === 'Final Invoice') {
+      stageCls = 'stage-final';
+      stageLabel = '✅ Final Invoice';
+    }
+
+    return `
+      <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="min-width: 0;">
+          <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            <strong style="color: #fbbf24; font-size: 12.5px;">${escapeHtml(d.invNo || 'No Inv')}</strong>
+            <span class="stage-pill ${stageCls}">${stageLabel}</span>
+            <span style="color: #94a3b8; font-size: 10.5px;">${escapeHtml(d.date || '')}</span>
+          </div>
+          <div style="font-size: 11.5px; color: #f8fafc; margin-top: 3px; font-weight: 600;">
+            ${escapeHtml(d.senderName || '-')} → ${escapeHtml(d.recName || '-')} • ${totalKg.toFixed(2)} kg
+          </div>
+          <div style="font-size: 10px; color: #64748b; margin-top: 1px;">Saved: ${escapeHtml(d.savedAt || '')}</div>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button onclick="recallDraftById('${d.docId}')" class="btn btn-green" style="padding: 6px 10px; font-size: 11px;">↩️ ပြန်ခေါ်ပြင်မည်</button>
+          <button onclick="deleteDraftById('${d.docId}')" class="btn btn-rose" style="padding: 6px 8px; font-size: 11px;">🗑️</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// REQUIRED GATE (EXCLUDING INSURANCE, DISCOUNT, NOTES) & PHOTO RULES
+// ============================================================
+function validateRequiredFieldsCommon() {
+  const missing = [];
+
+  const dateVal = (document.getElementById('inputDate').value || '').trim();
+  const invNoVal = (document.getElementById('inputInvNo').value || '').trim();
+  const senderName = (document.getElementById('inputSenderName').value || '').trim();
+  const senderPhone = (document.getElementById('inputSenderPhone').value || '').trim();
+  const recName = (document.getElementById('inputRecName').value || '').trim();
+  const recPhone = (document.getElementById('inputRecPhone').value || '').trim();
+
+  if (!dateVal) missing.push('Date (ရက်စွဲ)');
+  if (!invNoVal) missing.push('Invoice No.');
+  if (!senderName) missing.push('Sender Name (Myanmar)');
+  if (!senderPhone) missing.push('Sender Tel / Phone (Myanmar)');
+  if (!recName) missing.push('Receiver Name (Worldwide)');
+  if (!recPhone) missing.push('Receiver Tel / Phone (Worldwide)');
+
+  const oSel = document.getElementById('dashOriginSelect').value;
+  if (oSel === 'Other' && !(document.getElementById('dashOriginCustom').value || '').trim()) {
+    missing.push('Origin Country (Other နိုင်ငံအမည်)');
+  }
+  const dSel = document.getElementById('dashDestSelect').value;
+  if (dSel === 'Other' && !(document.getElementById('dashDestCustom').value || '').trim()) {
+    missing.push('Destination Country (Other နိုင်ငံအမည်)');
+  }
+
+  if (!items.length) {
+    missing.push('Consignment Items (ပစ္စည်းစာရင်း အနည်းဆုံး ၁ ခု)');
+  } else {
+    items.forEach((it, idx) => {
+      const w = parseFloat(it.weight) || 0;
+      const r = parseFloat(it.unitRateGbp) || 0;
+      if (w <= 0) missing.push(`Item #${idx + 1}: Weight (kg) 0 ထက်ကြီးရပါမည်`);
+      if (r <= 0) missing.push(`Item #${idx + 1}: Rate/kg (£) 0 ထက်ကြီးရပါမည်`);
+      if (it.categoryType === 'Other' && !(it.customCategory || '').trim()) {
+        missing.push(`Item #${idx + 1}: Other Category အမည် ရိုက်ထည့်ရပါမည်`);
+      }
+    });
+  }
+
+  const invCurr = document.getElementById('inputCurrency').value;
+  const exRate = parseFloat(document.getElementById('inputExchangeRate').value) || 0;
+  if (invCurr === 'MMK' && exRate <= 0) {
+    missing.push('Invoice Currency ကို MMK ရွေးထားသဖြင့် Default Rate (1£ = ? Ks) ထည့်ရပါမည်');
+  }
+
+  const boxes = parseInt(document.getElementById('dashBoxes').value, 10) || 0;
+  if (boxes < 1) missing.push('Boxes (ပုံးအရေအတွက်) အနည်းဆုံး ၁ ပုံး ပါရပါမည်');
+
+  const kgCurr = document.getElementById('dashKgCurrency').value;
+  const kgGbp = parseFloat(document.getElementById('dashKgGbpInput').value) || 0;
+  const kgMmk = parseFloat(document.getElementById('dashKgMmkInput').value) || 0;
+
+  if (kgCurr === 'MMK') {
+    if (exRate <= 0) missing.push('Default Rate (1£ = ? Ks) မဖြစ်မနေ ပါရပါမည်');
+    if (kgMmk <= 0) missing.push('Dashboard KG Amount (MMK) 0 ထက်ကြီးရပါမည်');
+  } else {
+    if (kgGbp <= 0) missing.push('Dashboard KG Amount (£) 0 ထက်ကြီးရပါမည်');
+  }
+
+  const deliCurr = document.getElementById('dashDeliCurrency').value;
+  const deliMmk = parseFloat(document.getElementById('dashDeliMmkInput').value) || 0;
+  if (deliCurr === 'MMK' && deliMmk > 0 && exRate <= 0) {
+    missing.push('Default Rate (1£ = ? Ks) မဖြစ်မနေ ပါရပါမည်');
+  }
+
+  return missing;
+}
+
+function showMissingFieldsPopup(missingList, options = {}) {
+  const titleEl = document.getElementById('missingModalTitle');
+  const descEl = document.getElementById('missingModalDesc');
+  const saveDraftBtn = document.getElementById('missingSaveDraftBtn');
+  const closeBtn = document.getElementById('missingCloseBtn');
+
+  titleEl.textContent = options.title || '⚠️ လိုအပ်နေသော အချက်အလက်များ';
+  descEl.innerHTML = options.desc || 'Final Invoice ထုတ်ရန် / Dashboard Sync ပို့ရန် အောက်ပါ မရှိမဖြစ် အချက်အလက်များ မပြည့်စုံသေးပါ။ (Insurance, Discount, Notes များ မပါလည်း ရပါသည်)';
+
+  const ul = document.getElementById('missingFieldsList');
+  ul.innerHTML = missingList.map(m => `<li>❌ ${escapeHtml(m)}</li>`).join('');
+
+  if (options.hideDraftBtn) {
+    saveDraftBtn.classList.add('hidden');
+  } else {
+    saveDraftBtn.classList.remove('hidden');
+  }
+  closeBtn.textContent = options.closeLabel || 'ပြန်ဖြည့်မည်';
+
+  document.getElementById('missingFieldsModal').classList.remove('hidden');
+}
+
+function closeMissingFieldsModal() {
+  document.getElementById('missingFieldsModal').classList.add('hidden');
+}
+
+function formatKgPayStatusLabel(statusVal, paymentStatusFallback) {
+  const effective = statusVal === 'auto'
+    ? (paymentStatusFallback === 'PAID' ? 'paid_mm' : 'unpaid')
+    : statusVal;
+  const map = {
+    paid_mm: 'မြန်မာပြည်တွင် ရှင်းပြီး (Paid in MM)',
+    paid_uk: 'UK တွင် ရှင်းပြီး (Paid in UK)',
+    pay_arrival_uk: 'ပစ္စည်းရောက်မှ ရှင်းမည် (Pay on Arrival)',
+    unpaid: 'မရှင်းရသေးပါ (Unpaid)'
+  };
+  return map[effective] || effective;
+}
+
+function formatDeliStatusLabel(statusVal, destType) {
+  if (destType !== 'UK' || statusVal === 'none') {
+    return 'UK Local Deli မပါဝင်ပါ (N/A)';
+  }
+  const map = {
+    pay_uk: 'UK ဘက်တွင် ရှင်းမည် (Pay in UK)',
+    paid_mm: 'မြန်မာပြည်တွင် ရှင်းပြီး (Paid in MM)',
+    paid_uk: 'UK တွင် ရှင်းပြီး (Paid in UK)',
+    office_pickup: 'ရုံးလာယူမည် (Office Pickup)'
+  };
+  return map[statusVal] || statusVal;
+}
+
+function openFinalCheckPopup(actionCallback, actionLabel, photoMissingWarning = false) {
+  pendingFinalAction = actionCallback;
+
+  const invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
+  const dateVal = (document.getElementById('inputDate').value || '').trim() || '-';
+  const payStatus = document.querySelector('input[name="paymentStatus"]:checked')?.value || 'PAID';
+  const curr = document.getElementById('inputCurrency').value || '£';
+  const defaultRate = getMasterRate();
+
+  const route = getSelectedRouteString();
+  const destLower = route.split('To').pop()?.trim().toLowerCase() || '';
+  const destType = (destLower === 'uk' || destLower === 'united kingdom') ? 'UK' : 'Worldwide';
+
+  const boxes = parseInt(document.getElementById('dashBoxes').value, 10) || 1;
+  const totalKg = items.reduce((s, it) => s + (parseFloat(it.weight) || 0), 0);
+
+  const senderName = (document.getElementById('inputSenderName').value || '').trim() || '-';
+  const senderPhone = (document.getElementById('inputSenderPhone').value || '').trim() || '-';
+  const recName = (document.getElementById('inputRecName').value || '').trim() || '-';
+  const recPhone = (document.getElementById('inputRecPhone').value || '').trim() || '-';
+
+  const grandTotal = document.getElementById('viewGrandTotal').innerText;
+  const stageWillBe = workingDocState.hasSyncedFinal ? '🔄 Revised' : '✅ Final Invoice';
+
+  const itemsDetailHtml = items.map((it, idx) => {
+    const catRaw = resolveItemCategoryLabel(it);
+    const isRisk = String(it.categoryType || '').toLowerCase() === 'risk' || catRaw.toLowerCase() === 'risk';
+    const catBadge = isRisk
+      ? `<span style="background:rgba(225,29,72,0.22);color:#fda4af;border:1px solid rgba(244,63,94,0.45);padding:1px 6px;border-radius:5px;font-weight:800;font-size:10.5px;">⚠️ RISK</span>`
+      : `<span style="background:rgba(148,163,184,0.16);color:#e2e8f0;border:1px solid rgba(148,163,184,0.3);padding:1px 6px;border-radius:5px;font-weight:700;font-size:10.5px;">${escapeHtml(catRaw)}</span>`;
+
+    const w = parseFloat(it.weight) || 0;
+    const r = parseFloat(it.unitRateGbp) || 0;
+    const lineGbp = (w * r) + (it.hasDelFee ? (parseFloat(it.delFeeGbp) || 0) : 0);
+    const lineDisp = curr === 'MMK'
+      ? `${Math.round(lineGbp * defaultRate).toLocaleString()} MMK`
+      : `£ ${Number.isInteger(lineGbp) ? lineGbp : lineGbp.toFixed(2)}`;
+    const itemDeliNote = it.hasDelFee ? ` • +Item Deli £${parseFloat(it.delFeeGbp) || 0}` : '';
+
+    return `
+      <div style="padding:5px 8px;background:rgba(30,41,59,0.75);border-radius:7px;border:1px solid #334155;margin-top:4px;font-size:11.5px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span>#${idx + 1} ${catBadge} <strong>${w} kg</strong> × £${r}/kg${escapeHtml(itemDeliNote)}</span>
+          <strong style="color:#fbbf24;">${escapeHtml(lineDisp)}</strong>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const kgCurr = document.getElementById('dashKgCurrency').value === 'MMK' ? 'MMK' : 'GBP';
+  const kgGbp = parseFloat(document.getElementById('dashKgGbpInput').value) || 0;
+  const kgMmk = parseFloat(document.getElementById('dashKgMmkInput').value) || 0;
+  const kgAmtText = kgCurr === 'MMK'
+    ? `${Math.round(kgMmk).toLocaleString()} MMK (Auto @ ${defaultRate.toLocaleString()} Ks)`
+    : `£ ${kgGbp}`;
+  const kgPayLabel = formatKgPayStatusLabel(document.getElementById('dashKgPayStatus').value, payStatus);
+  const kgPayDate = (document.getElementById('dashKgPayDate').value || '').trim();
+
+  const isSingleDeli = document.getElementById('singleDelFeeToggle').checked;
+  const singleDeliAmt = parseFloat(document.getElementById('singleDelFeeInput').value) || 0;
+  const deliCurr = document.getElementById('dashDeliCurrency').value === 'MMK' ? 'MMK' : 'GBP';
+  const deliGbp = parseFloat(document.getElementById('dashDeliGbpInput').value) || 0;
+  const deliMmk = parseFloat(document.getElementById('dashDeliMmkInput').value) || 0;
+  const deliAmtText = deliCurr === 'MMK'
+    ? `${Math.round(deliMmk).toLocaleString()} MMK (Auto @ ${defaultRate.toLocaleString()} Ks)`
+    : `£ ${deliGbp}`;
+  const deliStatusLabel = formatDeliStatusLabel(document.getElementById('dashDeliStatus').value, destType);
+
+  const isIns = document.getElementById('insuranceToggle').checked;
+  const insCurr = document.getElementById('insuranceCurrency').value;
+  const insVal = parseFloat(document.getElementById('insuranceFeeInput').value) || 0;
+  const insLabel = (document.getElementById('insuranceLabelInput').value || 'Insurance Fee').trim();
+  const insSummary = (isIns && insVal > 0)
+    ? `${escapeHtml(insLabel)}: ${insCurr === 'MMK' ? Math.round(insVal).toLocaleString() + ' MMK' : '£' + insVal}`
+    : 'မပါဝင်ပါ (None)';
+
+  const isDisc = document.getElementById('discountToggle').checked;
+  const discType = document.getElementById('discountType').value;
+  const discVal = parseFloat(document.getElementById('discountValueInput').value) || 0;
+  const discLabel = (document.getElementById('discountLabelInput').value || 'Promotion Discount').trim();
+  const discSummary = (isDisc && discVal > 0)
+    ? `${escapeHtml(discLabel)}: -${discType === 'MMK' ? Math.round(discVal).toLocaleString() + ' MMK' : (discType === 'percent' ? discVal + '%' : '£' + discVal)}`
+    : 'မပါဝင်ပါ (None)';
+
+  const noteText = (document.getElementById('dashNote').value || '').trim() || '-';
+  const photoCount = Array.isArray(dashPhotos) ? dashPhotos.length : 0;
+
+  const introEl = document.getElementById('finalCheckIntroText');
+  if (photoMissingWarning) {
+    introEl.innerHTML = `<span style="color:#fda4af;font-weight:700;">⚠️ ပစ္စည်းဓာတ်ပုံ မပါသေးပါ — Invoice ထုတ်ခွင့်ပေးမည်ဖြစ်ပြီး Draft မှာ Auto ကျန်နေပါမည်။ (Dashboard Sync ကိုတော့ ပုံမပါသေးသဖြင့် ခဏဆိုင်းထားပါမည်)</span>`;
+  } else {
+    introEl.innerHTML = `အောက်ပါ အချက်အလက်များ အားလုံး မှန်ကန်ကြောင်း သေချာစစ်ဆေးပြီးမှ <b>Confirm &amp; Proceed</b> ကို နှိပ်ပါ —`;
+  }
+
+  document.getElementById('finalCheckSummaryBody').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
+        <div><strong>Stage / Action:</strong> <span style="color:#6ee7b7;font-weight:800;">${stageWillBe}</span> • <span style="color:#7dd3fc;">${escapeHtml(actionLabel)}</span></div>
+        <div><strong>Inv No. / Date:</strong> <strong style="color:#fbbf24;">${escapeHtml(invNo)}</strong> • ${escapeHtml(dateVal)} • <strong style="color:${payStatus === 'PAID' ? '#34d399' : '#fb7185'};">${payStatus}</strong></div>
+        <div><strong>Invoice Currency &amp; Default Rate:</strong> <strong style="color:#fde047;">${escapeHtml(curr)}</strong> • <strong style="color:#34d399;">1 £ = ${defaultRate.toLocaleString()} MMK</strong></div>
+      </div>
+
+      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
+        <div><strong>Route:</strong> <strong style="color:#7dd3fc;">${escapeHtml(route)}</strong> • <strong>Boxes / Total KG:</strong> ${boxes} ပုံး / ${totalKg.toFixed(2)} kg</div>
+        <div><strong>Sender (MM):</strong> ${escapeHtml(senderName)} (${escapeHtml(senderPhone)})</div>
+        <div><strong>Receiver (WW):</strong> ${escapeHtml(recName)} (${escapeHtml(recPhone)})</div>
+      </div>
+
+      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
+        <div style="font-weight:700;color:#fbbf24;">📦 ပစ္စည်းစာရင်း (Items &amp; Risk Check):</div>
+        ${itemsDetailHtml}
+      </div>
+
+      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
+        <div style="font-weight:700;color:#6ee7b7;">💷 ငွေရှင်းမှု အသေးစိတ် (Settlement Details):</div>
+        <div style="margin-top:3px;">• <strong>KG Fee:</strong> ${escapeHtml(kgAmtText)} → <strong>${escapeHtml(kgPayLabel)}</strong>${kgPayDate ? ` (Date: ${escapeHtml(kgPayDate)})` : ''}</div>
+        <div style="margin-top:2px;">• <strong>Local Deli:</strong> ${escapeHtml(deliAmtText)} → <strong>${escapeHtml(deliStatusLabel)}</strong> ${isSingleDeli ? `(Invoice Deli: £${singleDeliAmt})` : '(Invoice Deli Off)'}</div>
+        <div style="margin-top:2px;">• <strong>Insurance:</strong> ${insSummary}</div>
+        <div style="margin-top:2px;">• <strong>Discount:</strong> ${discSummary}</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.4);padding:8px 10px;border-radius:8px;">
+        <span style="font-weight:800;color:#fde047;">💰 INVOICE TOTAL:</span>
+        <span style="font-size:15px;font-weight:900;color:#fbbf24;">${escapeHtml(curr)} ${escapeHtml(grandTotal)}</span>
+      </div>
+
+      <div style="font-size:11px;color:#cbd5e1;">
+        <div>• <strong>Note:</strong> ${escapeHtml(noteText)}</div>
+        <div>• <strong>Dashboard Photos:</strong> <strong style="color:${photoCount > 0 ? '#6ee7b7' : '#fda4af'};">${photoCount} ပုံ</strong></div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('finalCheckModal').classList.remove('hidden');
+}
+
+function closeFinalCheckModal() {
+  pendingFinalAction = null;
+  document.getElementById('finalCheckModal').classList.add('hidden');
+}
+
+function executeConfirmedFinalAction() {
+  const fn = pendingFinalAction;
+  pendingFinalAction = null;
+  document.getElementById('finalCheckModal').classList.add('hidden');
+  if (typeof fn === 'function') {
+    fn();
+  }
+}
+
+function requestFinalSyncToDashboard() {
+  const missing = validateRequiredFieldsCommon();
+  if (missing.length > 0) {
+    showMissingFieldsPopup(missing);
+    return;
+  }
+  if (!hasParcelPhotos()) {
+    showMissingFieldsPopup(
+      ['ပစ္စည်းဓာတ်ပုံ (Parcel Photo) မပါသေးပါ — Dashboard သို့ Record ပို့ရန် ပစ္စည်းဓာတ်ပုံ မဖြစ်မနေ လိုအပ်ပါသည်။'],
+      {
+        title: '📸 ပစ္စည်းဓာတ်ပုံ လိုအပ်နေပါသည် (Dashboard Sync)',
+        desc: 'Dashboard တွင် Record မှတ်ရန် ပစ္စည်းဓာတ်ပုံ မဖြစ်မနေ လိုအပ်ပါသည်။ ဓာတ်ပုံ ရိုက်ထည့်ပြီးမှ Dashboard Sync ကို ထပ်နှိပ်ပါ (သို့မဟုတ် Draft ထဲ သိမ်းထားနိုင်ပါသည်)။',
+        hideDraftBtn: false,
+        closeLabel: 'ဓာတ်ပုံ သွားထည့်မည်'
+      }
+    );
+    return;
+  }
+  openFinalCheckPopup(() => sendInvoiceToDashboard(false), 'Final & Dashboard Sync', false);
+}
+
+function requestExport(fmt) {
+  const missing = validateRequiredFieldsCommon();
+  if (missing.length > 0) {
+    showMissingFieldsPopup(missing);
+    return;
+  }
+  const photoMissing = !hasParcelPhotos();
+  openFinalCheckPopup(() => {
+    if (fmt === 'JPG') exportJPG(photoMissing);
+    else exportPDF(photoMissing);
+  }, `Export ${fmt}`, photoMissing);
+}
+
+function handlePostExportPhotoAndSync(photoMissing) {
+  if (photoMissing) {
+    autoSaveMissingPhotoDraft();
+    const el = document.getElementById('dashSyncStatus');
+    if (el) {
+      el.textContent = '📸 ပုံမပါသေးသဖြင့် Draft မှာ Auto သိမ်းထားပြီး Dashboard Sync ကို ခဏဆိုင်းထားပါသည်';
+      el.style.color = '#fda4af';
+    }
+    alert('⚠️ ပစ္စည်းဓာတ်ပုံ မထည့်ရသေးသဖြင့် Invoice ကို ထုတ်ပေးလိုက်ပြီး Draft စာရင်းထဲတွင် Auto သိမ်းထားပါသည်။\n\nနောက်ပိုင်း Draft ထဲ ပြန်ဝင်ပြီး ပစ္စည်းဓာတ်ပုံ ရိုက်ထည့်ပေးပါဦး (Dashboard ကို Sync လုပ်ရန် ပုံပါရှိမှ ရပါမည်)။');
+    return;
+  }
+
+  const cfg = getDashCfg();
+  if (cfg.autoSendOnExport !== false && cfg.user && cfg.repo && cfg.token) {
+    sendInvoiceToDashboard(true);
+  }
+}
 
 function getDashCfg() {
   try {
@@ -980,15 +1734,12 @@ function handleDashKgCurrencyChange() {
   const curr = document.getElementById('dashKgCurrency').value;
   const gbpBox = document.getElementById('dashKgGbpBox');
   const mmkBox = document.getElementById('dashKgMmkBox');
-  const badge = document.getElementById('dashKgUnitBadge');
   if (curr === 'MMK') {
     gbpBox.classList.add('hidden');
     mmkBox.classList.remove('hidden');
-    if (badge) badge.textContent = 'Unit: ကျပ် (MMK)';
   } else {
     mmkBox.classList.add('hidden');
     gbpBox.classList.remove('hidden');
-    if (badge) badge.textContent = 'Unit: Pound (£)';
   }
   syncDashAmountsFromInvoice();
 }
@@ -997,15 +1748,12 @@ function handleDashDeliCurrencyChange() {
   const curr = document.getElementById('dashDeliCurrency').value;
   const gbpBox = document.getElementById('dashDeliGbpBox');
   const mmkBox = document.getElementById('dashDeliMmkBox');
-  const badge = document.getElementById('dashDeliUnitBadge');
   if (curr === 'MMK') {
     gbpBox.classList.add('hidden');
     mmkBox.classList.remove('hidden');
-    if (badge) badge.textContent = 'Unit: ကျပ် (MMK)';
   } else {
     mmkBox.classList.add('hidden');
     gbpBox.classList.remove('hidden');
-    if (badge) badge.textContent = 'Unit: Pound (£)';
   }
   syncDashAmountsFromInvoice();
 }
@@ -1045,38 +1793,22 @@ function computeInvoiceNetGbpParts() {
 
 function syncDashAmountsFromInvoice() {
   const { netKgGbp, totalDeliGbp } = computeInvoiceNetGbpParts();
-  const defRate = parseFloat(document.getElementById('inputExchangeRate')?.value) || 5500;
-  const kgRate = parseFloat(document.getElementById('dashKgRate')?.value) || defRate;
-  const deliRate = parseFloat(document.getElementById('dashDeliRate')?.value) || defRate;
+  const masterRate = getMasterRate();
 
   const kgGbpEl = document.getElementById('dashKgGbpInput');
   const kgMmkEl = document.getElementById('dashKgMmkInput');
-  if (kgGbpEl && !kgGbpEl.dataset.touched) {
-    kgGbpEl.value = Number(netKgGbp.toFixed(2));
-  }
-  if (kgMmkEl && !kgMmkEl.dataset.touched) {
-    kgMmkEl.value = Math.round(netKgGbp * kgRate);
-  }
+  if (kgGbpEl) kgGbpEl.value = Number(netKgGbp.toFixed(2));
+  if (kgMmkEl) kgMmkEl.value = Math.round(netKgGbp * masterRate);
 
   const deliGbpEl = document.getElementById('dashDeliGbpInput');
   const deliMmkEl = document.getElementById('dashDeliMmkInput');
-  if (deliGbpEl && !deliGbpEl.dataset.touched) {
-    deliGbpEl.value = Number(totalDeliGbp.toFixed(2));
-  }
-  if (deliMmkEl && !deliMmkEl.dataset.touched) {
-    deliMmkEl.value = Math.round(totalDeliGbp * deliRate);
-  }
+  if (deliGbpEl) deliGbpEl.value = Number(totalDeliGbp.toFixed(2));
+  if (deliMmkEl) deliMmkEl.value = Math.round(totalDeliGbp * masterRate);
 }
 
-function syncDefaultRatesIfEmpty() {
-  const defRate = parseFloat(document.getElementById('inputExchangeRate').value) || 5500;
-  ['dashKgRate', 'dashDeliRate', 'dashInsRate', 'dashDiscRate'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && (!el.dataset.touched)) {
-      el.value = defRate;
-    }
-  });
+function handleMasterRateChange() {
   syncDashAmountsFromInvoice();
+  updateInvoice();
 }
 
 function compressPhotoFile(file, maxDim = 1280, quality = 0.8) {
@@ -1129,12 +1861,20 @@ async function handleDashPhotoFiles(event) {
     }
   }
   event.target.value = '';
+  if (hasParcelPhotos()) {
+    workingDocState.needsPhotoDraft = false;
+  }
   renderDashPhotoPreviews();
+  updateDocStageBadge();
 }
 
 function removeDashPhoto(idx) {
   dashPhotos.splice(idx, 1);
+  if (!hasParcelPhotos() && workingDocState.wasDraft) {
+    workingDocState.needsPhotoDraft = true;
+  }
   renderDashPhotoPreviews();
+  updateDocStageBadge();
 }
 
 function renderDashPhotoPreviews() {
@@ -1142,7 +1882,8 @@ function renderDashPhotoPreviews() {
   const statusEl = document.getElementById('dashPhotoStatus');
   if (!dashPhotos.length) {
     grid.innerHTML = '';
-    statusEl.textContent = 'ဓာတ်ပုံ မထည့်ရသေးပါ (လိုသလောက် ထည့်နိုင်သည်)';
+    statusEl.textContent = '⚠️ ပစ္စည်းဓာတ်ပုံ မထည့်ရသေးပါ (Dashboard Sync အတွက် ပုံပါမှ ရပါမည်)';
+    statusEl.style.color = '#fda4af';
     return;
   }
   grid.innerHTML = dashPhotos.map((p, idx) => `
@@ -1152,7 +1893,8 @@ function renderDashPhotoPreviews() {
       <span style="position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.65); color: white; font-size: 9px; padding: 0 4px; border-radius: 4px;">#${idx + 1}</span>
     </div>
   `).join('');
-  statusEl.textContent = `✅ ဓာတ်ပုံ ${dashPhotos.length} ပုံ အသင့်ဖြစ်ပါပြီ ("Dashboard ပို့ / Sync" နှိပ်ပါ)`;
+  statusEl.textContent = `✅ ဓာတ်ပုံ ${dashPhotos.length} ပုံ အသင့်ဖြစ်ပါပြီ (Dashboard Sync လုပ်နိုင်ပါပြီ)`;
+  statusEl.style.color = '#6ee7b7';
 }
 
 function toBase64Utf8(str) {
@@ -1181,7 +1923,7 @@ function resolveItemCategoryLabel(item) {
   return item.categoryType || 'Standard';
 }
 
-function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = []) {
+function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage = 'Final Invoice') {
   const invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
   const date = (document.getElementById('inputDate').value || '').trim() || '-';
   const sender = (document.getElementById('inputSenderName').value || '').trim() || '-';
@@ -1201,11 +1943,7 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = []) {
   const destLower = destination.toLowerCase();
   const destType = (destLower === 'uk' || destLower === 'united kingdom') ? 'UK' : 'Worldwide';
 
-  const defaultRate = parseFloat(document.getElementById('inputExchangeRate').value) || 5500;
-  const kgRate = parseFloat(document.getElementById('dashKgRate').value) || defaultRate;
-  const deliRate = parseFloat(document.getElementById('dashDeliRate').value) || defaultRate;
-  const insRate = parseFloat(document.getElementById('dashInsRate').value) || defaultRate;
-  const discRate = parseFloat(document.getElementById('dashDiscRate').value) || defaultRate;
+  const masterRate = getMasterRate();
 
   const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked')?.value || 'PAID';
   const kgPayStatusSel = document.getElementById('dashKgPayStatus').value;
@@ -1223,7 +1961,6 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = []) {
 
   const { discGbpAmt } = computeInvoiceNetGbpParts();
 
-  // Read explicit Dashboard KG Currency & Actual Entered Amount
   const kgCurrency = document.getElementById('dashKgCurrency').value === 'MMK' ? 'MMK' : 'GBP';
   const kgGbp = kgCurrency === 'GBP'
     ? Math.max(0, Number((parseFloat(document.getElementById('dashKgGbpInput').value) || 0).toFixed(2)))
@@ -1232,7 +1969,6 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = []) {
     ? Math.max(0, Math.round(parseFloat(document.getElementById('dashKgMmkInput').value) || 0))
     : 0;
 
-  // Read explicit Dashboard Local Deli Currency & Actual Entered Amount
   const deliCurrency = document.getElementById('dashDeliCurrency').value === 'MMK' ? 'MMK' : 'GBP';
   const deliGbp = deliCurrency === 'GBP'
     ? Math.max(0, Number((parseFloat(document.getElementById('dashDeliGbpInput').value) || 0).toFixed(2)))
@@ -1260,12 +1996,12 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = []) {
   const noteParts = [];
   if (customNote) noteParts.push(customNote);
   if (isIns && insAmtRaw > 0) {
-    noteParts.push(`${insLabel || 'Ins'}: ${insCurrRaw === 'MMK' ? Math.round(insAmtRaw).toLocaleString() + ' Ks @' + insRate : '£' + insAmtRaw + ' (@' + insRate + ')'}`);
+    noteParts.push(`${insLabel || 'Ins'}: ${insCurrRaw === 'MMK' ? Math.round(insAmtRaw).toLocaleString() + ' Ks' : '£' + insAmtRaw}`);
   }
   if (isDisc && discValRaw > 0) {
     const dStr = discTypeRaw === 'MMK'
-      ? Math.round(discValRaw).toLocaleString() + ' Ks @' + discRate
-      : (discTypeRaw === 'percent' ? discValRaw + '%' : '£' + discValRaw + ' (@' + discRate + ')');
+      ? Math.round(discValRaw).toLocaleString() + ' Ks'
+      : (discTypeRaw === 'percent' ? discValRaw + '%' : '£' + discValRaw);
     noteParts.push(`${discLabel || 'Disc'}: -${dStr}`);
   }
 
@@ -1288,23 +2024,24 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = []) {
     kgCurrency,
     kgGbp,
     kgMmk,
-    rate: kgCurrency === 'MMK' ? kgRate : defaultRate,
+    rate: masterRate,
     kgPayDate,
     deliStatus,
     deliCurrency,
     deliGbp,
     deliMmk,
-    deliRate: hasDeli ? deliRate : defaultRate,
+    deliRate: masterRate,
     deliPayDate: hasDeli && ['paid_mm', 'paid_uk'].includes(deliStatus) ? date : '',
     insured: !!(isIns && insAmtRaw > 0),
     insCurrency: insCurrRaw === 'MMK' ? 'MMK' : 'GBP',
     insAmount: (isIns && insAmtRaw > 0) ? insAmtRaw : 0,
-    insRate,
+    insRate: masterRate,
     discount: !!(isDisc && discValRaw > 0),
     discCurrency: discTypeRaw === 'MMK' ? 'MMK' : 'GBP',
     discAmount: (isDisc && discValRaw > 0) ? (discTypeRaw === 'GBP' ? discGbpAmt : discValRaw) : 0,
-    discRate,
+    discRate: masterRate,
     note: noteParts.join(' • '),
+    invoiceStage,
     sourceApp: 'mm-invoice-v44'
   };
 }
@@ -1335,6 +2072,26 @@ async function uploadDashPhotosToGitHub(cfg, recordId) {
 }
 
 async function sendInvoiceToDashboard(silent = false) {
+  if (!hasParcelPhotos()) {
+    const el = document.getElementById('dashSyncStatus');
+    if (el) {
+      el.textContent = '⚠️ ပစ္စည်းဓာတ်ပုံ မပါသေးသဖြင့် Dashboard Sync မလုပ်နိုင်ပါ (ပုံထည့်ပြီးမှ ထပ်နှိပ်ပါ)';
+      el.style.color = '#fda4af';
+    }
+    if (!silent) {
+      showMissingFieldsPopup(
+        ['ပစ္စည်းဓာတ်ပုံ (Parcel Photo) မပါသေးပါ — Dashboard သို့ Record ပို့ရန် ပစ္စည်းဓာတ်ပုံ မဖြစ်မနေ လိုအပ်ပါသည်။'],
+        {
+          title: '📸 ပစ္စည်းဓာတ်ပုံ လိုအပ်နေပါသည် (Dashboard Sync)',
+          desc: 'Dashboard တွင် Record မှတ်ရန် ပစ္စည်းဓာတ်ပုံ မဖြစ်မနေ လိုအပ်ပါသည်။ ဓာတ်ပုံ ရိုက်ထည့်ပြီးမှ Dashboard Sync ကို ထပ်နှိပ်ပါ။',
+          hideDraftBtn: false,
+          closeLabel: 'ဓာတ်ပုံ သွားထည့်မည်'
+        }
+      );
+    }
+    return false;
+  }
+
   const cfg = getDashCfg();
   if (!cfg.user || !cfg.repo || !cfg.token) {
     if (!silent) {
@@ -1356,7 +2113,6 @@ async function sendInvoiceToDashboard(silent = false) {
     const invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
     const recordId = 'inv_' + invNo.replace(/[^a-zA-Z0-9_-]/g, '') + '_' + Date.now();
     const photoPaths = await uploadDashPhotosToGitHub(cfg, recordId);
-    const incoming = buildDashboardPayloadFromInvoice(photoPaths);
 
     const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.user)}/${encodeURIComponent(cfg.repo)}/contents/data.json`;
     const getRes = await fetch(apiUrl + `?t=${Date.now()}`, {
@@ -1376,7 +2132,12 @@ async function sendInvoiceToDashboard(silent = false) {
       list = Array.isArray(parsed.records) ? parsed.records : (Array.isArray(parsed) ? parsed : []);
     }
 
-    const existingIdx = list.findIndex(r => String(r.invNo || '').trim().toLowerCase() === incoming.invNo.toLowerCase());
+    const existingIdx = list.findIndex(r => String(r.invNo || '').trim().toLowerCase() === invNo.toLowerCase());
+    const isUpdateExisting = existingIdx >= 0 || workingDocState.hasSyncedFinal;
+    const stageToSend = isUpdateExisting ? 'Revised' : 'Final Invoice';
+
+    const incoming = buildDashboardPayloadFromInvoice(photoPaths, stageToSend);
+
     if (existingIdx >= 0) {
       const mergedPhotos = photoPaths.length > 0 ? photoPaths : (list[existingIdx].photos || []);
       list[existingIdx] = {
@@ -1409,7 +2170,7 @@ async function sendInvoiceToDashboard(silent = false) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: `Sync invoice ${incoming.invNo} from MM Invoice V44`,
+        message: `${stageToSend} sync ${incoming.invNo} from MM Invoice V44`,
         content: contentB64,
         ...(sha ? { sha } : {})
       })
@@ -1417,13 +2178,19 @@ async function sendInvoiceToDashboard(silent = false) {
 
     if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
 
+    workingDocState.hasSyncedFinal = true;
+    workingDocState.wasDraft = false;
+    workingDocState.needsPhotoDraft = false;
+    upsertDraftRecord(snapshotCurrentFormState('Revised'));
+    updateDocStageBadge();
+
     const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     if (el) {
-      el.textContent = `✅ ${incoming.invNo} နှင့် ဓာတ်ပုံ ${photoPaths.length} ပုံ Dashboard သို့ ရောက်သွားပါပြီ (${nowStr})`;
+      el.textContent = `✅ [${stageToSend}] ${incoming.invNo} ကို Dashboard တွင် ${existingIdx >= 0 ? 'Update လုပ်ပြီး' : 'ပို့ပြီး'}ပါပြီ (${nowStr})`;
       el.style.color = '#6ee7b7';
     }
     if (!silent) {
-      alert(`✅ Invoice (${incoming.invNo}) နှင့် ဓာတ်ပုံ (${photoPaths.length} ပုံ) ကို Dashboard ထဲသို့ Auto ပို့ပြီးပါပြီ!`);
+      alert(`✅ [${stageToSend}] Invoice (${incoming.invNo}) နှင့် ဓာတ်ပုံ (${photoPaths.length} ပုံ) ကို Dashboard တွင် ${existingIdx >= 0 ? 'ရှိပြီးသားစာရင်းကို Update လုပ်ပြီးပါပြီ!' : 'ပို့ပြီးပါပြီ!'}`);
     }
     return true;
   } catch (err) {
@@ -1491,6 +2258,8 @@ async function init() {
   syncDashAmountsFromInvoice();
   updateInvoice();
   updateDashStatusBanner();
+  updateDraftCountBadge();
+  updateDocStageBadge();
 }
 
 function loadSavedInvoiceNumber() {
@@ -1593,7 +2362,7 @@ function renderItemInputs() {
   const container = document.getElementById('itemInputsContainer');
   container.innerHTML = '';
   const curr = document.getElementById('inputCurrency')?.value || '£';
-  const exRate = parseFloat(document.getElementById('inputExchangeRate')?.value) || 5500;
+  const exRate = getMasterRate();
 
   items.forEach((item, index) => {
     const itemSubtotalGbp = item.weight * item.unitRateGbp;
@@ -1621,11 +2390,11 @@ function renderItemInputs() {
 
       <div class="grid-3">
         <div>
-          <label>Weight (kg):</label>
+          <label>Weight (kg): *</label>
           <input type="number" step="0.5" id="weight_${index}" value="${item.weight}" oninput="items[${index}].weight = parseFloat(this.value)||0; updateItemTotalDisp(${index}); syncDashAmountsFromInvoice(); updateInvoice();" style="text-align: center; font-weight: 700;">
         </div>
         <div>
-          <label>Rate/kg (£):</label>
+          <label>Rate/kg (£): *</label>
           <input type="number" step="1" id="rate_${index}" value="${item.unitRateGbp}" oninput="items[${index}].unitRateGbp = parseFloat(this.value)||0; updateItemTotalDisp(${index}); syncDashAmountsFromInvoice(); updateInvoice();" style="text-align: center; font-weight: 700;">
         </div>
         <div>
@@ -1648,7 +2417,7 @@ function renderItemInputs() {
 
 function updateItemTotalDisp(index) {
   const curr = document.getElementById('inputCurrency')?.value || '£';
-  const exRate = parseFloat(document.getElementById('inputExchangeRate')?.value) || 5500;
+  const exRate = getMasterRate();
   const item = items[index];
   const itemSubtotalGbp = item.weight * item.unitRateGbp;
   const itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
@@ -1688,7 +2457,7 @@ function updateInvoice() {
 
   const activeRoute = getSelectedRouteString();
   const curr = document.getElementById('inputCurrency').value;
-  const exRate = parseFloat(document.getElementById('inputExchangeRate').value) || 5500;
+  const exRate = getMasterRate();
 
   const insCurr = document.getElementById('insuranceCurrency').value;
   document.getElementById('insuranceValueLabel').innerText = `Amount (${insCurr}):`;
@@ -1853,7 +2622,7 @@ function updateInvoice() {
   document.getElementById('viewGrandTotal').innerText = finalGrandTotalDisp;
 }
 
-function exportJPG() {
+function exportJPG(photoMissing = false) {
   const invNo = document.getElementById('inputInvNo').value;
   const invoice = document.getElementById('invoice');
 
@@ -1863,14 +2632,11 @@ function exportJPG() {
     link.href = canvas.toDataURL('image/jpeg', 1.0);
     link.click();
 
-    const cfg = getDashCfg();
-    if (cfg.autoSendOnExport !== false && cfg.user && cfg.repo && cfg.token) {
-      sendInvoiceToDashboard(true);
-    }
+    handlePostExportPhotoAndSync(photoMissing);
   });
 }
 
-function exportPDF() {
+function exportPDF(photoMissing = false) {
   const invNo = document.getElementById('inputInvNo').value;
   const invoice = document.getElementById('invoice');
 
@@ -1885,10 +2651,7 @@ function exportPDF() {
     pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
     pdf.save(`${invNo}_AD_Daffodils_Invoice.pdf`);
 
-    const cfg = getDashCfg();
-    if (cfg.autoSendOnExport !== false && cfg.user && cfg.repo && cfg.token) {
-      sendInvoiceToDashboard(true);
-    }
+    handlePostExportPhotoAndSync(photoMissing);
   });
 }
 
