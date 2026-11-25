@@ -460,11 +460,11 @@
       </div>
       <div class="grid-2">
         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
-          <input type="radio" name="paymentStatus" value="PAID" checked onchange="updateInvoice()" style="accent-color: #059669;">
+          <input type="radio" name="paymentStatus" value="PAID" checked onchange="syncAllViews()" style="accent-color: #059669;">
           <span style="font-weight: 800; color: #34d399;">PAID (ရှင်းပြီး)</span>
         </label>
         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; background: #0f172a; padding: 8px; border-radius: 8px; border: 1px solid #334155;">
-          <input type="radio" name="paymentStatus" value="UNPAID" onchange="updateInvoice()" style="accent-color: #e11d48;">
+          <input type="radio" name="paymentStatus" value="UNPAID" onchange="syncAllViews()" style="accent-color: #e11d48;">
           <span style="font-weight: 800; color: #f43f5e;">UNPAID (မရှင်းရသေး)</span>
         </label>
       </div>
@@ -483,18 +483,18 @@
       <div class="grid-2">
         <div>
           <label>Date *</label>
-          <input type="text" id="inputDate" value="" oninput="updateInvoice()">
+          <input type="text" id="inputDate" value="" oninput="syncAllViews()">
         </div>
         <div>
           <label>Inv No. *</label>
-          <input type="text" id="inputInvNo" value="ADF563" oninput="updateInvoice()" style="font-weight: 700;">
+          <input type="text" id="inputInvNo" value="ADF563" oninput="syncAllViews()" style="font-weight: 700;">
         </div>
       </div>
 
       <div class="grid-2">
         <div>
           <label>Invoice Currency *</label>
-          <select id="inputCurrency" onchange="updateInvoice();" style="color: #fbbf24; font-weight: 700;">
+          <select id="inputCurrency" onchange="handleInvoiceCurrencyChange();" style="color: #fbbf24; font-weight: 700;">
             <option value="£">Pound (£)</option>
             <option value="MMK">Kyat (MMK)</option>
           </select>
@@ -566,13 +566,13 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="section-title">5. Local Delivery Fee (£)</span>
         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #34d399; margin: 0;">
-          <input type="checkbox" id="singleDelFeeToggle" checked onchange="syncDashAmountsFromInvoice(); updateInvoice();" style="accent-color: #f59e0b; width: 16px; height: 16px;">
+          <input type="checkbox" id="singleDelFeeToggle" checked onchange="syncAllViews();" style="accent-color: #f59e0b; width: 16px; height: 16px;">
           Include Fee
         </label>
       </div>
       <div>
         <label>Invoice Local Deli Amount (£):</label>
-        <input type="number" id="singleDelFeeInput" value="10" step="1" oninput="syncDashAmountsFromInvoice(); updateInvoice();" style="text-align: center; color: #fde047; font-weight: 700;">
+        <input type="number" id="singleDelFeeInput" value="10" step="1" oninput="syncAllViews();" style="text-align: center; color: #fde047; font-weight: 700;">
       </div>
     </div>
 
@@ -581,21 +581,21 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="section-title" style="color: #38bdf8;">Insurance Fee (Optional)</span>
         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #38bdf8; margin: 0;">
-          <input type="checkbox" id="insuranceToggle" onchange="updateInvoice()" style="accent-color: #0284c7; width: 16px; height: 16px;">
+          <input type="checkbox" id="insuranceToggle" onchange="syncAllViews()" style="accent-color: #0284c7; width: 16px; height: 16px;">
           Include Insurance
         </label>
       </div>
       <div class="grid-2">
         <div>
           <label>Currency</label>
-          <select id="insuranceCurrency" onchange="updateInvoice()" style="color: #7dd3fc; font-weight: 700;">
+          <select id="insuranceCurrency" onchange="syncAllViews()" style="color: #7dd3fc; font-weight: 700;">
             <option value="MMK">MMK (Separate)</option>
             <option value="£">£ (In Total)</option>
           </select>
         </div>
         <div>
           <label id="insuranceValueLabel">Amount (MMK):</label>
-          <input type="number" id="insuranceFeeInput" value="0" min="0" step="100" oninput="updateInvoice()" style="text-align: center; color: #7dd3fc; font-weight: 700;">
+          <input type="number" id="insuranceFeeInput" value="0" min="0" step="100" oninput="syncAllViews()" style="text-align: center; color: #7dd3fc; font-weight: 700;">
         </div>
       </div>
       <div>
@@ -609,7 +609,7 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <span class="section-title" style="color: #34d399;">Promotion Discount (Optional)</span>
         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: #34d399; margin: 0;">
-          <input type="checkbox" id="discountToggle" onchange="syncDashAmountsFromInvoice(); updateInvoice();" style="accent-color: #059669; width: 16px; height: 16px;">
+          <input type="checkbox" id="discountToggle" onchange="syncAllViews();" style="accent-color: #059669; width: 16px; height: 16px;">
           Apply Discount
         </label>
       </div>
@@ -617,7 +617,7 @@
       <div class="grid-2">
         <div>
           <label>Discount Mode</label>
-          <select id="discountType" onchange="syncDashAmountsFromInvoice(); updateInvoice();" style="color: #6ee7b7; font-weight: 700;">
+          <select id="discountType" onchange="syncAllViews();" style="color: #6ee7b7; font-weight: 700;">
             <option value="£">£ (In Total)</option>
             <option value="MMK">MMK (Separate)</option>
             <option value="percent">% (In Total)</option>
@@ -625,7 +625,7 @@
         </div>
         <div>
           <label id="discountValueLabel">Discount (£):</label>
-          <input type="number" id="discountValueInput" value="0" min="0" step="0.5" oninput="syncDashAmountsFromInvoice(); updateInvoice();" style="text-align: center; color: #34d399; font-weight: 700;">
+          <input type="number" id="discountValueInput" value="0" min="0" step="0.5" oninput="syncAllViews();" style="text-align: center; color: #34d399; font-weight: 700;">
         </div>
       </div>
       <div>
@@ -709,7 +709,8 @@
             <option value="pay_uk">Pay in UK</option>
             <option value="paid_mm">Paid in MM</option>
             <option value="paid_uk">Paid in UK</option>
-            <option value="office_pickup">Office Pickup</option>
+            <option value="office_pickup">Office Pickup (ရုံးလာယူမည်)</option>
+            <option value="none">No Local Delivery</option>
           </select>
         </div>
       </div>
@@ -951,6 +952,7 @@ const DB_NAME = 'ADDaffodilsMMInvoiceDBV44';
 const DB_VERSION = 1;
 const STORE_NAME = 'assets';
 const DASH_CFG_KEY = 'mm_uk_ww_inv_to_dash_cfg_v1';
+const MAX_LOCAL_DRAFTS = 35;
 
 let workingDocState = {
   docId: 'doc_' + Date.now(),
@@ -962,34 +964,39 @@ let workingDocState = {
 let pendingFinalAction = null;
 
 function getMasterRate() {
-  const val = parseFloat(document.getElementById('inputExchangeRate')?.value);
-  return Number.isFinite(val) && val > 0 ? val : 5500;
+  var el = document.getElementById('inputExchangeRate');
+  var val = parseFloat(el ? el.value : 5500);
+  return isFinite(val) && val > 0 ? val : 5500;
 }
 
 function getSelectedRouteString() {
-  const oSel = document.getElementById('dashOriginSelect')?.value || 'Myanmar';
-  const origin = oSel === 'Other'
-    ? ((document.getElementById('dashOriginCustom')?.value || '').trim() || 'Other')
+  var oEl = document.getElementById('dashOriginSelect');
+  var oSel = oEl ? oEl.value : 'Myanmar';
+  var oCustEl = document.getElementById('dashOriginCustom');
+  var origin = oSel === 'Other'
+    ? ((oCustEl ? oCustEl.value : '').trim() || 'Other')
     : 'Myanmar';
 
-  const dSel = document.getElementById('dashDestSelect')?.value || 'UK';
-  const dest = dSel === 'Other'
-    ? ((document.getElementById('dashDestCustom')?.value || '').trim() || 'Other')
+  var dEl = document.getElementById('dashDestSelect');
+  var dSel = dEl ? dEl.value : 'UK';
+  var dCustEl = document.getElementById('dashDestCustom');
+  var dest = dSel === 'Other'
+    ? ((dCustEl ? dCustEl.value : '').trim() || 'Other')
     : 'UK';
 
-  return `${origin} To ${dest}`;
+  return origin + ' To ' + dest;
 }
 
 function formatCategoryBadgeHtml(item) {
-  const catType = item.categoryType || 'Standard';
+  var catType = item.categoryType || 'Standard';
   if (catType === 'Other') {
-    const cVal = (item.customCategory || '').trim();
-    return cVal ? `(${cVal})` : '(Other)';
+    var cVal = (item.customCategory || '').trim();
+    return cVal ? '(' + cVal + ')' : '(Other)';
   }
   if (catType === 'Risk') {
     return "<span style='color: #dc2626; font-weight: 800;'>(Risk)</span>";
   }
-  return `(${catType})`;
+  return '(' + catType + ')';
 }
 
 let items = [
@@ -1020,20 +1027,20 @@ function escapeHtml(str) {
 }
 
 function openDashboardPage() {
-  const cfg = getDashCfg();
+  var cfg = getDashCfg();
   if (!cfg.user || !cfg.repo) {
     alert('Dashboard Link ဖွင့်ရန် "Dashboard Sync" Setup ထဲတွင် GitHub Username နှင့် Repo Name အရင်ဖြည့်ပေးပါ။');
     openDashSyncModal();
     return;
   }
-  const cleanUser = cfg.user.trim();
-  const cleanRepo = cfg.repo.trim().replace(/^\/+|\/+$/g, '');
-  const url = `https://${encodeURIComponent(cleanUser)}.github.io/${encodeURIComponent(cleanRepo)}/`;
+  var cleanUser = cfg.user.trim();
+  var cleanRepo = cfg.repo.trim().replace(/^\/+|\/+$/g, '');
+  var url = 'https://' + encodeURIComponent(cleanUser) + '.github.io/' + encodeURIComponent(cleanRepo) + '/';
   window.open(url, '_blank', 'noopener');
 }
 
 function updateDocStageBadge() {
-  const badge = document.getElementById('currentDocStageBadge');
+  var badge = document.getElementById('currentDocStageBadge');
   if (!badge) return;
   if (!hasParcelPhotos() && (workingDocState.needsPhotoDraft || workingDocState.wasDraft)) {
     badge.className = 'stage-pill stage-photo-warn';
@@ -1052,7 +1059,7 @@ function updateDocStageBadge() {
 
 function getSavedDrafts() {
   try {
-    const arr = JSON.parse(localStorage.getItem(DRAFTS_STORAGE_KEY));
+    var arr = JSON.parse(localStorage.getItem(DRAFTS_STORAGE_KEY));
     return Array.isArray(arr) ? arr : [];
   } catch (e) {
     return [];
@@ -1060,29 +1067,36 @@ function getSavedDrafts() {
 }
 
 function writeSavedDrafts(list) {
+  var trimmed = Array.isArray(list) ? list.slice(0, MAX_LOCAL_DRAFTS) : [];
   try {
-    localStorage.setItem(DRAFTS_STORAGE_KEY, JSON.stringify(list));
+    localStorage.setItem(DRAFTS_STORAGE_KEY, JSON.stringify(trimmed));
   } catch (e) {
-    alert('⚠️ Draft သိမ်းရန် Browser Memory ပြည့်နေပါသည် — Draft အဟောင်းတချို့ကို ဖျက်ပေးပါ။');
+    try {
+      localStorage.setItem(DRAFTS_STORAGE_KEY, JSON.stringify(trimmed.slice(0, 10)));
+    } catch (e2) {
+      alert('⚠️ Draft သိမ်းရန် Browser Memory ပြည့်နေပါသည် — Draft အဟောင်းတချို့ကို ဖျက်ပေးပါ။');
+    }
   }
   updateDraftCountBadge();
 }
 
 function updateDraftCountBadge() {
-  const el = document.getElementById('draftCountBadge');
+  var el = document.getElementById('draftCountBadge');
   if (el) el.textContent = getSavedDrafts().length;
 }
 
-function snapshotCurrentFormState(docStage = 'Draft') {
-  const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked')?.value || 'PAID';
-  const missingPhoto = !hasParcelPhotos();
+function snapshotCurrentFormState(docStage) {
+  if (!docStage) docStage = 'Draft';
+  var checkedPay = document.querySelector('input[name="paymentStatus"]:checked');
+  var paymentStatus = checkedPay ? checkedPay.value : 'PAID';
+  var missingPhoto = !hasParcelPhotos();
   return {
     docId: workingDocState.docId,
     docStage: missingPhoto && docStage !== 'Revised' ? 'PhotoMissingDraft' : docStage,
-    missingPhoto,
+    missingPhoto: missingPhoto,
     hasSyncedFinal: !!workingDocState.hasSyncedFinal,
     savedAt: new Date().toLocaleString(),
-    paymentStatus,
+    paymentStatus: paymentStatus,
     date: document.getElementById('inputDate').value || '',
     invNo: document.getElementById('inputInvNo').value || '',
     currency: document.getElementById('inputCurrency').value || '£',
@@ -1121,8 +1135,8 @@ function snapshotCurrentFormState(docStage = 'Draft') {
 }
 
 function upsertDraftRecord(snap) {
-  const list = getSavedDrafts();
-  const idx = list.findIndex(d => d.docId === snap.docId);
+  var list = getSavedDrafts();
+  var idx = list.findIndex(function(d) { return d.docId === snap.docId; });
   if (idx >= 0) {
     list[idx] = snap;
   } else {
@@ -1136,16 +1150,16 @@ function saveCurrentAsDraft() {
   if (!hasParcelPhotos()) {
     workingDocState.needsPhotoDraft = true;
   }
-  const snap = snapshotCurrentFormState(workingDocState.hasSyncedFinal ? 'Revised' : 'Draft');
+  var snap = snapshotCurrentFormState(workingDocState.hasSyncedFinal ? 'Revised' : 'Draft');
   upsertDraftRecord(snap);
   updateDocStageBadge();
-  alert(`💾 Draft သိမ်းပြီးပါပြီ (${snap.invNo || 'Untitled'} • ${snap.recName || snap.senderName || 'Customer'}) — Customer အများအပြားကို Draft အနေနဲ့ သိမ်းထားနိုင်ပြီး နောက်မှ ပြန်ခေါ် ဆက်ဖြည့်နိုင်ပါသည်။`);
+  alert('💾 Draft သိမ်းပြီးပါပြီ (' + (snap.invNo || 'Untitled') + ' • ' + (snap.recName || snap.senderName || 'Customer') + ') — Customer အများအပြားကို Draft အနေနဲ့ သိမ်းထားနိုင်ပြီး နောက်မှ ပြန်ခေါ် ဆက်ဖြည့်နိုင်ပါသည်။');
 }
 
 function autoSaveMissingPhotoDraft() {
   workingDocState.wasDraft = true;
   workingDocState.needsPhotoDraft = true;
-  const snap = snapshotCurrentFormState('PhotoMissingDraft');
+  var snap = snapshotCurrentFormState('PhotoMissingDraft');
   upsertDraftRecord(snap);
   updateDocStageBadge();
   return snap;
@@ -1157,7 +1171,8 @@ function applySnapshotToForm(snap) {
   workingDocState.wasDraft = snap.docStage === 'Draft' || snap.docStage === 'PhotoMissingDraft' || !!snap.missingPhoto;
   workingDocState.needsPhotoDraft = !!snap.missingPhoto || snap.docStage === 'PhotoMissingDraft';
 
-  const payRadio = document.querySelector(`input[name="paymentStatus"][value="${snap.paymentStatus === 'UNPAID' ? 'UNPAID' : 'PAID'}"]`);
+  var payVal = snap.paymentStatus === 'UNPAID' ? 'UNPAID' : 'PAID';
+  var payRadio = document.querySelector('input[name="paymentStatus"][value="' + payVal + '"]');
   if (payRadio) payRadio.checked = true;
 
   document.getElementById('inputDate').value = snap.date || '';
@@ -1189,16 +1204,16 @@ function applySnapshotToForm(snap) {
       }];
 
   document.getElementById('singleDelFeeToggle').checked = !!snap.singleDelFeeToggle;
-  document.getElementById('singleDelFeeInput').value = snap.singleDelFeeInput ?? '10';
+  document.getElementById('singleDelFeeInput').value = snap.singleDelFeeInput !== undefined ? snap.singleDelFeeInput : '10';
 
   document.getElementById('insuranceToggle').checked = !!snap.insuranceToggle;
   document.getElementById('insuranceCurrency').value = snap.insuranceCurrency || 'MMK';
-  document.getElementById('insuranceFeeInput').value = snap.insuranceFeeInput ?? '0';
+  document.getElementById('insuranceFeeInput').value = snap.insuranceFeeInput !== undefined ? snap.insuranceFeeInput : '0';
   document.getElementById('insuranceLabelInput').value = snap.insuranceLabelInput || 'Insurance Fee (Yangon Paid)';
 
   document.getElementById('discountToggle').checked = !!snap.discountToggle;
   document.getElementById('discountType').value = snap.discountType || '£';
-  document.getElementById('discountValueInput').value = snap.discountValueInput ?? '0';
+  document.getElementById('discountValueInput').value = snap.discountValueInput !== undefined ? snap.discountValueInput : '0';
   document.getElementById('discountLabelInput').value = snap.discountLabelInput || 'Promotion Discount';
 
   document.getElementById('dashKgCurrency').value = snap.dashKgCurrency || 'GBP';
@@ -1212,17 +1227,16 @@ function applySnapshotToForm(snap) {
   document.getElementById('dashNote').value = snap.dashNote || '';
 
   handleRouteSelectionChange();
-  handleDashKgCurrencyChange();
-  handleDashDeliCurrencyChange();
+  handleDashKgCurrencyChange(true);
+  handleDashDeliCurrencyChange(true);
   renderItemInputs();
-  syncDashAmountsFromInvoice();
-  updateInvoice();
+  syncAllViews();
   updateDocStageBadge();
 }
 
 function recallDraftById(docId) {
-  const list = getSavedDrafts();
-  const found = list.find(d => d.docId === docId);
+  var list = getSavedDrafts();
+  var found = list.find(function(d) { return d.docId === docId; });
   if (!found) return;
   applySnapshotToForm(found);
   closeDraftsModal();
@@ -1230,7 +1244,7 @@ function recallDraftById(docId) {
 
 function deleteDraftById(docId) {
   if (!confirm('ဒီ Draft / Saved စာရင်းကို ဖျက်မှာ သေချာလား?')) return;
-  const list = getSavedDrafts().filter(d => d.docId !== docId);
+  var list = getSavedDrafts().filter(function(d) { return d.docId !== docId; });
   writeSavedDrafts(list);
   renderDraftsList();
 }
@@ -1249,6 +1263,8 @@ function startFreshInvoice() {
   document.getElementById('dashNote').value = '';
   document.getElementById('dashKgPayDate').value = '';
   document.getElementById('dashBoxes').value = '1';
+  dashPhotos = [];
+  renderDashPhotoPreviews();
 
   items = [{
     route: getSelectedRouteString(),
@@ -1264,8 +1280,7 @@ function startFreshInvoice() {
   autoNextInvoiceNo();
   setTodayDate();
   renderItemInputs();
-  syncDashAmountsFromInvoice();
-  updateInvoice();
+  syncAllViews();
   updateDocStageBadge();
 }
 
@@ -1280,22 +1295,22 @@ function closeDraftsModal() {
 }
 
 function renderDraftsList() {
-  const q = (document.getElementById('draftSearchInput').value || '').trim().toLowerCase();
-  const list = getSavedDrafts().filter(d => {
+  var q = (document.getElementById('draftSearchInput').value || '').trim().toLowerCase();
+  var list = getSavedDrafts().filter(function(d) {
     if (!q) return true;
-    return [d.invNo, d.senderName, d.senderPhone, d.recName, d.recPhone, d.docStage].join(' ').toLowerCase().includes(q);
+    return [d.invNo, d.senderName, d.senderPhone, d.recName, d.recPhone, d.docStage].join(' ').toLowerCase().indexOf(q) !== -1;
   });
 
-  const container = document.getElementById('draftsListContainer');
+  var container = document.getElementById('draftsListContainer');
   if (!list.length) {
-    container.innerHTML = `<div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 12px;">Draft / Saved Invoice မရှိသေးပါ။</div>`;
+    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 12px;">Draft / Saved Invoice မရှိသေးပါ။</div>';
     return;
   }
 
-  container.innerHTML = list.map(d => {
-    const totalKg = (d.items || []).reduce((s, it) => s + (parseFloat(it.weight) || 0), 0);
-    let stageCls = 'stage-draft';
-    let stageLabel = '📝 Draft';
+  container.innerHTML = list.map(function(d) {
+    var totalKg = (d.items || []).reduce(function(s, it) { return s + (parseFloat(it.weight) || 0); }, 0);
+    var stageCls = 'stage-draft';
+    var stageLabel = '📝 Draft';
     if (d.docStage === 'PhotoMissingDraft' || d.missingPhoto) {
       stageCls = 'stage-photo-warn';
       stageLabel = '📸 ပုံလိုနေသည် (Auto-Draft)';
@@ -1307,25 +1322,23 @@ function renderDraftsList() {
       stageLabel = '✅ Final Invoice';
     }
 
-    return `
-      <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <div style="min-width: 0;">
-          <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-            <strong style="color: #fbbf24; font-size: 12.5px;">${escapeHtml(d.invNo || 'No Inv')}</strong>
-            <span class="stage-pill ${stageCls}">${stageLabel}</span>
-            <span style="color: #94a3b8; font-size: 10.5px;">${escapeHtml(d.date || '')}</span>
-          </div>
-          <div style="font-size: 11.5px; color: #f8fafc; margin-top: 3px; font-weight: 600;">
-            ${escapeHtml(d.senderName || '-')} → ${escapeHtml(d.recName || '-')} • ${totalKg.toFixed(2)} kg
-          </div>
-          <div style="font-size: 10px; color: #64748b; margin-top: 1px;">Saved: ${escapeHtml(d.savedAt || '')}</div>
-        </div>
-        <div style="display: flex; gap: 6px;">
-          <button onclick="recallDraftById('${d.docId}')" class="btn btn-green" style="padding: 6px 10px; font-size: 11px;">↩️ ပြန်ခေါ်ပြင်မည်</button>
-          <button onclick="deleteDraftById('${d.docId}')" class="btn btn-rose" style="padding: 6px 8px; font-size: 11px;">🗑️</button>
-        </div>
-      </div>
-    `;
+    return '<div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">' +
+      '<div style="min-width: 0;">' +
+        '<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">' +
+          '<strong style="color: #fbbf24; font-size: 12.5px;">' + escapeHtml(d.invNo || 'No Inv') + '</strong>' +
+          '<span class="stage-pill ' + stageCls + '">' + stageLabel + '</span>' +
+          '<span style="color: #94a3b8; font-size: 10.5px;">' + escapeHtml(d.date || '') + '</span>' +
+        '</div>' +
+        '<div style="font-size: 11.5px; color: #f8fafc; margin-top: 3px; font-weight: 600;">' +
+          escapeHtml(d.senderName || '-') + ' → ' + escapeHtml(d.recName || '-') + ' • ' + totalKg.toFixed(2) + ' kg' +
+        '</div>' +
+        '<div style="font-size: 10px; color: #64748b; margin-top: 1px;">Saved: ' + escapeHtml(d.savedAt || '') + '</div>' +
+      '</div>' +
+      '<div style="display: flex; gap: 6px;">' +
+        '<button onclick="recallDraftById(\'' + d.docId + '\')" class="btn btn-green" style="padding: 6px 10px; font-size: 11px;">↩️ ပြန်ခေါ်ပြင်မည်</button>' +
+        '<button onclick="deleteDraftById(\'' + d.docId + '\')" class="btn btn-rose" style="padding: 6px 8px; font-size: 11px;">🗑️</button>' +
+      '</div>' +
+    '</div>';
   }).join('');
 }
 
@@ -1333,14 +1346,14 @@ function renderDraftsList() {
 // REQUIRED GATE (EXCLUDING INSURANCE, DISCOUNT, NOTES) & PHOTO RULES
 // ============================================================
 function validateRequiredFieldsCommon() {
-  const missing = [];
+  var missing = [];
 
-  const dateVal = (document.getElementById('inputDate').value || '').trim();
-  const invNoVal = (document.getElementById('inputInvNo').value || '').trim();
-  const senderName = (document.getElementById('inputSenderName').value || '').trim();
-  const senderPhone = (document.getElementById('inputSenderPhone').value || '').trim();
-  const recName = (document.getElementById('inputRecName').value || '').trim();
-  const recPhone = (document.getElementById('inputRecPhone').value || '').trim();
+  var dateVal = (document.getElementById('inputDate').value || '').trim();
+  var invNoVal = (document.getElementById('inputInvNo').value || '').trim();
+  var senderName = (document.getElementById('inputSenderName').value || '').trim();
+  var senderPhone = (document.getElementById('inputSenderPhone').value || '').trim();
+  var recName = (document.getElementById('inputRecName').value || '').trim();
+  var recPhone = (document.getElementById('inputRecPhone').value || '').trim();
 
   if (!dateVal) missing.push('Date (ရက်စွဲ)');
   if (!invNoVal) missing.push('Invoice No.');
@@ -1349,11 +1362,11 @@ function validateRequiredFieldsCommon() {
   if (!recName) missing.push('Receiver Name (Worldwide)');
   if (!recPhone) missing.push('Receiver Tel / Phone (Worldwide)');
 
-  const oSel = document.getElementById('dashOriginSelect').value;
+  var oSel = document.getElementById('dashOriginSelect').value;
   if (oSel === 'Other' && !(document.getElementById('dashOriginCustom').value || '').trim()) {
     missing.push('Origin Country (Other နိုင်ငံအမည်)');
   }
-  const dSel = document.getElementById('dashDestSelect').value;
+  var dSel = document.getElementById('dashDestSelect').value;
   if (dSel === 'Other' && !(document.getElementById('dashDestCustom').value || '').trim()) {
     missing.push('Destination Country (Other နိုင်ငံအမည်)');
   }
@@ -1361,29 +1374,29 @@ function validateRequiredFieldsCommon() {
   if (!items.length) {
     missing.push('Consignment Items (ပစ္စည်းစာရင်း အနည်းဆုံး ၁ ခု)');
   } else {
-    items.forEach((it, idx) => {
-      const w = parseFloat(it.weight) || 0;
-      const r = parseFloat(it.unitRateGbp) || 0;
-      if (w <= 0) missing.push(`Item #${idx + 1}: Weight (kg) 0 ထက်ကြီးရပါမည်`);
-      if (r <= 0) missing.push(`Item #${idx + 1}: Rate/kg (£) 0 ထက်ကြီးရပါမည်`);
+    items.forEach(function(it, idx) {
+      var w = parseFloat(it.weight) || 0;
+      var r = parseFloat(it.unitRateGbp) || 0;
+      if (w <= 0) missing.push('Item #' + (idx + 1) + ': Weight (kg) 0 ထက်ကြီးရပါမည်');
+      if (r <= 0) missing.push('Item #' + (idx + 1) + ': Rate/kg (£) 0 ထက်ကြီးရပါမည်');
       if (it.categoryType === 'Other' && !(it.customCategory || '').trim()) {
-        missing.push(`Item #${idx + 1}: Other Category အမည် ရိုက်ထည့်ရပါမည်`);
+        missing.push('Item #' + (idx + 1) + ': Other Category အမည် ရိုက်ထည့်ရပါမည်');
       }
     });
   }
 
-  const invCurr = document.getElementById('inputCurrency').value;
-  const exRate = parseFloat(document.getElementById('inputExchangeRate').value) || 0;
+  var invCurr = document.getElementById('inputCurrency').value;
+  var exRate = parseFloat(document.getElementById('inputExchangeRate').value) || 0;
   if (invCurr === 'MMK' && exRate <= 0) {
     missing.push('Invoice Currency ကို MMK ရွေးထားသဖြင့် Default Rate (1£ = ? Ks) ထည့်ရပါမည်');
   }
 
-  const boxes = parseInt(document.getElementById('dashBoxes').value, 10) || 0;
+  var boxes = parseInt(document.getElementById('dashBoxes').value, 10) || 0;
   if (boxes < 1) missing.push('Boxes (ပုံးအရေအတွက်) အနည်းဆုံး ၁ ပုံး ပါရပါမည်');
 
-  const kgCurr = document.getElementById('dashKgCurrency').value;
-  const kgGbp = parseFloat(document.getElementById('dashKgGbpInput').value) || 0;
-  const kgMmk = parseFloat(document.getElementById('dashKgMmkInput').value) || 0;
+  var kgCurr = document.getElementById('dashKgCurrency').value;
+  var kgGbp = parseFloat(document.getElementById('dashKgGbpInput').value) || 0;
+  var kgMmk = parseFloat(document.getElementById('dashKgMmkInput').value) || 0;
 
   if (kgCurr === 'MMK') {
     if (exRate <= 0) missing.push('Default Rate (1£ = ? Ks) မဖြစ်မနေ ပါရပါမည်');
@@ -1392,8 +1405,8 @@ function validateRequiredFieldsCommon() {
     if (kgGbp <= 0) missing.push('Dashboard KG Amount (£) 0 ထက်ကြီးရပါမည်');
   }
 
-  const deliCurr = document.getElementById('dashDeliCurrency').value;
-  const deliMmk = parseFloat(document.getElementById('dashDeliMmkInput').value) || 0;
+  var deliCurr = document.getElementById('dashDeliCurrency').value;
+  var deliMmk = parseFloat(document.getElementById('dashDeliMmkInput').value) || 0;
   if (deliCurr === 'MMK' && deliMmk > 0 && exRate <= 0) {
     missing.push('Default Rate (1£ = ? Ks) မဖြစ်မနေ ပါရပါမည်');
   }
@@ -1401,17 +1414,18 @@ function validateRequiredFieldsCommon() {
   return missing;
 }
 
-function showMissingFieldsPopup(missingList, options = {}) {
-  const titleEl = document.getElementById('missingModalTitle');
-  const descEl = document.getElementById('missingModalDesc');
-  const saveDraftBtn = document.getElementById('missingSaveDraftBtn');
-  const closeBtn = document.getElementById('missingCloseBtn');
+function showMissingFieldsPopup(missingList, options) {
+  if (!options) options = {};
+  var titleEl = document.getElementById('missingModalTitle');
+  var descEl = document.getElementById('missingModalDesc');
+  var saveDraftBtn = document.getElementById('missingSaveDraftBtn');
+  var closeBtn = document.getElementById('missingCloseBtn');
 
   titleEl.textContent = options.title || '⚠️ လိုအပ်နေသော အချက်အလက်များ';
   descEl.innerHTML = options.desc || 'Final Invoice ထုတ်ရန် / Dashboard Sync ပို့ရန် အောက်ပါ မရှိမဖြစ် အချက်အလက်များ မပြည့်စုံသေးပါ။ (Insurance, Discount, Notes များ မပါလည်း ရပါသည်)';
 
-  const ul = document.getElementById('missingFieldsList');
-  ul.innerHTML = missingList.map(m => `<li>❌ ${escapeHtml(m)}</li>`).join('');
+  var ul = document.getElementById('missingFieldsList');
+  ul.innerHTML = missingList.map(function(m) { return '<li>❌ ' + escapeHtml(m) + '</li>'; }).join('');
 
   if (options.hideDraftBtn) {
     saveDraftBtn.classList.add('hidden');
@@ -1428,10 +1442,10 @@ function closeMissingFieldsModal() {
 }
 
 function formatKgPayStatusLabel(statusVal, paymentStatusFallback) {
-  const effective = statusVal === 'auto'
+  var effective = statusVal === 'auto'
     ? (paymentStatusFallback === 'PAID' ? 'paid_mm' : 'unpaid')
     : statusVal;
-  const map = {
+  var map = {
     paid_mm: 'မြန်မာပြည်တွင် ရှင်းပြီး (Paid in MM)',
     paid_uk: 'UK တွင် ရှင်းပြီး (Paid in UK)',
     pay_arrival_uk: 'ပစ္စည်းရောက်မှ ရှင်းမည် (Pay on Arrival)',
@@ -1444,147 +1458,142 @@ function formatDeliStatusLabel(statusVal, destType) {
   if (destType !== 'UK' || statusVal === 'none') {
     return 'UK Local Deli မပါဝင်ပါ (N/A)';
   }
-  const map = {
+  var map = {
     pay_uk: 'UK ဘက်တွင် ရှင်းမည် (Pay in UK)',
     paid_mm: 'မြန်မာပြည်တွင် ရှင်းပြီး (Paid in MM)',
     paid_uk: 'UK တွင် ရှင်းပြီး (Paid in UK)',
-    office_pickup: 'ရုံးလာယူမည် (Office Pickup)'
+    office_pickup: '🏢 ရုံးလာယူမည် (Office Pickup)'
   };
   return map[statusVal] || statusVal;
 }
 
-function openFinalCheckPopup(actionCallback, actionLabel, photoMissingWarning = false) {
+function openFinalCheckPopup(actionCallback, actionLabel, photoMissingWarning) {
   pendingFinalAction = actionCallback;
+  syncAllViews();
 
-  const invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
-  const dateVal = (document.getElementById('inputDate').value || '').trim() || '-';
-  const payStatus = document.querySelector('input[name="paymentStatus"]:checked')?.value || 'PAID';
-  const curr = document.getElementById('inputCurrency').value || '£';
-  const defaultRate = getMasterRate();
+  var invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
+  var dateVal = (document.getElementById('inputDate').value || '').trim() || '-';
+  var checkedPay = document.querySelector('input[name="paymentStatus"]:checked');
+  var payStatus = checkedPay ? checkedPay.value : 'PAID';
+  var curr = document.getElementById('inputCurrency').value || '£';
+  var defaultRate = getMasterRate();
 
-  const route = getSelectedRouteString();
-  const destLower = route.split('To').pop()?.trim().toLowerCase() || '';
-  const destType = (destLower === 'uk' || destLower === 'united kingdom') ? 'UK' : 'Worldwide';
+  var route = getSelectedRouteString();
+  var routeParts = route.split('To');
+  var destLower = (routeParts[routeParts.length - 1] || '').trim().toLowerCase();
+  var destType = (destLower === 'uk' || destLower === 'united kingdom') ? 'UK' : 'Worldwide';
 
-  const boxes = parseInt(document.getElementById('dashBoxes').value, 10) || 1;
-  const totalKg = items.reduce((s, it) => s + (parseFloat(it.weight) || 0), 0);
+  var boxes = parseInt(document.getElementById('dashBoxes').value, 10) || 1;
+  var totalKg = items.reduce(function(s, it) { return s + (parseFloat(it.weight) || 0); }, 0);
 
-  const senderName = (document.getElementById('inputSenderName').value || '').trim() || '-';
-  const senderPhone = (document.getElementById('inputSenderPhone').value || '').trim() || '-';
-  const recName = (document.getElementById('inputRecName').value || '').trim() || '-';
-  const recPhone = (document.getElementById('inputRecPhone').value || '').trim() || '-';
+  var senderName = (document.getElementById('inputSenderName').value || '').trim() || '-';
+  var senderPhone = (document.getElementById('inputSenderPhone').value || '').trim() || '-';
+  var recName = (document.getElementById('inputRecName').value || '').trim() || '-';
+  var recPhone = (document.getElementById('inputRecPhone').value || '').trim() || '-';
 
-  const grandTotal = document.getElementById('viewGrandTotal').innerText;
-  const stageWillBe = workingDocState.hasSyncedFinal ? '🔄 Revised' : '✅ Final Invoice';
+  var grandTotal = document.getElementById('viewGrandTotal').innerText;
+  var stageWillBe = workingDocState.hasSyncedFinal ? '🔄 Revised' : '✅ Final Invoice';
 
-  const itemsDetailHtml = items.map((it, idx) => {
-    const catRaw = resolveItemCategoryLabel(it);
-    const isRisk = String(it.categoryType || '').toLowerCase() === 'risk' || catRaw.toLowerCase() === 'risk';
-    const catBadge = isRisk
-      ? `<span style="background:rgba(225,29,72,0.22);color:#fda4af;border:1px solid rgba(244,63,94,0.45);padding:1px 6px;border-radius:5px;font-weight:800;font-size:10.5px;">⚠️ RISK</span>`
-      : `<span style="background:rgba(148,163,184,0.16);color:#e2e8f0;border:1px solid rgba(148,163,184,0.3);padding:1px 6px;border-radius:5px;font-weight:700;font-size:10.5px;">${escapeHtml(catRaw)}</span>`;
+  var itemsDetailHtml = items.map(function(it, idx) {
+    var catRaw = resolveItemCategoryLabel(it);
+    var isRisk = String(it.categoryType || '').toLowerCase() === 'risk' || catRaw.toLowerCase() === 'risk';
+    var catBadge = isRisk
+      ? '<span style="background:rgba(225,29,72,0.22);color:#fda4af;border:1px solid rgba(244,63,94,0.45);padding:1px 6px;border-radius:5px;font-weight:800;font-size:10.5px;">⚠️ RISK</span>'
+      : '<span style="background:rgba(148,163,184,0.16);color:#e2e8f0;border:1px solid rgba(148,163,184,0.3);padding:1px 6px;border-radius:5px;font-weight:700;font-size:10.5px;">' + escapeHtml(catRaw) + '</span>';
 
-    const w = parseFloat(it.weight) || 0;
-    const r = parseFloat(it.unitRateGbp) || 0;
-    const lineGbp = (w * r) + (it.hasDelFee ? (parseFloat(it.delFeeGbp) || 0) : 0);
-    const lineDisp = curr === 'MMK'
-      ? `${Math.round(lineGbp * defaultRate).toLocaleString()} MMK`
-      : `£ ${Number.isInteger(lineGbp) ? lineGbp : lineGbp.toFixed(2)}`;
-    const itemDeliNote = it.hasDelFee ? ` • +Item Deli £${parseFloat(it.delFeeGbp) || 0}` : '';
+    var w = parseFloat(it.weight) || 0;
+    var r = parseFloat(it.unitRateGbp) || 0;
+    var lineGbp = (w * r) + (it.hasDelFee ? (parseFloat(it.delFeeGbp) || 0) : 0);
+    var lineDisp = curr === 'MMK'
+      ? Math.round(lineGbp * defaultRate).toLocaleString() + ' MMK'
+      : '£ ' + (Number.isInteger(lineGbp) ? lineGbp : lineGbp.toFixed(2));
+    var itemDeliNote = it.hasDelFee ? ' • +Item Deli £' + (parseFloat(it.delFeeGbp) || 0) : '';
 
-    return `
-      <div style="padding:5px 8px;background:rgba(30,41,59,0.75);border-radius:7px;border:1px solid #334155;margin-top:4px;font-size:11.5px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
-          <span>#${idx + 1} ${catBadge} <strong>${w} kg</strong> × £${r}/kg${escapeHtml(itemDeliNote)}</span>
-          <strong style="color:#fbbf24;">${escapeHtml(lineDisp)}</strong>
-        </div>
-      </div>
-    `;
+    return '<div style="padding:5px 8px;background:rgba(30,41,59,0.75);border-radius:7px;border:1px solid #334155;margin-top:4px;font-size:11.5px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">' +
+        '<span>#' + (idx + 1) + ' ' + catBadge + ' <strong>' + w + ' kg</strong> × £' + r + '/kg' + escapeHtml(itemDeliNote) + '</span>' +
+        '<strong style="color:#fbbf24;">' + escapeHtml(lineDisp) + '</strong>' +
+      '</div>' +
+    '</div>';
   }).join('');
 
-  const kgCurr = document.getElementById('dashKgCurrency').value === 'MMK' ? 'MMK' : 'GBP';
-  const kgGbp = parseFloat(document.getElementById('dashKgGbpInput').value) || 0;
-  const kgMmk = parseFloat(document.getElementById('dashKgMmkInput').value) || 0;
-  const kgAmtText = kgCurr === 'MMK'
-    ? `${Math.round(kgMmk).toLocaleString()} MMK (Auto @ ${defaultRate.toLocaleString()} Ks)`
-    : `£ ${kgGbp}`;
-  const kgPayLabel = formatKgPayStatusLabel(document.getElementById('dashKgPayStatus').value, payStatus);
-  const kgPayDate = (document.getElementById('dashKgPayDate').value || '').trim();
+  var kgCurr = document.getElementById('dashKgCurrency').value === 'MMK' ? 'MMK' : 'GBP';
+  var kgGbp = parseFloat(document.getElementById('dashKgGbpInput').value) || 0;
+  var kgMmk = parseFloat(document.getElementById('dashKgMmkInput').value) || 0;
+  var kgAmtText = kgCurr === 'MMK'
+    ? Math.round(kgMmk).toLocaleString() + ' MMK (Auto @ ' + defaultRate.toLocaleString() + ' Ks)'
+    : '£ ' + kgGbp;
+  var kgPayLabel = formatKgPayStatusLabel(document.getElementById('dashKgPayStatus').value, payStatus);
+  var kgPayDate = (document.getElementById('dashKgPayDate').value || '').trim();
 
-  const isSingleDeli = document.getElementById('singleDelFeeToggle').checked;
-  const singleDeliAmt = parseFloat(document.getElementById('singleDelFeeInput').value) || 0;
-  const deliCurr = document.getElementById('dashDeliCurrency').value === 'MMK' ? 'MMK' : 'GBP';
-  const deliGbp = parseFloat(document.getElementById('dashDeliGbpInput').value) || 0;
-  const deliMmk = parseFloat(document.getElementById('dashDeliMmkInput').value) || 0;
-  const deliAmtText = deliCurr === 'MMK'
-    ? `${Math.round(deliMmk).toLocaleString()} MMK (Auto @ ${defaultRate.toLocaleString()} Ks)`
-    : `£ ${deliGbp}`;
-  const deliStatusLabel = formatDeliStatusLabel(document.getElementById('dashDeliStatus').value, destType);
+  var isSingleDeli = document.getElementById('singleDelFeeToggle').checked;
+  var singleDeliAmt = parseFloat(document.getElementById('singleDelFeeInput').value) || 0;
+  var deliCurr = document.getElementById('dashDeliCurrency').value === 'MMK' ? 'MMK' : 'GBP';
+  var deliGbp = parseFloat(document.getElementById('dashDeliGbpInput').value) || 0;
+  var deliMmk = parseFloat(document.getElementById('dashDeliMmkInput').value) || 0;
+  var deliAmtText = deliCurr === 'MMK'
+    ? Math.round(deliMmk).toLocaleString() + ' MMK (Auto @ ' + defaultRate.toLocaleString() + ' Ks)'
+    : '£ ' + deliGbp;
+  var deliStatusLabel = formatDeliStatusLabel(document.getElementById('dashDeliStatus').value, destType);
 
-  const isIns = document.getElementById('insuranceToggle').checked;
-  const insCurr = document.getElementById('insuranceCurrency').value;
-  const insVal = parseFloat(document.getElementById('insuranceFeeInput').value) || 0;
-  const insLabel = (document.getElementById('insuranceLabelInput').value || 'Insurance Fee').trim();
-  const insSummary = (isIns && insVal > 0)
-    ? `${escapeHtml(insLabel)}: ${insCurr === 'MMK' ? Math.round(insVal).toLocaleString() + ' MMK' : '£' + insVal}`
+  var isIns = document.getElementById('insuranceToggle').checked;
+  var insCurr = document.getElementById('insuranceCurrency').value;
+  var insVal = parseFloat(document.getElementById('insuranceFeeInput').value) || 0;
+  var insLabel = (document.getElementById('insuranceLabelInput').value || 'Insurance Fee').trim();
+  var insSummary = (isIns && insVal > 0)
+    ? escapeHtml(insLabel) + ': ' + (insCurr === 'MMK' ? Math.round(insVal).toLocaleString() + ' MMK' : '£' + insVal)
     : 'မပါဝင်ပါ (None)';
 
-  const isDisc = document.getElementById('discountToggle').checked;
-  const discType = document.getElementById('discountType').value;
-  const discVal = parseFloat(document.getElementById('discountValueInput').value) || 0;
-  const discLabel = (document.getElementById('discountLabelInput').value || 'Promotion Discount').trim();
-  const discSummary = (isDisc && discVal > 0)
-    ? `${escapeHtml(discLabel)}: -${discType === 'MMK' ? Math.round(discVal).toLocaleString() + ' MMK' : (discType === 'percent' ? discVal + '%' : '£' + discVal)}`
+  var isDisc = document.getElementById('discountToggle').checked;
+  var discType = document.getElementById('discountType').value;
+  var discVal = parseFloat(document.getElementById('discountValueInput').value) || 0;
+  var discLabel = (document.getElementById('discountLabelInput').value || 'Promotion Discount').trim();
+  var discSummary = (isDisc && discVal > 0)
+    ? escapeHtml(discLabel) + ': -' + (discType === 'MMK' ? Math.round(discVal).toLocaleString() + ' MMK' : (discType === 'percent' ? discVal + '%' : '£' + discVal))
     : 'မပါဝင်ပါ (None)';
 
-  const noteText = (document.getElementById('dashNote').value || '').trim() || '-';
-  const photoCount = Array.isArray(dashPhotos) ? dashPhotos.length : 0;
+  var noteText = (document.getElementById('dashNote').value || '').trim() || '-';
+  var photoCount = Array.isArray(dashPhotos) ? dashPhotos.length : 0;
 
-  const introEl = document.getElementById('finalCheckIntroText');
+  var introEl = document.getElementById('finalCheckIntroText');
   if (photoMissingWarning) {
-    introEl.innerHTML = `<span style="color:#fda4af;font-weight:700;">⚠️ ပစ္စည်းဓာတ်ပုံ မပါသေးပါ — Invoice ထုတ်ခွင့်ပေးမည်ဖြစ်ပြီး Draft မှာ Auto ကျန်နေပါမည်။ (Dashboard Sync ကိုတော့ ပုံမပါသေးသဖြင့် ခဏဆိုင်းထားပါမည်)</span>`;
+    introEl.innerHTML = '<span style="color:#fda4af;font-weight:700;">⚠️ ပစ္စည်းဓာတ်ပုံ မပါသေးပါ — Invoice ထုတ်ခွင့်ပေးမည်ဖြစ်ပြီး Draft မှာ Auto ကျန်နေပါမည်။ (Dashboard Sync ကိုတော့ ပုံမပါသေးသဖြင့် ခဏဆိုင်းထားပါမည်)</span>';
   } else {
-    introEl.innerHTML = `အောက်ပါ အချက်အလက်များ အားလုံး မှန်ကန်ကြောင်း သေချာစစ်ဆေးပြီးမှ <b>Confirm &amp; Proceed</b> ကို နှိပ်ပါ —`;
+    introEl.innerHTML = 'အောက်ပါ အချက်အလက်များ အားလုံး မှန်ကန်ကြောင်း သေချာစစ်ဆေးပြီးမှ <b>Confirm &amp; Proceed</b> ကို နှိပ်ပါ —';
   }
 
-  document.getElementById('finalCheckSummaryBody').innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
-        <div><strong>Stage / Action:</strong> <span style="color:#6ee7b7;font-weight:800;">${stageWillBe}</span> • <span style="color:#7dd3fc;">${escapeHtml(actionLabel)}</span></div>
-        <div><strong>Inv No. / Date:</strong> <strong style="color:#fbbf24;">${escapeHtml(invNo)}</strong> • ${escapeHtml(dateVal)} • <strong style="color:${payStatus === 'PAID' ? '#34d399' : '#fb7185'};">${payStatus}</strong></div>
-        <div><strong>Invoice Currency &amp; Default Rate:</strong> <strong style="color:#fde047;">${escapeHtml(curr)}</strong> • <strong style="color:#34d399;">1 £ = ${defaultRate.toLocaleString()} MMK</strong></div>
-      </div>
-
-      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
-        <div><strong>Route:</strong> <strong style="color:#7dd3fc;">${escapeHtml(route)}</strong> • <strong>Boxes / Total KG:</strong> ${boxes} ပုံး / ${totalKg.toFixed(2)} kg</div>
-        <div><strong>Sender (MM):</strong> ${escapeHtml(senderName)} (${escapeHtml(senderPhone)})</div>
-        <div><strong>Receiver (WW):</strong> ${escapeHtml(recName)} (${escapeHtml(recPhone)})</div>
-      </div>
-
-      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
-        <div style="font-weight:700;color:#fbbf24;">📦 ပစ္စည်းစာရင်း (Items &amp; Risk Check):</div>
-        ${itemsDetailHtml}
-      </div>
-
-      <div style="padding-bottom:6px;border-bottom:1px solid #334155;">
-        <div style="font-weight:700;color:#6ee7b7;">💷 ငွေရှင်းမှု အသေးစိတ် (Settlement Details):</div>
-        <div style="margin-top:3px;">• <strong>KG Fee:</strong> ${escapeHtml(kgAmtText)} → <strong>${escapeHtml(kgPayLabel)}</strong>${kgPayDate ? ` (Date: ${escapeHtml(kgPayDate)})` : ''}</div>
-        <div style="margin-top:2px;">• <strong>Local Deli:</strong> ${escapeHtml(deliAmtText)} → <strong>${escapeHtml(deliStatusLabel)}</strong> ${isSingleDeli ? `(Invoice Deli: £${singleDeliAmt})` : '(Invoice Deli Off)'}</div>
-        <div style="margin-top:2px;">• <strong>Insurance:</strong> ${insSummary}</div>
-        <div style="margin-top:2px;">• <strong>Discount:</strong> ${discSummary}</div>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.4);padding:8px 10px;border-radius:8px;">
-        <span style="font-weight:800;color:#fde047;">💰 INVOICE TOTAL:</span>
-        <span style="font-size:15px;font-weight:900;color:#fbbf24;">${escapeHtml(curr)} ${escapeHtml(grandTotal)}</span>
-      </div>
-
-      <div style="font-size:11px;color:#cbd5e1;">
-        <div>• <strong>Note:</strong> ${escapeHtml(noteText)}</div>
-        <div>• <strong>Dashboard Photos:</strong> <strong style="color:${photoCount > 0 ? '#6ee7b7' : '#fda4af'};">${photoCount} ပုံ</strong></div>
-      </div>
-    </div>
-  `;
+  document.getElementById('finalCheckSummaryBody').innerHTML =
+    '<div style="display:flex;flex-direction:column;gap:8px;">' +
+      '<div style="padding-bottom:6px;border-bottom:1px solid #334155;">' +
+        '<div><strong>Stage / Action:</strong> <span style="color:#6ee7b7;font-weight:800;">' + stageWillBe + '</span> • <span style="color:#7dd3fc;">' + escapeHtml(actionLabel) + '</span></div>' +
+        '<div><strong>Inv No. / Date:</strong> <strong style="color:#fbbf24;">' + escapeHtml(invNo) + '</strong> • ' + escapeHtml(dateVal) + ' • <strong style="color:' + (payStatus === 'PAID' ? '#34d399' : '#fb7185') + ';">' + payStatus + '</strong></div>' +
+        '<div><strong>Invoice Currency &amp; Default Rate:</strong> <strong style="color:#fde047;">' + escapeHtml(curr) + '</strong> • <strong style="color:#34d399;">1 £ = ' + defaultRate.toLocaleString() + ' MMK</strong></div>' +
+      '</div>' +
+      '<div style="padding-bottom:6px;border-bottom:1px solid #334155;">' +
+        '<div><strong>Route:</strong> <strong style="color:#7dd3fc;">' + escapeHtml(route) + '</strong> • <strong>Boxes / Total KG:</strong> ' + boxes + ' ပုံး / ' + totalKg.toFixed(2) + ' kg</div>' +
+        '<div><strong>Sender (MM):</strong> ' + escapeHtml(senderName) + ' (' + escapeHtml(senderPhone) + ')</div>' +
+        '<div><strong>Receiver (WW):</strong> ' + escapeHtml(recName) + ' (' + escapeHtml(recPhone) + ')</div>' +
+      '</div>' +
+      '<div style="padding-bottom:6px;border-bottom:1px solid #334155;">' +
+        '<div style="font-weight:700;color:#fbbf24;">📦 ပစ္စည်းစာရင်း (Items &amp; Risk Check):</div>' +
+        itemsDetailHtml +
+      '</div>' +
+      '<div style="padding-bottom:6px;border-bottom:1px solid #334155;">' +
+        '<div style="font-weight:700;color:#6ee7b7;">💷 ငွေရှင်းမှု အသေးစိတ် (Settlement Details):</div>' +
+        '<div style="margin-top:3px;">• <strong>KG Fee:</strong> ' + escapeHtml(kgAmtText) + ' → <strong>' + escapeHtml(kgPayLabel) + '</strong>' + (kgPayDate ? ' (Date: ' + escapeHtml(kgPayDate) + ')' : '') + '</div>' +
+        '<div style="margin-top:2px;">• <strong>Local Deli:</strong> ' + escapeHtml(deliAmtText) + ' → <strong>' + escapeHtml(deliStatusLabel) + '</strong> ' + (isSingleDeli ? '(Invoice Deli: £' + singleDeliAmt + ')' : '(Invoice Deli Off)') + '</div>' +
+        '<div style="margin-top:2px;">• <strong>Insurance:</strong> ' + insSummary + '</div>' +
+        '<div style="margin-top:2px;">• <strong>Discount:</strong> ' + discSummary + '</div>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.4);padding:8px 10px;border-radius:8px;">' +
+        '<span style="font-weight:800;color:#fde047;">💰 INVOICE TOTAL:</span>' +
+        '<span style="font-size:15px;font-weight:900;color:#fbbf24;">' + escapeHtml(curr) + ' ' + escapeHtml(grandTotal) + '</span>' +
+      '</div>' +
+      '<div style="font-size:11px;color:#cbd5e1;">' +
+        '<div>• <strong>Note:</strong> ' + escapeHtml(noteText) + '</div>' +
+        '<div>• <strong>Dashboard Photos:</strong> <strong style="color:' + (photoCount > 0 ? '#6ee7b7' : '#fda4af') + ';">' + photoCount + ' ပုံ</strong></div>' +
+      '</div>' +
+    '</div>';
 
   document.getElementById('finalCheckModal').classList.remove('hidden');
 }
@@ -1595,7 +1604,7 @@ function closeFinalCheckModal() {
 }
 
 function executeConfirmedFinalAction() {
-  const fn = pendingFinalAction;
+  var fn = pendingFinalAction;
   pendingFinalAction = null;
   document.getElementById('finalCheckModal').classList.add('hidden');
   if (typeof fn === 'function') {
@@ -1604,7 +1613,7 @@ function executeConfirmedFinalAction() {
 }
 
 function requestFinalSyncToDashboard() {
-  const missing = validateRequiredFieldsCommon();
+  var missing = validateRequiredFieldsCommon();
   if (missing.length > 0) {
     showMissingFieldsPopup(missing);
     return;
@@ -1621,26 +1630,26 @@ function requestFinalSyncToDashboard() {
     );
     return;
   }
-  openFinalCheckPopup(() => sendInvoiceToDashboard(false), 'Final & Dashboard Sync', false);
+  openFinalCheckPopup(function() { sendInvoiceToDashboard(false); }, 'Final & Dashboard Sync', false);
 }
 
 function requestExport(fmt) {
-  const missing = validateRequiredFieldsCommon();
+  var missing = validateRequiredFieldsCommon();
   if (missing.length > 0) {
     showMissingFieldsPopup(missing);
     return;
   }
-  const photoMissing = !hasParcelPhotos();
-  openFinalCheckPopup(() => {
+  var photoMissing = !hasParcelPhotos();
+  openFinalCheckPopup(function() {
     if (fmt === 'JPG') exportJPG(photoMissing);
     else exportPDF(photoMissing);
-  }, `Export ${fmt}`, photoMissing);
+  }, 'Export ' + fmt, photoMissing);
 }
 
 function handlePostExportPhotoAndSync(photoMissing) {
   if (photoMissing) {
     autoSaveMissingPhotoDraft();
-    const el = document.getElementById('dashSyncStatus');
+    var el = document.getElementById('dashSyncStatus');
     if (el) {
       el.textContent = '📸 ပုံမပါသေးသဖြင့် Draft မှာ Auto သိမ်းထားပြီး Dashboard Sync ကို ခဏဆိုင်းထားပါသည်';
       el.style.color = '#fda4af';
@@ -1649,7 +1658,7 @@ function handlePostExportPhotoAndSync(photoMissing) {
     return;
   }
 
-  const cfg = getDashCfg();
+  var cfg = getDashCfg();
   if (cfg.autoSendOnExport !== false && cfg.user && cfg.repo && cfg.token) {
     sendInvoiceToDashboard(true);
   }
@@ -1673,11 +1682,11 @@ function saveDashCfg(cfg) {
 }
 
 function updateDashStatusBanner() {
-  const cfg = getDashCfg();
-  const el = document.getElementById('dashSyncStatus');
+  var cfg = getDashCfg();
+  var el = document.getElementById('dashSyncStatus');
   if (!el) return;
   if (cfg.user && cfg.repo && cfg.token) {
-    el.textContent = `✅ Auto-Sync Ready → ${cfg.user}/${cfg.repo} (data.json + photos/)`;
+    el.textContent = '✅ Auto-Sync Ready → ' + cfg.user + '/' + cfg.repo + ' (data.json + photos/)';
     el.style.color = '#6ee7b7';
   } else {
     el.textContent = '⚙️ Dashboard Sync Setup မလုပ်ရသေးပါ ("Dashboard Sync" နှိပ်၍ ချိတ်ဆက်နိုင်သည်)';
@@ -1686,7 +1695,7 @@ function updateDashStatusBanner() {
 }
 
 function openDashSyncModal() {
-  const cfg = getDashCfg();
+  var cfg = getDashCfg();
   document.getElementById('dashUser').value = cfg.user || '';
   document.getElementById('dashRepo').value = cfg.repo || '';
   document.getElementById('dashToken').value = cfg.token || '';
@@ -1699,7 +1708,7 @@ function closeDashSyncModal() {
 }
 
 function saveDashSyncConfig() {
-  const cfg = {
+  var cfg = {
     user: document.getElementById('dashUser').value.trim(),
     repo: document.getElementById('dashRepo').value.trim(),
     token: document.getElementById('dashToken').value.trim(),
@@ -1711,29 +1720,34 @@ function saveDashSyncConfig() {
 }
 
 function handleRouteSelectionChange() {
-  const oSel = document.getElementById('dashOriginSelect').value;
-  const oCust = document.getElementById('dashOriginCustom');
+  var oSel = document.getElementById('dashOriginSelect').value;
+  var oCust = document.getElementById('dashOriginCustom');
   if (oSel === 'Other') oCust.classList.remove('hidden');
   else oCust.classList.add('hidden');
 
-  const dSel = document.getElementById('dashDestSelect').value;
-  const dCust = document.getElementById('dashDestCustom');
+  var dSel = document.getElementById('dashDestSelect').value;
+  var dCust = document.getElementById('dashDestCustom');
   if (dSel === 'Other') dCust.classList.remove('hidden');
   else dCust.classList.add('hidden');
 
-  const mergedRoute = getSelectedRouteString();
-  const badge = document.getElementById('routePreviewBadge');
+  var mergedRoute = getSelectedRouteString();
+  var badge = document.getElementById('routePreviewBadge');
   if (badge) badge.textContent = mergedRoute;
-  items.forEach(it => {
+  items.forEach(function(it) {
     it.route = mergedRoute;
   });
-  updateInvoice();
+  syncAllViews();
 }
 
-function handleDashKgCurrencyChange() {
-  const curr = document.getElementById('dashKgCurrency').value;
-  const gbpBox = document.getElementById('dashKgGbpBox');
-  const mmkBox = document.getElementById('dashKgMmkBox');
+function handleInvoiceCurrencyChange() {
+  renderItemInputs();
+  syncAllViews();
+}
+
+function handleDashKgCurrencyChange(skipSync) {
+  var curr = document.getElementById('dashKgCurrency').value;
+  var gbpBox = document.getElementById('dashKgGbpBox');
+  var mmkBox = document.getElementById('dashKgMmkBox');
   if (curr === 'MMK') {
     gbpBox.classList.add('hidden');
     mmkBox.classList.remove('hidden');
@@ -1741,13 +1755,13 @@ function handleDashKgCurrencyChange() {
     mmkBox.classList.add('hidden');
     gbpBox.classList.remove('hidden');
   }
-  syncDashAmountsFromInvoice();
+  if (!skipSync) syncDashAmountsFromInvoice();
 }
 
-function handleDashDeliCurrencyChange() {
-  const curr = document.getElementById('dashDeliCurrency').value;
-  const gbpBox = document.getElementById('dashDeliGbpBox');
-  const mmkBox = document.getElementById('dashDeliMmkBox');
+function handleDashDeliCurrencyChange(skipSync) {
+  var curr = document.getElementById('dashDeliCurrency').value;
+  var gbpBox = document.getElementById('dashDeliGbpBox');
+  var mmkBox = document.getElementById('dashDeliMmkBox');
   if (curr === 'MMK') {
     gbpBox.classList.add('hidden');
     mmkBox.classList.remove('hidden');
@@ -1755,70 +1769,87 @@ function handleDashDeliCurrencyChange() {
     mmkBox.classList.add('hidden');
     gbpBox.classList.remove('hidden');
   }
-  syncDashAmountsFromInvoice();
+  if (!skipSync) syncDashAmountsFromInvoice();
 }
 
 function computeInvoiceNetGbpParts() {
-  const isSingleDelFee = document.getElementById('singleDelFeeToggle')?.checked;
-  const singleDelFeeGbp = isSingleDelFee ? (parseFloat(document.getElementById('singleDelFeeInput')?.value) || 0) : 0;
-  const itemDelFeeGbp = items.reduce((sum, it) => sum + (it.hasDelFee ? (parseFloat(it.delFeeGbp) || 0) : 0), 0);
-  const itemsFreightGbp = items.reduce((sum, it) => sum + ((parseFloat(it.weight) || 0) * (parseFloat(it.unitRateGbp) || 0)), 0);
+  var delToggleEl = document.getElementById('singleDelFeeToggle');
+  var isSingleDelFee = delToggleEl ? delToggleEl.checked : false;
+  var delInputEl = document.getElementById('singleDelFeeInput');
+  var singleDelFeeGbp = isSingleDelFee ? (parseFloat(delInputEl ? delInputEl.value : 0) || 0) : 0;
+  var itemDelFeeGbp = items.reduce(function(sum, it) { return sum + (it.hasDelFee ? (parseFloat(it.delFeeGbp) || 0) : 0); }, 0);
+  var itemsFreightGbp = items.reduce(function(sum, it) { return sum + ((parseFloat(it.weight) || 0) * (parseFloat(it.unitRateGbp) || 0)); }, 0);
 
-  const isIns = document.getElementById('insuranceToggle')?.checked;
-  const insCurrRaw = document.getElementById('insuranceCurrency')?.value;
-  const insAmtRaw = Math.max(0, parseFloat(document.getElementById('insuranceFeeInput')?.value) || 0);
+  var insToggleEl = document.getElementById('insuranceToggle');
+  var isIns = insToggleEl ? insToggleEl.checked : false;
+  var insCurrEl = document.getElementById('insuranceCurrency');
+  var insCurrRaw = insCurrEl ? insCurrEl.value : 'MMK';
+  var insFeeEl = document.getElementById('insuranceFeeInput');
+  var insAmtRaw = Math.max(0, parseFloat(insFeeEl ? insFeeEl.value : 0) || 0);
 
-  let totalKgGbp = itemsFreightGbp;
+  var totalKgGbp = itemsFreightGbp;
   if (isIns && insCurrRaw === '£' && insAmtRaw > 0) {
     totalKgGbp += insAmtRaw;
   }
 
-  const isDisc = document.getElementById('discountToggle')?.checked;
-  const discTypeRaw = document.getElementById('discountType')?.value;
-  const discValRaw = Math.max(0, parseFloat(document.getElementById('discountValueInput')?.value) || 0);
+  var discToggleEl = document.getElementById('discountToggle');
+  var isDisc = discToggleEl ? discToggleEl.checked : false;
+  var discTypeEl = document.getElementById('discountType');
+  var discTypeRaw = discTypeEl ? discTypeEl.value : '£';
+  var discValEl = document.getElementById('discountValueInput');
+  var discValRaw = Math.max(0, parseFloat(discValEl ? discValEl.value : 0) || 0);
 
-  let discGbpAmt = 0;
+  var discGbpAmt = 0;
   if (isDisc && discValRaw > 0 && discTypeRaw !== 'MMK') {
     if (discTypeRaw === 'percent') {
-      const baseForPct = totalKgGbp + singleDelFeeGbp + itemDelFeeGbp;
+      var baseForPct = totalKgGbp + singleDelFeeGbp + itemDelFeeGbp;
       discGbpAmt = (baseForPct * Math.min(100, discValRaw)) / 100;
     } else {
-      discGbpAmt = discValRaw;
+      discGbpAmt = Math.min(totalKgGbp, discValRaw);
     }
   }
-  const netKgGbp = Math.max(0, totalKgGbp - discGbpAmt);
-  const totalDeliGbp = singleDelFeeGbp + itemDelFeeGbp;
-  return { netKgGbp, totalDeliGbp, discGbpAmt };
+  var netKgGbp = Math.max(0, totalKgGbp - discGbpAmt);
+  var totalDeliGbp = singleDelFeeGbp + itemDelFeeGbp;
+  return { netKgGbp: netKgGbp, totalDeliGbp: totalDeliGbp, discGbpAmt: discGbpAmt };
 }
 
 function syncDashAmountsFromInvoice() {
-  const { netKgGbp, totalDeliGbp } = computeInvoiceNetGbpParts();
-  const masterRate = getMasterRate();
+  var parts = computeInvoiceNetGbpParts();
+  var netKgGbp = parts.netKgGbp;
+  var totalDeliGbp = parts.totalDeliGbp;
+  var masterRate = getMasterRate();
 
-  const kgGbpEl = document.getElementById('dashKgGbpInput');
-  const kgMmkEl = document.getElementById('dashKgMmkInput');
+  var kgGbpEl = document.getElementById('dashKgGbpInput');
+  var kgMmkEl = document.getElementById('dashKgMmkInput');
   if (kgGbpEl) kgGbpEl.value = Number(netKgGbp.toFixed(2));
   if (kgMmkEl) kgMmkEl.value = Math.round(netKgGbp * masterRate);
 
-  const deliGbpEl = document.getElementById('dashDeliGbpInput');
-  const deliMmkEl = document.getElementById('dashDeliMmkInput');
+  var deliGbpEl = document.getElementById('dashDeliGbpInput');
+  var deliMmkEl = document.getElementById('dashDeliMmkInput');
   if (deliGbpEl) deliGbpEl.value = Number(totalDeliGbp.toFixed(2));
   if (deliMmkEl) deliMmkEl.value = Math.round(totalDeliGbp * masterRate);
 }
 
-function handleMasterRateChange() {
+function syncAllViews() {
   syncDashAmountsFromInvoice();
   updateInvoice();
 }
 
-function compressPhotoFile(file, maxDim = 1280, quality = 0.8) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        let w = img.width;
-        let h = img.height;
+function handleMasterRateChange() {
+  items.forEach(function(_, idx) { updateItemTotalDisp(idx); });
+  syncAllViews();
+}
+
+function compressPhotoFile(file, maxDim, quality) {
+  if (!maxDim) maxDim = 1280;
+  if (!quality) quality = 0.8;
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      var img = new Image();
+      img.onload = function() {
+        var w = img.width;
+        var h = img.height;
         if (w > maxDim || h > maxDim) {
           if (w > h) {
             h = Math.round((h * maxDim) / w);
@@ -1828,10 +1859,10 @@ function compressPhotoFile(file, maxDim = 1280, quality = 0.8) {
             h = maxDim;
           }
         }
-        const canvas = document.createElement('canvas');
+        var canvas = document.createElement('canvas');
         canvas.width = w;
         canvas.height = h;
-        const ctx = canvas.getContext('2d');
+        var ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, w, h);
         resolve(canvas.toDataURL('image/jpeg', quality));
       };
@@ -1844,17 +1875,17 @@ function compressPhotoFile(file, maxDim = 1280, quality = 0.8) {
 }
 
 async function handleDashPhotoFiles(event) {
-  const files = Array.from(event.target.files || []);
+  var files = Array.prototype.slice.call(event.target.files || []);
   if (!files.length) return;
-  const statusEl = document.getElementById('dashPhotoStatus');
-  statusEl.textContent = `⏳ ဓာတ်ပုံ ${files.length} ပုံကို Size ချုံ့နေပါသည်...`;
+  var statusEl = document.getElementById('dashPhotoStatus');
+  statusEl.textContent = '⏳ ဓာတ်ပုံ ' + files.length + ' ပုံကို Size ချုံ့နေပါသည်...';
 
-  for (const f of files) {
+  for (var i = 0; i < files.length; i++) {
     try {
-      const compressed = await compressPhotoFile(f);
+      var compressed = await compressPhotoFile(files[i]);
       dashPhotos.push({
         dataUrl: compressed,
-        name: f.name || 'photo.jpg'
+        name: files[i].name || 'photo.jpg'
       });
     } catch (err) {
       console.error(err);
@@ -1878,41 +1909,43 @@ function removeDashPhoto(idx) {
 }
 
 function renderDashPhotoPreviews() {
-  const grid = document.getElementById('dashPhotoPreviewGrid');
-  const statusEl = document.getElementById('dashPhotoStatus');
+  var grid = document.getElementById('dashPhotoPreviewGrid');
+  var statusEl = document.getElementById('dashPhotoStatus');
   if (!dashPhotos.length) {
     grid.innerHTML = '';
     statusEl.textContent = '⚠️ ပစ္စည်းဓာတ်ပုံ မထည့်ရသေးပါ (Dashboard Sync အတွက် ပုံပါမှ ရပါမည်)';
     statusEl.style.color = '#fda4af';
     return;
   }
-  grid.innerHTML = dashPhotos.map((p, idx) => `
-    <div style="position: relative; width: 68px; height: 68px; border-radius: 8px; overflow: hidden; border: 1px solid #6366f1; background: #0f172a;">
-      <img src="${p.dataUrl}" style="width: 100%; height: 100%; object-fit: cover;">
-      <button onclick="removeDashPhoto(${idx})" style="position: absolute; top: 2px; right: 2px; background: #e11d48; color: white; border: none; border-radius: 9999px; width: 18px; height: 18px; font-size: 10px; font-weight: 800; cursor: pointer;">✕</button>
-      <span style="position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.65); color: white; font-size: 9px; padding: 0 4px; border-radius: 4px;">#${idx + 1}</span>
-    </div>
-  `).join('');
-  statusEl.textContent = `✅ ဓာတ်ပုံ ${dashPhotos.length} ပုံ အသင့်ဖြစ်ပါပြီ (Dashboard Sync လုပ်နိုင်ပါပြီ)`;
+  grid.innerHTML = dashPhotos.map(function(p, idx) {
+    return '<div style="position: relative; width: 68px; height: 68px; border-radius: 8px; overflow: hidden; border: 1px solid #6366f1; background: #0f172a;">' +
+      '<img src="' + p.dataUrl + '" style="width: 100%; height: 100%; object-fit: cover;">' +
+      '<button onclick="removeDashPhoto(' + idx + ')" style="position: absolute; top: 2px; right: 2px; background: #e11d48; color: white; border: none; border-radius: 9999px; width: 18px; height: 18px; font-size: 10px; font-weight: 800; cursor: pointer;">✕</button>' +
+      '<span style="position: absolute; bottom: 2px; left: 4px; background: rgba(0,0,0,0.65); color: white; font-size: 9px; padding: 0 4px; border-radius: 4px;">#' + (idx + 1) + '</span>' +
+    '</div>';
+  }).join('');
+  statusEl.textContent = '✅ ဓာတ်ပုံ ' + dashPhotos.length + ' ပုံ အသင့်ဖြစ်ပါပြီ (Dashboard Sync လုပ်နိုင်ပါပြီ)';
   statusEl.style.color = '#6ee7b7';
 }
 
 function toBase64Utf8(str) {
-  const bytes = new TextEncoder().encode(str);
-  let bin = '';
-  bytes.forEach(b => { bin += String.fromCharCode(b); });
+  var bytes = new TextEncoder().encode(str);
+  var bin = '';
+  for (var i = 0; i < bytes.length; i++) {
+    bin += String.fromCharCode(bytes[i]);
+  }
   return btoa(bin);
 }
 
 function fromBase64Utf8(b64) {
-  const bin = atob(b64.replace(/\n/g, ''));
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  var bin = atob(String(b64 || '').replace(/\n/g, ''));
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   return new TextDecoder().decode(bytes);
 }
 
 function dataUrlToPureBase64(dataUrl) {
-  const idx = String(dataUrl || '').indexOf(',');
+  var idx = String(dataUrl || '').indexOf(',');
   return idx >= 0 ? dataUrl.slice(idx + 1) : dataUrl;
 }
 
@@ -1923,145 +1956,171 @@ function resolveItemCategoryLabel(item) {
   return item.categoryType || 'Standard';
 }
 
-function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage = 'Final Invoice') {
-  const invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
-  const date = (document.getElementById('inputDate').value || '').trim() || '-';
-  const sender = (document.getElementById('inputSenderName').value || '').trim() || '-';
-  const senderPhone = (document.getElementById('inputSenderPhone').value || '').trim();
-  const receiver = (document.getElementById('inputRecName').value || '').trim() || '-';
-  const receiverPhone = (document.getElementById('inputRecPhone').value || '').trim();
+function buildDashboardPayloadFromInvoice(uploadedPhotoPaths, invoiceStage) {
+  if (!uploadedPhotoPaths) uploadedPhotoPaths = [];
+  if (!invoiceStage) invoiceStage = 'Final Invoice';
 
-  const originSel = document.getElementById('dashOriginSelect').value;
-  const origin = originSel === 'Other'
+  var invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
+  var date = (document.getElementById('inputDate').value || '').trim() || '-';
+  var sender = (document.getElementById('inputSenderName').value || '').trim() || '-';
+  var senderPhone = (document.getElementById('inputSenderPhone').value || '').trim();
+  var receiver = (document.getElementById('inputRecName').value || '').trim() || '-';
+  var receiverPhone = (document.getElementById('inputRecPhone').value || '').trim();
+
+  var originSel = document.getElementById('dashOriginSelect').value;
+  var origin = originSel === 'Other'
     ? ((document.getElementById('dashOriginCustom').value || '').trim() || 'Other')
     : 'Myanmar';
 
-  const destSel = document.getElementById('dashDestSelect').value;
-  const destination = destSel === 'Other'
+  var destSel = document.getElementById('dashDestSelect').value;
+  var destination = destSel === 'Other'
     ? ((document.getElementById('dashDestCustom').value || '').trim() || 'Other')
     : 'UK';
-  const destLower = destination.toLowerCase();
-  const destType = (destLower === 'uk' || destLower === 'united kingdom') ? 'UK' : 'Worldwide';
+  var destLower = destination.toLowerCase();
+  var destType = (destLower === 'uk' || destLower === 'united kingdom') ? 'UK' : 'Worldwide';
 
-  const masterRate = getMasterRate();
+  var masterRate = getMasterRate();
 
-  const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked')?.value || 'PAID';
-  const kgPayStatusSel = document.getElementById('dashKgPayStatus').value;
-  const kgPayStatus = kgPayStatusSel === 'auto'
+  var checkedPay = document.querySelector('input[name="paymentStatus"]:checked');
+  var paymentStatus = checkedPay ? checkedPay.value : 'PAID';
+  var kgPayStatusSel = document.getElementById('dashKgPayStatus').value;
+  var kgPayStatus = kgPayStatusSel === 'auto'
     ? (paymentStatus === 'PAID' ? 'paid_mm' : 'unpaid')
     : kgPayStatusSel;
-  const kgPayDate = (document.getElementById('dashKgPayDate').value || '').trim() || (paymentStatus === 'PAID' ? date : '');
+  var kgPayDate = (document.getElementById('dashKgPayDate').value || '').trim() || (paymentStatus === 'PAID' ? date : '');
 
-  const totalKg = items.reduce((sum, it) => sum + (parseFloat(it.weight) || 0), 0);
-  const kgBreakdowns = items.map(it => ({
-    category: resolveItemCategoryLabel(it),
-    kg: Math.max(0, parseFloat(it.weight) || 0)
-  }));
-  const primaryCat = kgBreakdowns[0] ? kgBreakdowns[0].category : 'Standard';
+  var totalKg = items.reduce(function(sum, it) { return sum + (parseFloat(it.weight) || 0); }, 0);
+  var kgBreakdowns = items.map(function(it) {
+    return {
+      category: resolveItemCategoryLabel(it),
+      kg: Math.max(0, parseFloat(it.weight) || 0)
+    };
+  });
+  var primaryCat = kgBreakdowns[0] ? kgBreakdowns[0].category : 'Standard';
 
-  const { discGbpAmt } = computeInvoiceNetGbpParts();
+  var netParts = computeInvoiceNetGbpParts();
+  var discGbpAmt = netParts.discGbpAmt;
 
-  const kgCurrency = document.getElementById('dashKgCurrency').value === 'MMK' ? 'MMK' : 'GBP';
-  const kgGbp = kgCurrency === 'GBP'
+  var kgCurrency = document.getElementById('dashKgCurrency').value === 'MMK' ? 'MMK' : 'GBP';
+  var kgGbp = kgCurrency === 'GBP'
     ? Math.max(0, Number((parseFloat(document.getElementById('dashKgGbpInput').value) || 0).toFixed(2)))
     : 0;
-  const kgMmk = kgCurrency === 'MMK'
+  var kgMmk = kgCurrency === 'MMK'
     ? Math.max(0, Math.round(parseFloat(document.getElementById('dashKgMmkInput').value) || 0))
     : 0;
 
-  const deliCurrency = document.getElementById('dashDeliCurrency').value === 'MMK' ? 'MMK' : 'GBP';
-  const deliGbp = deliCurrency === 'GBP'
+  var deliCurrency = document.getElementById('dashDeliCurrency').value === 'MMK' ? 'MMK' : 'GBP';
+  var deliGbp = deliCurrency === 'GBP'
     ? Math.max(0, Number((parseFloat(document.getElementById('dashDeliGbpInput').value) || 0).toFixed(2)))
     : 0;
-  const deliMmk = deliCurrency === 'MMK'
+  var deliMmk = deliCurrency === 'MMK'
     ? Math.max(0, Math.round(parseFloat(document.getElementById('dashDeliMmkInput').value) || 0))
     : 0;
 
-  const hasDeli = (deliCurrency === 'GBP' ? deliGbp > 0 : deliMmk > 0);
-  const deliStatus = destType === 'UK'
-    ? (hasDeli ? document.getElementById('dashDeliStatus').value : 'none')
-    : 'none';
+  var rawDeliStatus = document.getElementById('dashDeliStatus').value;
+  var hasDeliAmt = (deliCurrency === 'GBP' ? deliGbp > 0 : deliMmk > 0);
+  var deliStatus = 'none';
+  if (destType === 'UK') {
+    if (rawDeliStatus === 'office_pickup') {
+      deliStatus = 'office_pickup';
+    } else if (rawDeliStatus === 'none') {
+      deliStatus = 'none';
+    } else {
+      deliStatus = hasDeliAmt ? rawDeliStatus : 'none';
+    }
+  }
 
-  const isIns = document.getElementById('insuranceToggle').checked;
-  const insCurrRaw = document.getElementById('insuranceCurrency').value;
-  const insAmtRaw = Math.max(0, parseFloat(document.getElementById('insuranceFeeInput').value) || 0);
-  const insLabel = (document.getElementById('insuranceLabelInput').value || '').trim();
+  var isIns = document.getElementById('insuranceToggle').checked;
+  var insCurrRaw = document.getElementById('insuranceCurrency').value;
+  var insAmtRaw = Math.max(0, parseFloat(document.getElementById('insuranceFeeInput').value) || 0);
+  var insLabel = (document.getElementById('insuranceLabelInput').value || '').trim();
 
-  const isDisc = document.getElementById('discountToggle').checked;
-  const discTypeRaw = document.getElementById('discountType').value;
-  const discValRaw = Math.max(0, parseFloat(document.getElementById('discountValueInput').value) || 0);
-  const discLabel = (document.getElementById('discountLabelInput').value || '').trim();
+  var isDisc = document.getElementById('discountToggle').checked;
+  var discTypeRaw = document.getElementById('discountType').value;
+  var discValRaw = Math.max(0, parseFloat(document.getElementById('discountValueInput').value) || 0);
+  var discLabel = (document.getElementById('discountLabelInput').value || '').trim();
 
-  const customNote = (document.getElementById('dashNote').value || '').trim();
-  const noteParts = [];
+  var resolvedDiscAmount = 0;
+  if (isDisc && discValRaw > 0) {
+    if (discTypeRaw === 'MMK') {
+      resolvedDiscAmount = Math.round(discValRaw);
+    } else if (discTypeRaw === 'percent') {
+      resolvedDiscAmount = Number(discGbpAmt.toFixed(2));
+    } else {
+      resolvedDiscAmount = Number(discGbpAmt.toFixed(2));
+    }
+  }
+
+  var customNote = (document.getElementById('dashNote').value || '').trim();
+  var noteParts = [];
   if (customNote) noteParts.push(customNote);
   if (isIns && insAmtRaw > 0) {
-    noteParts.push(`${insLabel || 'Ins'}: ${insCurrRaw === 'MMK' ? Math.round(insAmtRaw).toLocaleString() + ' Ks' : '£' + insAmtRaw}`);
+    noteParts.push((insLabel || 'Ins') + ': ' + (insCurrRaw === 'MMK' ? Math.round(insAmtRaw).toLocaleString() + ' Ks' : '£' + insAmtRaw));
   }
   if (isDisc && discValRaw > 0) {
-    const dStr = discTypeRaw === 'MMK'
+    var dStr = discTypeRaw === 'MMK'
       ? Math.round(discValRaw).toLocaleString() + ' Ks'
-      : (discTypeRaw === 'percent' ? discValRaw + '%' : '£' + discValRaw);
-    noteParts.push(`${discLabel || 'Disc'}: -${dStr}`);
+      : (discTypeRaw === 'percent' ? discValRaw + '% (£' + Number(discGbpAmt.toFixed(2)) + ')' : '£' + discValRaw);
+    noteParts.push((discLabel || 'Disc') + ': -' + dStr);
   }
 
   return {
-    invNo,
-    date,
+    invNo: invNo,
+    date: date,
     cargoType: primaryCat,
-    kgBreakdowns,
-    origin,
-    destType,
-    destination,
-    sender,
-    senderPhone,
-    receiver,
-    receiverPhone,
+    kgBreakdowns: kgBreakdowns,
+    origin: origin,
+    destType: destType,
+    destination: destination,
+    sender: sender,
+    senderPhone: senderPhone,
+    receiver: receiver,
+    receiverPhone: receiverPhone,
     boxes: Math.max(1, parseInt(document.getElementById('dashBoxes').value, 10) || items.length || 1),
     kg: Number(totalKg.toFixed(2)),
     photos: uploadedPhotoPaths,
-    kgPayStatus,
-    kgCurrency,
-    kgGbp,
-    kgMmk,
+    kgPayStatus: kgPayStatus,
+    kgCurrency: kgCurrency,
+    kgGbp: kgGbp,
+    kgMmk: kgMmk,
     rate: masterRate,
-    kgPayDate,
-    deliStatus,
-    deliCurrency,
-    deliGbp,
-    deliMmk,
+    kgPayDate: kgPayDate,
+    deliStatus: deliStatus,
+    deliCurrency: deliCurrency,
+    deliGbp: deliStatus === 'office_pickup' ? 0 : deliGbp,
+    deliMmk: deliStatus === 'office_pickup' ? 0 : deliMmk,
     deliRate: masterRate,
-    deliPayDate: hasDeli && ['paid_mm', 'paid_uk'].includes(deliStatus) ? date : '',
+    deliPayDate: (deliStatus !== 'office_pickup' && deliStatus !== 'none' && hasDeliAmt && ['paid_mm', 'paid_uk'].indexOf(deliStatus) !== -1) ? date : '',
     insured: !!(isIns && insAmtRaw > 0),
     insCurrency: insCurrRaw === 'MMK' ? 'MMK' : 'GBP',
     insAmount: (isIns && insAmtRaw > 0) ? insAmtRaw : 0,
     insRate: masterRate,
     discount: !!(isDisc && discValRaw > 0),
     discCurrency: discTypeRaw === 'MMK' ? 'MMK' : 'GBP',
-    discAmount: (isDisc && discValRaw > 0) ? (discTypeRaw === 'GBP' ? discGbpAmt : discValRaw) : 0,
+    discAmount: resolvedDiscAmount,
     discRate: masterRate,
     note: noteParts.join(' • '),
-    invoiceStage,
+    invoiceStage: invoiceStage,
     sourceApp: 'mm-invoice-v44'
   };
 }
 
 async function uploadDashPhotosToGitHub(cfg, recordId) {
   if (!dashPhotos.length) return [];
-  const uploadedPaths = [];
-  for (let i = 0; i < dashPhotos.length; i++) {
-    const p = dashPhotos[i];
-    const fileName = `photos/${recordId}_${Date.now()}_${i + 1}.jpg`;
-    const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.user)}/${encodeURIComponent(cfg.repo)}/contents/${fileName}`;
-    const res = await fetch(apiUrl, {
+  var uploadedPaths = [];
+  for (var i = 0; i < dashPhotos.length; i++) {
+    var p = dashPhotos[i];
+    var fileName = 'photos/' + recordId + '_' + Date.now() + '_' + (i + 1) + '.jpg';
+    var apiUrl = 'https://api.github.com/repos/' + encodeURIComponent(cfg.user) + '/' + encodeURIComponent(cfg.repo) + '/contents/' + fileName;
+    var res = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${cfg.token}`,
+        'Authorization': 'Bearer ' + cfg.token,
         'Accept': 'application/vnd.github+json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: `Upload photo ${fileName} from MM Invoice V44`,
+        message: 'Upload photo ' + fileName + ' from MM Invoice V44',
         content: dataUrlToPureBase64(p.dataUrl)
       })
     });
@@ -2071,12 +2130,12 @@ async function uploadDashPhotosToGitHub(cfg, recordId) {
   return uploadedPaths;
 }
 
-async function sendInvoiceToDashboard(silent = false) {
+async function sendInvoiceToDashboard(silent) {
   if (!hasParcelPhotos()) {
-    const el = document.getElementById('dashSyncStatus');
-    if (el) {
-      el.textContent = '⚠️ ပစ္စည်းဓာတ်ပုံ မပါသေးသဖြင့် Dashboard Sync မလုပ်နိုင်ပါ (ပုံထည့်ပြီးမှ ထပ်နှိပ်ပါ)';
-      el.style.color = '#fda4af';
+    var elWarn = document.getElementById('dashSyncStatus');
+    if (elWarn) {
+      elWarn.textContent = '⚠️ ပစ္စည်းဓာတ်ပုံ မပါသေးသဖြင့် Dashboard Sync မလုပ်နိုင်ပါ (ပုံထည့်ပြီးမှ ထပ်နှိပ်ပါ)';
+      elWarn.style.color = '#fda4af';
     }
     if (!silent) {
       showMissingFieldsPopup(
@@ -2092,7 +2151,7 @@ async function sendInvoiceToDashboard(silent = false) {
     return false;
   }
 
-  const cfg = getDashCfg();
+  var cfg = getDashCfg();
   if (!cfg.user || !cfg.repo || !cfg.token) {
     if (!silent) {
       alert('Dashboard Sync Setup မလုပ်ရသေးပါ — "Dashboard Sync" ခလုတ်ကို နှိပ်ပြီး Repo & Token ဖြည့်ပေးပါ။');
@@ -2101,79 +2160,81 @@ async function sendInvoiceToDashboard(silent = false) {
     return false;
   }
 
-  const btn = document.getElementById('sendToDashBtn');
-  const el = document.getElementById('dashSyncStatus');
+  var btn = document.getElementById('sendToDashBtn');
+  var el = document.getElementById('dashSyncStatus');
   if (btn) btn.disabled = true;
   if (el) {
-    el.textContent = `⏳ ဓာတ်ပုံ (${dashPhotos.length} ပုံ) နှင့် Data ကို Dashboard သို့ ပို့နေပါသည်...`;
+    el.textContent = '⏳ ဓာတ်ပုံ (' + dashPhotos.length + ' ပုံ) နှင့် Data ကို Dashboard သို့ ပို့နေပါသည်...';
     el.style.color = '#7dd3fc';
   }
 
   try {
-    const invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
-    const recordId = 'inv_' + invNo.replace(/[^a-zA-Z0-9_-]/g, '') + '_' + Date.now();
-    const photoPaths = await uploadDashPhotosToGitHub(cfg, recordId);
+    var invNo = (document.getElementById('inputInvNo').value || '').trim() || '-';
+    var recordId = 'inv_' + invNo.replace(/[^a-zA-Z0-9_-]/g, '') + '_' + Date.now();
+    var photoPaths = await uploadDashPhotosToGitHub(cfg, recordId);
 
-    const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.user)}/${encodeURIComponent(cfg.repo)}/contents/data.json`;
-    const getRes = await fetch(apiUrl + `?t=${Date.now()}`, {
+    var apiUrl = 'https://api.github.com/repos/' + encodeURIComponent(cfg.user) + '/' + encodeURIComponent(cfg.repo) + '/contents/data.json';
+    var getRes = await fetch(apiUrl + '?t=' + Date.now(), {
       headers: {
-        'Authorization': `Bearer ${cfg.token}`,
+        'Authorization': 'Bearer ' + cfg.token,
         'Accept': 'application/vnd.github+json'
       }
     });
 
-    let sha = null;
-    let list = [];
+    var sha = null;
+    var list = [];
     if (getRes.ok) {
-      const fileObj = await getRes.json();
+      var fileObj = await getRes.json();
       sha = fileObj.sha;
-      const decoded = fromBase64Utf8(fileObj.content || '');
-      const parsed = JSON.parse(decoded || '{}');
+      var decoded = fromBase64Utf8(fileObj.content || '');
+      var parsed = JSON.parse(decoded || '{}');
       list = Array.isArray(parsed.records) ? parsed.records : (Array.isArray(parsed) ? parsed : []);
     }
 
-    const existingIdx = list.findIndex(r => String(r.invNo || '').trim().toLowerCase() === invNo.toLowerCase());
-    const isUpdateExisting = existingIdx >= 0 || workingDocState.hasSyncedFinal;
-    const stageToSend = isUpdateExisting ? 'Revised' : 'Final Invoice';
+    var existingIdx = list.findIndex(function(r) {
+      return String(r.invNo || '').trim().toLowerCase() === invNo.toLowerCase();
+    });
+    var isUpdateExisting = existingIdx >= 0 || workingDocState.hasSyncedFinal;
+    var stageToSend = isUpdateExisting ? 'Revised' : 'Final Invoice';
 
-    const incoming = buildDashboardPayloadFromInvoice(photoPaths, stageToSend);
+    var incoming = buildDashboardPayloadFromInvoice(photoPaths, stageToSend);
 
     if (existingIdx >= 0) {
-      const mergedPhotos = photoPaths.length > 0 ? photoPaths : (list[existingIdx].photos || []);
-      list[existingIdx] = {
-        ...list[existingIdx],
-        ...incoming,
+      var mergedPhotos = photoPaths.length > 0 ? photoPaths : (list[existingIdx].photos || []);
+      list[existingIdx] = Object.assign({}, list[existingIdx], incoming, {
         id: list[existingIdx].id,
         photos: mergedPhotos,
         archived: false
-      };
+      });
     } else {
-      list.unshift({
-        id: recordId,
-        ...incoming,
+      list.unshift(Object.assign({
+        id: recordId
+      }, incoming, {
         ready: false,
         dispatched: false,
         archived: false
-      });
+      }));
     }
 
-    const contentB64 = toBase64Utf8(JSON.stringify({
+    var contentB64 = toBase64Utf8(JSON.stringify({
       updatedAt: new Date().toISOString(),
       records: list
     }, null, 2));
 
-    const putRes = await fetch(apiUrl, {
+    var putBody = {
+      message: stageToSend + ' sync ' + incoming.invNo + ' from MM Invoice V44',
+      content: contentB64
+    };
+    if (sha) putBody.sha = sha;
+
+    var putRes = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
-        'Authorization': `Bearer ${cfg.token}`,
+        'Authorization': 'Bearer ' + cfg.token,
         'Accept': 'application/vnd.github+json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        message: `${stageToSend} sync ${incoming.invNo} from MM Invoice V44`,
-        content: contentB64,
-        ...(sha ? { sha } : {})
-      })
+      body: JSON.stringify(putBody)
     });
 
     if (!putRes.ok) throw new Error('HTTP ' + putRes.status);
@@ -2184,18 +2245,18 @@ async function sendInvoiceToDashboard(silent = false) {
     upsertDraftRecord(snapshotCurrentFormState('Revised'));
     updateDocStageBadge();
 
-    const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    var nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     if (el) {
-      el.textContent = `✅ [${stageToSend}] ${incoming.invNo} ကို Dashboard တွင် ${existingIdx >= 0 ? 'Update လုပ်ပြီး' : 'ပို့ပြီး'}ပါပြီ (${nowStr})`;
+      el.textContent = '✅ [' + stageToSend + '] ' + incoming.invNo + ' ကို Dashboard တွင် ' + (existingIdx >= 0 ? 'Update လုပ်ပြီး' : 'ပို့ပြီး') + 'ပါပြီ (' + nowStr + ')';
       el.style.color = '#6ee7b7';
     }
     if (!silent) {
-      alert(`✅ [${stageToSend}] Invoice (${incoming.invNo}) နှင့် ဓာတ်ပုံ (${photoPaths.length} ပုံ) ကို Dashboard တွင် ${existingIdx >= 0 ? 'ရှိပြီးသားစာရင်းကို Update လုပ်ပြီးပါပြီ!' : 'ပို့ပြီးပါပြီ!'}`);
+      alert('✅ [' + stageToSend + '] Invoice (' + incoming.invNo + ') နှင့် ဓာတ်ပုံ (' + photoPaths.length + ' ပုံ) ကို Dashboard တွင် ' + (existingIdx >= 0 ? 'ရှိပြီးသားစာရင်းကို Update လုပ်ပြီးပါပြီ!' : 'ပို့ပြီးပါပြီ!'));
     }
     return true;
   } catch (err) {
     if (el) {
-      el.textContent = `❌ Dashboard Sync Failed (${err.message})`;
+      el.textContent = '❌ Dashboard Sync Failed (' + err.message + ')';
       el.style.color = '#fda4af';
     }
     if (!silent) {
@@ -2208,41 +2269,41 @@ async function sendInvoiceToDashboard(silent = false) {
 }
 
 function openDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = (e) => {
-      const db = e.target.result;
+  return new Promise(function(resolve, reject) {
+    var request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onupgradeneeded = function(e) {
+      var db = e.target.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
     };
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    request.onsuccess = function() { resolve(request.result); };
+    request.onerror = function() { reject(request.error); };
   });
 }
 
 async function saveLogoToDB(dataUrl) {
   try {
-    const db = await openDB();
-    const tx = db.transaction(STORE_NAME, 'readwrite');
+    var db = await openDB();
+    var tx = db.transaction(STORE_NAME, 'readwrite');
     tx.objectStore(STORE_NAME).put(dataUrl, 'companyLogo');
   } catch (err) { console.error(err); }
 }
 
 async function getLogoFromDB() {
   try {
-    const db = await openDB();
-    return new Promise((resolve) => {
-      const tx = db.transaction(STORE_NAME, 'readonly');
-      const req = tx.objectStore(STORE_NAME).get('companyLogo');
-      req.onsuccess = () => resolve(req.result || null);
-      req.onerror = () => resolve(null);
+    var db = await openDB();
+    return new Promise(function(resolve) {
+      var tx = db.transaction(STORE_NAME, 'readonly');
+      var req = tx.objectStore(STORE_NAME).get('companyLogo');
+      req.onsuccess = function() { resolve(req.result || null); };
+      req.onerror = function() { resolve(null); };
     });
   } catch (err) { return null; }
 }
 
 async function deleteLogoFromDB() {
   try {
-    const db = await openDB();
-    const tx = db.transaction(STORE_NAME, 'readwrite');
+    var db = await openDB();
+    var tx = db.transaction(STORE_NAME, 'readwrite');
     tx.objectStore(STORE_NAME).delete('companyLogo');
   } catch (err) { console.error(err); }
 }
@@ -2251,32 +2312,31 @@ async function init() {
   await loadSavedLogo();
   loadSavedInvoiceNumber();
   setTodayDate();
-  const initialRoute = getSelectedRouteString();
-  items.forEach(it => { it.route = initialRoute; });
+  var initialRoute = getSelectedRouteString();
+  items.forEach(function(it) { it.route = initialRoute; });
   renderItemInputs();
   renderDashPhotoPreviews();
-  syncDashAmountsFromInvoice();
-  updateInvoice();
+  syncAllViews();
   updateDashStatusBanner();
   updateDraftCountBadge();
   updateDocStageBadge();
 }
 
 function loadSavedInvoiceNumber() {
-  const savedInv = localStorage.getItem('addaffodils_mm_last_inv_no');
+  var savedInv = localStorage.getItem('addaffodils_mm_last_inv_no');
   if (savedInv) document.getElementById('inputInvNo').value = savedInv;
 }
 
 function autoNextInvoiceNo() {
-  const invInput = document.getElementById('inputInvNo');
-  let val = invInput.value.trim();
-  const match = val.match(/^(.*?)(?:\b|_|-)*(\d+)$/);
+  var invInput = document.getElementById('inputInvNo');
+  var val = invInput.value.trim();
+  var match = val.match(/^(.*?)(?:\b|_|-)*(\d+)$/);
 
   if (match) {
-    const prefix = match[1];
-    const numStr = match[2];
-    const nextNum = parseInt(numStr, 10) + 1;
-    const paddedNum = String(nextNum).padStart(numStr.length, '0');
+    var prefix = match[1];
+    var numStr = match[2];
+    var nextNum = parseInt(numStr, 10) + 1;
+    var paddedNum = String(nextNum).padStart(numStr.length, '0');
     invInput.value = prefix + paddedNum;
   } else {
     invInput.value = val + '001';
@@ -2285,20 +2345,20 @@ function autoNextInvoiceNo() {
 }
 
 function setTodayDate() {
-  const today = new Date();
-  const day = String(today.getDate()).padStart(2, '0');
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const year = today.getFullYear();
+  var today = new Date();
+  var day = String(today.getDate()).padStart(2, '0');
+  var month = String(today.getMonth() + 1).padStart(2, '0');
+  var year = today.getFullYear();
 
-  const dStr = `${day}.${month}.${year}`;
+  var dStr = day + '.' + month + '.' + year;
   document.getElementById('inputDate').value = dStr;
-  const kgDateEl = document.getElementById('dashKgPayDate');
+  var kgDateEl = document.getElementById('dashKgPayDate');
   if (kgDateEl && !kgDateEl.value) kgDateEl.value = dStr;
   updateInvoice();
 }
 
 async function loadSavedLogo() {
-  const savedLogo = await getLogoFromDB();
+  var savedLogo = await getLogoFromDB();
   if (savedLogo) displayImageLogo(savedLogo);
   else displayTextLogo();
 }
@@ -2314,16 +2374,16 @@ function displayTextLogo() {
   document.getElementById('imageLogoWrapper').classList.add('hidden');
   document.getElementById('textLogoWrapper').classList.remove('hidden');
   document.getElementById('resetLogoBtn').classList.add('hidden');
-  const fileInput = document.getElementById('logoFileInput');
+  var fileInput = document.getElementById('logoFileInput');
   if (fileInput) fileInput.value = '';
 }
 
 async function handleLogoUpload(event) {
-  const file = event.target.files[0];
+  var file = event.target.files[0];
   if (file) {
-    const reader = new FileReader();
+    var reader = new FileReader();
     reader.onload = async function(e) {
-      const base64Image = e.target.result;
+      var base64Image = e.target.result;
       displayImageLogo(base64Image);
       await saveLogoToDB(base64Image);
     };
@@ -2338,12 +2398,12 @@ async function clearLogo() {
 
 function handleCategorySelectChange(index, selVal) {
   items[index].categoryType = selVal;
-  const customBox = document.getElementById(`customCatBox_${index}`);
-  const customInput = document.getElementById(`customCat_${index}`);
+  var customBox = document.getElementById('customCatBox_' + index);
+  var customInput = document.getElementById('customCat_' + index);
   if (selVal === 'Other') {
     if (customBox) customBox.classList.remove('hidden');
-    const cVal = (customInput ? customInput.value : items[index].customCategory || '').trim();
-    items[index].riskNote = cVal ? `(${cVal})` : '(Other)';
+    var cVal = (customInput ? customInput.value : items[index].customCategory || '').trim();
+    items[index].riskNote = cVal ? '(' + cVal + ')' : '(Other)';
   } else {
     if (customBox) customBox.classList.add('hidden');
     items[index].riskNote = formatCategoryBadgeHtml(items[index]);
@@ -2353,77 +2413,79 @@ function handleCategorySelectChange(index, selVal) {
 
 function handleCustomCategoryInput(index, val) {
   items[index].customCategory = val;
-  const trimmed = val.trim();
-  items[index].riskNote = trimmed ? `(${trimmed})` : '(Other)';
+  var trimmed = val.trim();
+  items[index].riskNote = trimmed ? '(' + trimmed + ')' : '(Other)';
   updateInvoice();
 }
 
 function renderItemInputs() {
-  const container = document.getElementById('itemInputsContainer');
+  var container = document.getElementById('itemInputsContainer');
   container.innerHTML = '';
-  const curr = document.getElementById('inputCurrency')?.value || '£';
-  const exRate = getMasterRate();
+  var currEl = document.getElementById('inputCurrency');
+  var curr = currEl ? currEl.value : '£';
+  var exRate = getMasterRate();
 
-  items.forEach((item, index) => {
-    const itemSubtotalGbp = item.weight * item.unitRateGbp;
-    const itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
-    const isOther = item.categoryType === 'Other';
+  items.forEach(function(item, index) {
+    var itemSubtotalGbp = item.weight * item.unitRateGbp;
+    var itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
+    var isOther = item.categoryType === 'Other';
 
-    const div = document.createElement('div');
+    var div = document.createElement('div');
     div.className = 'card-box';
     div.style.gap = '8px';
-    div.innerHTML = `
-      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-        <div style="flex: 1;">
-          <label style="color: #fde047;">Item Category:</label>
-          <select id="catSelect_${index}" onchange="handleCategorySelectChange(${index}, this.value)" style="color: #fde047; font-weight: 700;">
-            ${CATEGORY_OPTIONS.map(c => `<option value="${c}" ${item.categoryType === c ? 'selected' : ''}>${c}</option>`).join('')}
-          </select>
-        </div>
-        <button onclick="removeItem(${index})" class="btn btn-rose" style="padding: 5px 9px; margin-top: 14px;">✕</button>
-      </div>
+    div.innerHTML =
+      '<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">' +
+        '<div style="flex: 1;">' +
+          '<label style="color: #fde047;">Item Category:</label>' +
+          '<select id="catSelect_' + index + '" onchange="handleCategorySelectChange(' + index + ', this.value)" style="color: #fde047; font-weight: 700;">' +
+            CATEGORY_OPTIONS.map(function(c) { return '<option value="' + c + '" ' + (item.categoryType === c ? 'selected' : '') + '>' + c + '</option>'; }).join('') +
+          '</select>' +
+        '</div>' +
+        '<button onclick="removeItem(' + index + ')" class="btn btn-rose" style="padding: 5px 9px; margin-top: 14px;">✕</button>' +
+      '</div>' +
 
-      <div id="customCatBox_${index}" class="${isOther ? '' : 'hidden'}">
-        <label style="color: #fde047;">Other Category (ကိုယ်တိုင် ရိုက်ထည့်ရန်):</label>
-        <input type="text" id="customCat_${index}" value="${item.customCategory || ''}" oninput="handleCustomCategoryInput(${index}, this.value)" placeholder="စာရင်းထဲမပါသော ပစ္စည်းအမျိုးအစား ရိုက်ထည့်ပါ...">
-      </div>
+      '<div id="customCatBox_' + index + '" class="' + (isOther ? '' : 'hidden') + '">' +
+        '<label style="color: #fde047;">Other Category (ကိုယ်တိုင် ရိုက်ထည့်ရန်):</label>' +
+        '<input type="text" id="customCat_' + index + '" value="' + escapeHtml(item.customCategory || '') + '" oninput="handleCustomCategoryInput(' + index + ', this.value)" placeholder="စာရင်းထဲမပါသော ပစ္စည်းအမျိုးအစား ရိုက်ထည့်ပါ...">' +
+      '</div>' +
 
-      <div class="grid-3">
-        <div>
-          <label>Weight (kg): *</label>
-          <input type="number" step="0.5" id="weight_${index}" value="${item.weight}" oninput="items[${index}].weight = parseFloat(this.value)||0; updateItemTotalDisp(${index}); syncDashAmountsFromInvoice(); updateInvoice();" style="text-align: center; font-weight: 700;">
-        </div>
-        <div>
-          <label>Rate/kg (£): *</label>
-          <input type="number" step="1" id="rate_${index}" value="${item.unitRateGbp}" oninput="items[${index}].unitRateGbp = parseFloat(this.value)||0; updateItemTotalDisp(${index}); syncDashAmountsFromInvoice(); updateInvoice();" style="text-align: center; font-weight: 700;">
-        </div>
-        <div>
-          <label>Total (${curr}):</label>
-          <div id="itemTotalDisp_${index}" style="background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 6px; color: #34d399; font-weight: 800; text-align: center; font-size: 11px;">${curr} ${itemSubtotalDisp}</div>
-        </div>
-      </div>
+      '<div class="grid-3">' +
+        '<div>' +
+          '<label>Weight (kg): *</label>' +
+          '<input type="number" step="0.5" id="weight_' + index + '" value="' + item.weight + '" oninput="items[' + index + '].weight = parseFloat(this.value)||0; updateItemTotalDisp(' + index + '); syncAllViews();" style="text-align: center; font-weight: 700;">' +
+        '</div>' +
+        '<div>' +
+          '<label>Rate/kg (£): *</label>' +
+          '<input type="number" step="1" id="rate_' + index + '" value="' + item.unitRateGbp + '" oninput="items[' + index + '].unitRateGbp = parseFloat(this.value)||0; updateItemTotalDisp(' + index + '); syncAllViews();" style="text-align: center; font-weight: 700;">' +
+        '</div>' +
+        '<div>' +
+          '<label>Total (' + curr + '):</label>' +
+          '<div id="itemTotalDisp_' + index + '" style="background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 6px; color: #34d399; font-weight: 800; text-align: center; font-size: 11px;">' + curr + ' ' + itemSubtotalDisp + '</div>' +
+        '</div>' +
+      '</div>' +
 
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px solid #334155;">
-        <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; color: #cbd5e1; margin: 0;">
-          <input type="checkbox" ${item.hasDelFee ? 'checked' : ''} onchange="items[${index}].hasDelFee = this.checked; syncDashAmountsFromInvoice(); updateInvoice();" style="accent-color: #f59e0b;">
-          <span>Add Item Delivery Fee (£)</span>
-        </label>
-        <input type="number" value="${item.delFeeGbp || 10}" ${item.hasDelFee ? '' : 'disabled'} oninput="items[${index}].delFeeGbp = parseFloat(this.value)||0; syncDashAmountsFromInvoice(); updateInvoice();" style="width: 70px; text-align: center; color: #fde047; font-weight: 700;">
-      </div>
-    `;
+      '<div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px solid #334155;">' +
+        '<label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; color: #cbd5e1; margin: 0;">' +
+          '<input type="checkbox" ' + (item.hasDelFee ? 'checked' : '') + ' onchange="items[' + index + '].hasDelFee = this.checked; syncAllViews();" style="accent-color: #f59e0b;">' +
+          '<span>Add Item Delivery Fee (£)</span>' +
+        '</label>' +
+        '<input type="number" value="' + (item.delFeeGbp || 10) + '" ' + (item.hasDelFee ? '' : 'disabled') + ' oninput="items[' + index + '].delFeeGbp = parseFloat(this.value)||0; syncAllViews();" style="width: 70px; text-align: center; color: #fde047; font-weight: 700;">' +
+      '</div>';
     container.appendChild(div);
   });
 }
 
 function updateItemTotalDisp(index) {
-  const curr = document.getElementById('inputCurrency')?.value || '£';
-  const exRate = getMasterRate();
-  const item = items[index];
-  const itemSubtotalGbp = item.weight * item.unitRateGbp;
-  const itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
+  var currEl = document.getElementById('inputCurrency');
+  var curr = currEl ? currEl.value : '£';
+  var exRate = getMasterRate();
+  var item = items[index];
+  if (!item) return;
+  var itemSubtotalGbp = item.weight * item.unitRateGbp;
+  var itemSubtotalDisp = curr === 'MMK' ? Math.round(itemSubtotalGbp * exRate).toLocaleString() : itemSubtotalGbp;
 
-  const dispEl = document.getElementById(`itemTotalDisp_${index}`);
-  if (dispEl) dispEl.innerText = `${curr} ${itemSubtotalDisp}`;
+  var dispEl = document.getElementById('itemTotalDisp_' + index);
+  if (dispEl) dispEl.innerText = curr + ' ' + itemSubtotalDisp;
 }
 
 function addItem() {
@@ -2438,35 +2500,36 @@ function addItem() {
     delFeeGbp: 10
   });
   renderItemInputs();
-  syncDashAmountsFromInvoice();
-  updateInvoice();
+  syncAllViews();
 }
 
 function removeItem(index) {
   if (items.length > 1) {
     items.splice(index, 1);
     renderItemInputs();
-    syncDashAmountsFromInvoice();
-    updateInvoice();
+    syncAllViews();
   }
 }
 
 function updateInvoice() {
-  const currentInv = document.getElementById('inputInvNo').value;
-  localStorage.setItem('addaffodils_mm_last_inv_no', currentInv);
+  var currentInv = document.getElementById('inputInvNo').value;
+  try {
+    localStorage.setItem('addaffodils_mm_last_inv_no', currentInv);
+  } catch (e) {}
 
-  const activeRoute = getSelectedRouteString();
-  const curr = document.getElementById('inputCurrency').value;
-  const exRate = getMasterRate();
+  var activeRoute = getSelectedRouteString();
+  var curr = document.getElementById('inputCurrency').value;
+  var exRate = getMasterRate();
 
-  const insCurr = document.getElementById('insuranceCurrency').value;
-  document.getElementById('insuranceValueLabel').innerText = `Amount (${insCurr}):`;
+  var insCurr = document.getElementById('insuranceCurrency').value;
+  document.getElementById('insuranceValueLabel').innerText = 'Amount (' + insCurr + '):';
 
-  const discountType = document.getElementById('discountType').value;
-  document.getElementById('discountValueLabel').innerText = discountType === 'percent' ? 'Discount (%):' : `Discount (${discountType}):`;
+  var discountType = document.getElementById('discountType').value;
+  document.getElementById('discountValueLabel').innerText = discountType === 'percent' ? 'Discount (%):' : 'Discount (' + discountType + '):';
 
-  const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked').value;
-  const stampEl = document.getElementById('statusStamp');
+  var checkedPay = document.querySelector('input[name="paymentStatus"]:checked');
+  var paymentStatus = checkedPay ? checkedPay.value : 'PAID';
+  var stampEl = document.getElementById('statusStamp');
   stampEl.innerText = paymentStatus;
   if (paymentStatus === 'PAID') {
     stampEl.className = 'status-stamp stamp-paid';
@@ -2474,7 +2537,7 @@ function updateInvoice() {
     stampEl.className = 'status-stamp stamp-unpaid';
   }
 
-  document.querySelectorAll('.currSym').forEach(el => el.innerText = curr);
+  document.querySelectorAll('.currSym').forEach(function(el) { el.innerText = curr; });
 
   document.getElementById('viewDate').innerText = document.getElementById('inputDate').value;
   document.getElementById('viewInvNo').innerText = currentInv;
@@ -2484,73 +2547,72 @@ function updateInvoice() {
   document.getElementById('viewRecName').innerText = document.getElementById('inputRecName').value;
   document.getElementById('viewRecPhone').innerText = document.getElementById('inputRecPhone').value;
 
-  const tbody = document.getElementById('viewTableBody');
+  var tbody = document.getElementById('viewTableBody');
   tbody.innerHTML = '';
 
-  let subTotalGbp = 0;
+  var subTotalGbp = 0;
 
-  items.forEach((item) => {
+  items.forEach(function(item) {
     item.route = activeRoute;
-    const itemPriceGbp = item.weight * item.unitRateGbp;
-    const itemDelFeeGbp = item.hasDelFee ? (item.delFeeGbp || 0) : 0;
-    const lineTotalGbp = itemPriceGbp + itemDelFeeGbp;
+    var itemPriceGbp = item.weight * item.unitRateGbp;
+    var itemDelFeeGbp = item.hasDelFee ? (item.delFeeGbp || 0) : 0;
+    var lineTotalGbp = itemPriceGbp + itemDelFeeGbp;
     subTotalGbp += lineTotalGbp;
 
-    let rawRisk = item.riskNote || formatCategoryBadgeHtml(item);
-    if (rawRisk && !rawRisk.includes('style=')) {
-      rawRisk = `<span>${rawRisk}</span>`;
+    var rawRisk = item.riskNote || formatCategoryBadgeHtml(item);
+    if (rawRisk && rawRisk.indexOf('style=') === -1) {
+      rawRisk = '<span>' + rawRisk + '</span>';
     }
 
-    const descText = `${activeRoute} ${item.weight} kg ${rawRisk || ''}`.trim();
+    var descText = (activeRoute + ' ' + item.weight + ' kg ' + (rawRisk || '')).trim();
 
-    const unitRateDisplay = curr === 'MMK' ? `${curr} ${Math.round(item.unitRateGbp * exRate).toLocaleString()}` : `£ ${item.unitRateGbp}`;
-    const lineTotalDisplay = curr === 'MMK' ? `${curr} ${Math.round(lineTotalGbp * exRate).toLocaleString()}` : `£ ${lineTotalGbp}`;
+    var unitRateDisplay = curr === 'MMK' ? curr + ' ' + Math.round(item.unitRateGbp * exRate).toLocaleString() : '£ ' + item.unitRateGbp;
+    var lineTotalDisplay = curr === 'MMK' ? curr + ' ' + Math.round(lineTotalGbp * exRate).toLocaleString() : '£ ' + lineTotalGbp;
 
-    const tr = document.createElement('tr');
+    var tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid rgba(120, 53, 15, 0.1)';
     tr.style.fontWeight = '600';
     tr.style.color = '#1c1917';
 
-    let descHtml = `<div>${descText}</div>`;
+    var descHtml = '<div>' + descText + '</div>';
     if (item.hasDelFee && itemDelFeeGbp > 0) {
-      const delFeeDisp = curr === 'MMK' ? `${curr} ${Math.round(itemDelFeeGbp * exRate).toLocaleString()}` : `£ ${itemDelFeeGbp}`;
-      descHtml += `<div style="font-size: 9.5px; color: #92400e; font-weight: 700;">+ Item Deli Fee (${delFeeDisp})</div>`;
+      var delFeeDisp = curr === 'MMK' ? curr + ' ' + Math.round(itemDelFeeGbp * exRate).toLocaleString() : '£ ' + itemDelFeeGbp;
+      descHtml += '<div style="font-size: 9.5px; color: #92400e; font-weight: 700;">+ Item Deli Fee (' + delFeeDisp + ')</div>';
     }
 
-    tr.innerHTML = `
-      <td style="padding: 5px 8px;">${descHtml}</td>
-      <td style="padding: 5px 8px; text-align: center;">${unitRateDisplay}</td>
-      <td style="padding: 5px 8px; text-align: right; font-weight: 800;">${lineTotalDisplay}</td>
-    `;
+    tr.innerHTML =
+      '<td style="padding: 5px 8px;">' + descHtml + '</td>' +
+      '<td style="padding: 5px 8px; text-align: center;">' + unitRateDisplay + '</td>' +
+      '<td style="padding: 5px 8px; text-align: right; font-weight: 800;">' + lineTotalDisplay + '</td>';
     tbody.appendChild(tr);
   });
 
-  const isSingleDelFeeEnabled = document.getElementById('singleDelFeeToggle').checked;
-  const singleDelFeeGbp = isSingleDelFeeEnabled ? (parseFloat(document.getElementById('singleDelFeeInput').value) || 0) : 0;
-  const delFeeRow = document.getElementById('deliveryFeeRow');
+  var isSingleDelFeeEnabled = document.getElementById('singleDelFeeToggle').checked;
+  var singleDelFeeGbp = isSingleDelFeeEnabled ? (parseFloat(document.getElementById('singleDelFeeInput').value) || 0) : 0;
+  var delFeeRow = document.getElementById('deliveryFeeRow');
 
   if (isSingleDelFeeEnabled) {
     subTotalGbp += singleDelFeeGbp;
     delFeeRow.classList.remove('hidden');
-    const singleDelFeeDisp = curr === 'MMK' ? `${curr} ${Math.round(singleDelFeeGbp * exRate).toLocaleString()}` : `£ ${singleDelFeeGbp}`;
+    var singleDelFeeDisp = curr === 'MMK' ? curr + ' ' + Math.round(singleDelFeeGbp * exRate).toLocaleString() : '£ ' + singleDelFeeGbp;
     document.getElementById('viewDeliveryFeeAmount').innerText = singleDelFeeDisp;
   } else {
     delFeeRow.classList.add('hidden');
   }
 
-  const isInsuranceEnabled = document.getElementById('insuranceToggle').checked;
-  const insuranceRawVal = parseFloat(document.getElementById('insuranceFeeInput').value) || 0;
-  const insuranceLabelText = document.getElementById('insuranceLabelInput').value.trim() || 'Insurance Fee';
-  const insuranceTableRow = document.getElementById('insuranceTableRow');
-  const mmkInsuranceLine = document.getElementById('mmkInsuranceLine');
+  var isInsuranceEnabled = document.getElementById('insuranceToggle').checked;
+  var insuranceRawVal = parseFloat(document.getElementById('insuranceFeeInput').value) || 0;
+  var insuranceLabelText = document.getElementById('insuranceLabelInput').value.trim() || 'Insurance Fee';
+  var insuranceTableRow = document.getElementById('insuranceTableRow');
+  var mmkInsuranceLine = document.getElementById('mmkInsuranceLine');
 
-  let hasMmkInsurance = false;
+  var hasMmkInsurance = false;
   if (isInsuranceEnabled && insuranceRawVal > 0) {
     if (insCurr === '£') {
       subTotalGbp += insuranceRawVal;
-      const insDisp = curr === 'MMK'
-        ? `+ ${curr} ${Math.round(insuranceRawVal * exRate).toLocaleString()}`
-        : `+ £ ${Number.isInteger(insuranceRawVal) ? insuranceRawVal : insuranceRawVal.toFixed(2)}`;
+      var insDisp = curr === 'MMK'
+        ? '+ ' + curr + ' ' + Math.round(insuranceRawVal * exRate).toLocaleString()
+        : '+ £ ' + (Number.isInteger(insuranceRawVal) ? insuranceRawVal : insuranceRawVal.toFixed(2));
       document.getElementById('viewInsuranceTableLabel').innerText = insuranceLabelText;
       document.getElementById('viewInsuranceTableAmount').innerText = insDisp;
       insuranceTableRow.classList.remove('hidden');
@@ -2558,7 +2620,7 @@ function updateInvoice() {
     } else {
       insuranceTableRow.classList.add('hidden');
       document.getElementById('viewMmkInsuranceLabel').innerText = insuranceLabelText;
-      document.getElementById('viewMmkInsuranceAmount').innerText = `${Math.round(insuranceRawVal).toLocaleString()} MMK`;
+      document.getElementById('viewMmkInsuranceAmount').innerText = Math.round(insuranceRawVal).toLocaleString() + ' MMK';
       mmkInsuranceLine.classList.remove('hidden');
       hasMmkInsurance = true;
     }
@@ -2567,37 +2629,37 @@ function updateInvoice() {
     mmkInsuranceLine.classList.add('hidden');
   }
 
-  const isDiscountEnabled = document.getElementById('discountToggle').checked;
-  const discountValInput = parseFloat(document.getElementById('discountValueInput').value) || 0;
-  const discountLabelText = document.getElementById('discountLabelInput').value.trim() || 'Promotion Discount';
-  const discountTableRow = document.getElementById('discountTableRow');
-  const mmkDiscountLine = document.getElementById('mmkDiscountLine');
+  var isDiscountEnabled = document.getElementById('discountToggle').checked;
+  var discountValInput = parseFloat(document.getElementById('discountValueInput').value) || 0;
+  var discountLabelText = document.getElementById('discountLabelInput').value.trim() || 'Promotion Discount';
+  var discountTableRow = document.getElementById('discountTableRow');
+  var mmkDiscountLine = document.getElementById('mmkDiscountLine');
 
-  let discountGbp = 0;
-  let hasMmkDiscount = false;
+  var discountGbp = 0;
+  var hasMmkDiscount = false;
 
   if (isDiscountEnabled && discountValInput > 0) {
     if (discountType === 'MMK') {
       discountTableRow.classList.add('hidden');
       document.getElementById('viewMmkDiscountLabel').innerText = discountLabelText;
-      document.getElementById('viewMmkDiscountAmount').innerText = `- ${Math.round(discountValInput).toLocaleString()} MMK`;
+      document.getElementById('viewMmkDiscountAmount').innerText = '- ' + Math.round(discountValInput).toLocaleString() + ' MMK';
       mmkDiscountLine.classList.remove('hidden');
       hasMmkDiscount = true;
     } else {
       mmkDiscountLine.classList.add('hidden');
       if (discountType === 'percent') {
-        const clampedPct = Math.min(100, Math.max(0, discountValInput));
+        var clampedPct = Math.min(100, Math.max(0, discountValInput));
         discountGbp = (subTotalGbp * clampedPct) / 100;
-        document.getElementById('viewDiscountTableBadge').innerText = `${clampedPct}%`;
+        document.getElementById('viewDiscountTableBadge').innerText = clampedPct + '%';
       } else {
         discountGbp = discountValInput;
-        document.getElementById('viewDiscountTableBadge').innerText = `£ ${discountValInput}`;
+        document.getElementById('viewDiscountTableBadge').innerText = '£ ' + discountValInput;
       }
       discountGbp = Math.min(subTotalGbp, Math.max(0, discountGbp));
 
-      const discountDisp = curr === 'MMK'
-        ? `- ${curr} ${Math.round(discountGbp * exRate).toLocaleString()}`
-        : `- £ ${Number.isInteger(discountGbp) ? discountGbp : discountGbp.toFixed(2)}`;
+      var discountDisp = curr === 'MMK'
+        ? '- ' + curr + ' ' + Math.round(discountGbp * exRate).toLocaleString()
+        : '- £ ' + (Number.isInteger(discountGbp) ? discountGbp : discountGbp.toFixed(2));
 
       document.getElementById('viewDiscountTableLabel').innerText = discountLabelText;
       document.getElementById('viewDiscountTableAmount').innerText = discountDisp;
@@ -2608,50 +2670,57 @@ function updateInvoice() {
     mmkDiscountLine.classList.add('hidden');
   }
 
-  const mmkSeparateBox = document.getElementById('mmkSeparateBox');
+  var mmkSeparateBox = document.getElementById('mmkSeparateBox');
   if (hasMmkInsurance || hasMmkDiscount) {
     mmkSeparateBox.classList.remove('hidden');
   } else {
     mmkSeparateBox.classList.add('hidden');
   }
 
-  const finalTotalGbp = Math.max(0, subTotalGbp - discountGbp);
-  const finalGrandTotalDisp = curr === 'MMK'
+  var finalTotalGbp = Math.max(0, subTotalGbp - discountGbp);
+  var finalGrandTotalDisp = curr === 'MMK'
     ? Math.round(finalTotalGbp * exRate).toLocaleString()
     : (Number.isInteger(finalTotalGbp) ? finalTotalGbp.toLocaleString() : finalTotalGbp.toFixed(2));
   document.getElementById('viewGrandTotal').innerText = finalGrandTotalDisp;
 }
 
-function exportJPG(photoMissing = false) {
-  const invNo = document.getElementById('inputInvNo').value;
-  const invoice = document.getElementById('invoice');
+function captureInvoiceCanvasWithFallback(invoiceEl) {
+  return html2canvas(invoiceEl, { scale: 2, useCORS: true, allowTaint: true })
+    .catch(function() {
+      return html2canvas(invoiceEl, { scale: 1.5, useCORS: true, allowTaint: true });
+    });
+}
 
-  html2canvas(invoice, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = `${invNo}_AD_Daffodils_Invoice.jpg`;
-    link.href = canvas.toDataURL('image/jpeg', 1.0);
+function exportJPG(photoMissing) {
+  var invNo = document.getElementById('inputInvNo').value;
+  var invoice = document.getElementById('invoice');
+
+  captureInvoiceCanvasWithFallback(invoice).then(function(canvas) {
+    var link = document.createElement('a');
+    link.download = invNo + '_AD_Daffodils_Invoice.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.96);
     link.click();
 
-    handlePostExportPhotoAndSync(photoMissing);
+    handlePostExportPhotoAndSync(!!photoMissing);
   });
 }
 
-function exportPDF(photoMissing = false) {
-  const invNo = document.getElementById('inputInvNo').value;
-  const invoice = document.getElementById('invoice');
+function exportPDF(photoMissing) {
+  var invNo = document.getElementById('inputInvNo').value;
+  var invoice = document.getElementById('invoice');
 
-  html2canvas(invoice, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({
+  captureInvoiceCanvasWithFallback(invoice).then(function(canvas) {
+    var imgData = canvas.toDataURL('image/jpeg', 0.96);
+    var jsPDF = window.jspdf.jsPDF;
+    var pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4'
     });
     pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-    pdf.save(`${invNo}_AD_Daffodils_Invoice.pdf`);
+    pdf.save(invNo + '_AD_Daffodils_Invoice.pdf');
 
-    handlePostExportPhotoAndSync(photoMissing);
+    handlePostExportPhotoAndSync(!!photoMissing);
   });
 }
 
