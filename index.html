@@ -1022,13 +1022,13 @@ function escapeHtml(str) {
 function openDashboardPage() {
   const cfg = getDashCfg();
   if (!cfg.user || !cfg.repo) {
-    alert('Dashboard Link ဖွင့်ရန် "Dashboard Sync" Setup ထဲတွင် GitHub Username နှင့် Repo Name အရင်ဖြည့်ပေးပါ။');
-    openDashSyncModal();
+    const localUrl = new URL('index-v2.html', window.location.href).href;
+    window.open(localUrl, '_blank', 'noopener');
     return;
   }
   const cleanUser = cfg.user.trim();
   const cleanRepo = cfg.repo.trim().replace(/^\/+|\/+$/g, '');
-  const url = `https://${encodeURIComponent(cleanUser)}.github.io/${encodeURIComponent(cleanRepo)}/`;
+  const url = `https://${encodeURIComponent(cleanUser)}.github.io/${encodeURIComponent(cleanRepo)}/index-v2.html`;
   window.open(url, '_blank', 'noopener');
 }
 
@@ -1329,9 +1329,6 @@ function renderDraftsList() {
   }).join('');
 }
 
-// ============================================================
-// REQUIRED GATE (EXCLUDING INSURANCE, DISCOUNT, NOTES) & PHOTO RULES
-// ============================================================
 function validateRequiredFieldsCommon() {
   const missing = [];
 
@@ -1977,7 +1974,6 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage 
     ? Math.max(0, Math.round(parseFloat(document.getElementById('dashDeliMmkInput').value) || 0))
     : 0;
 
-  // Preserve exact selected deliStatus (including office_pickup even when amount is 0)
   const rawDeliStatus = document.getElementById('dashDeliStatus')?.value || 'pay_uk';
   const hasDeli = (deliCurrency === 'GBP' ? deliGbp > 0 : deliMmk > 0);
   const deliStatus = rawDeliStatus;
