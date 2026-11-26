@@ -1441,7 +1441,7 @@ function formatKgPayStatusLabel(statusVal, paymentStatusFallback) {
 }
 
 function formatDeliStatusLabel(statusVal, destType) {
-  if (destType !== 'UK' || statusVal === 'none') {
+  if (statusVal === 'none') {
     return 'UK Local Deli မပါဝင်ပါ (N/A)';
   }
   const map = {
@@ -1977,10 +1977,10 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage 
     ? Math.max(0, Math.round(parseFloat(document.getElementById('dashDeliMmkInput').value) || 0))
     : 0;
 
+  // Preserve exact selected deliStatus (including office_pickup even when amount is 0)
+  const rawDeliStatus = document.getElementById('dashDeliStatus')?.value || 'pay_uk';
   const hasDeli = (deliCurrency === 'GBP' ? deliGbp > 0 : deliMmk > 0);
-  const deliStatus = destType === 'UK'
-    ? (hasDeli ? document.getElementById('dashDeliStatus').value : 'none')
-    : 'none';
+  const deliStatus = rawDeliStatus;
 
   const isIns = document.getElementById('insuranceToggle').checked;
   const insCurrRaw = document.getElementById('insuranceCurrency').value;
@@ -2004,6 +2004,7 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage 
       : (discTypeRaw === 'percent' ? discValRaw + '%' : '£' + discValRaw);
     noteParts.push(`${discLabel || 'Disc'}: -${dStr}`);
   }
+  const combinedNote = noteParts.join(' • ');
 
   return {
     invNo,
@@ -2027,11 +2028,12 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage 
     rate: masterRate,
     kgPayDate,
     deliStatus,
+    hasDeli,
     deliCurrency,
     deliGbp,
     deliMmk,
     deliRate: masterRate,
-    deliPayDate: hasDeli && ['paid_mm', 'paid_uk'].includes(deliStatus) ? date : '',
+    deliPayDate: ['paid_mm', 'paid_uk'].includes(deliStatus) ? date : '',
     insured: !!(isIns && insAmtRaw > 0),
     insCurrency: insCurrRaw === 'MMK' ? 'MMK' : 'GBP',
     insAmount: (isIns && insAmtRaw > 0) ? insAmtRaw : 0,
@@ -2040,7 +2042,9 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage 
     discCurrency: discTypeRaw === 'MMK' ? 'MMK' : 'GBP',
     discAmount: (isDisc && discValRaw > 0) ? (discTypeRaw === 'GBP' ? discGbpAmt : discValRaw) : 0,
     discRate: masterRate,
-    note: noteParts.join(' • '),
+    note: combinedNote,
+    notes: combinedNote,
+    dashNote: customNote,
     invoiceStage,
     sourceApp: 'mm-invoice-v44'
   };
