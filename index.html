@@ -2160,8 +2160,11 @@ function buildDashboardPayloadFromInvoice(uploadedPhotoPaths = [], invoiceStage 
     : 0;
 
   const hasDeli = (deliCurrency === 'GBP' ? deliGbp > 0 : deliMmk > 0);
+  const selectedDeliStatus = document.getElementById('dashDeliStatus')?.value || 'pay_uk';
   const deliStatus = destType === 'UK'
-    ? (hasDeli ? document.getElementById('dashDeliStatus').value : 'none')
+    ? ((hasDeli || ['paid_mm', 'paid_uk', 'office_pickup'].includes(selectedDeliStatus))
+        ? selectedDeliStatus
+        : 'none')
     : 'none';
 
   const isIns = document.getElementById('insuranceToggle').checked;
@@ -2807,15 +2810,46 @@ function updateInvoice() {
   document.getElementById('viewGrandTotal').innerText = finalGrandTotalDisp;
 }
 
+function captureInvoiceCanvas() {
+  const invoice = document.getElementById('invoice');
+  const previewCol = document.getElementById('previewCol');
+  const outer = document.getElementById('previewScaleOuter');
+  const wasPreviewHidden = previewCol ? previewCol.classList.contains('hidden') : false;
+  const prevTransform = outer ? outer.style.transform : '';
+  const prevMarginBottom = outer ? outer.style.marginBottom : '';
+
+  if (wasPreviewHidden && previewCol) {
+    previewCol.classList.remove('hidden');
+  }
+  if (outer) {
+    outer.style.transform = 'none';
+    outer.style.marginBottom = '0px';
+  }
+
+  return html2canvas(invoice, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
+    if (outer) {
+      outer.style.transform = prevTransform;
+      outer.style.marginBottom = prevMarginBottom;
+    }
+    if (wasPreviewHidden && previewCol) {
+      previewCol.classList.add('hidden');
+    }
+    return canvas;
+  }).catch(err => {
+    if (outer) {
+      outer.style.transform = prevTransform;
+      outer.style.marginBottom = prevMarginBottom;
+    }
+    if (wasPreviewHidden && previewCol) {
+      previewCol.classList.add('hidden');
+    }
+    throw err;
+  });
+}
+
 function exportJPG(photoMissing = false) {
   const invNo = document.getElementById('inputInvNo').value;
-  const invoice = document.getElementById('invoice');
-  const outer = document.getElementById('previewScaleOuter');
-  const prevTransform = outer ? outer.style.transform : '';
-  if (outer) outer.style.transform = 'none';
-
-  html2canvas(invoice, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
-    if (outer) outer.style.transform = prevTransform;
+  captureInvoiceCanvas().then(canvas => {
     const link = document.createElement('a');
     link.download = `${invNo}_AD_Daffodils_Invoice.jpg`;
     link.href = canvas.toDataURL('image/jpeg', 1.0);
@@ -2827,13 +2861,7 @@ function exportJPG(photoMissing = false) {
 
 function exportPDF(photoMissing = false) {
   const invNo = document.getElementById('inputInvNo').value;
-  const invoice = document.getElementById('invoice');
-  const outer = document.getElementById('previewScaleOuter');
-  const prevTransform = outer ? outer.style.transform : '';
-  if (outer) outer.style.transform = 'none';
-
-  html2canvas(invoice, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
-    if (outer) outer.style.transform = prevTransform;
+  captureInvoiceCanvas().then(canvas => {
     const imgData = canvas.toDataURL('image/jpeg', 1.0);
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
